@@ -6,15 +6,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "repository_data")
 public class RepositoryData {
 
@@ -34,16 +36,16 @@ public class RepositoryData {
 
   private Set<String> boardColumns;
 
-  private int doneColumnIndex;
+  private String doneColumnName;
 
   public RepositoryData(String ownerName, String name, String defaultBranch, String visibility,
-      Set<String> boardColumns, int doneColumnIndex) {
+      Set<String> boardColumns, String doneColumnName) {
     this.ownerName = ownerName;
     this.repoName = name;
     this.defaultBranch = defaultBranch;
     this.visibility = visibility;
     this.boardColumns = boardColumns;
-    this.doneColumnIndex = doneColumnIndex;
+    this.doneColumnName = doneColumnName;
   }
 
 }

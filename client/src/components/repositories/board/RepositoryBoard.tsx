@@ -1,21 +1,38 @@
-import { DragHandleIcon } from '@chakra-ui/icons';
+import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
-  Box, Divider, Heading, HStack,
+  Box, ButtonGroup, HStack, IconButton, Input, VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
-
-type BoardData = {
-  columns: Set<string>,
-  doneIndex: number
-}
+import React, { FormEvent, useContext, useState } from 'react';
+import { fetchUpdateRepositoryData } from '../../../api/repositoriesApi';
+import UserContext from '../../../context/UserContext';
+import useDebouncedEffect from '../../../utilities/debounce';
+import RepositoryData from '../../../utilities/types/RepositoryData';
+import BoardColumn from './BoardColumn';
 
 type Props = {
-  boardData: BoardData
+  data: RepositoryData
 }
 
-function RepositoryBoard({ boardData }: Props) {
-  const [columns, setColumns] = useState<Set<string>>(boardData.columns);
+function RepositoryBoard({ data }: Props) {
+  const [columns, setColumns] = useState<Set<string>>(new Set(data.boardColumns));
   const [dragItemIndex, setDragItemIndex] = useState<number>(-1);
+  const [addColumnMode, setAddColumnMode] = useState<boolean>(false);
+  const [columnName, setColumnName] = useState<string>('');
+  const [dataUpdate, setDataUpdate] = useState<boolean>(false);
+
+  const { user } = useContext(UserContext);
+
+  useDebouncedEffect(() => {
+    if (user && dataUpdate) {
+      const updateRepoData = async () => {
+        const newData = { ...data };
+        newData.boardColumns = columns;
+        await fetchUpdateRepositoryData(newData, user.accessToken); // Return
+        setDataUpdate(false);
+      };
+      updateRepoData();
+    }
+  }, [columns, dataUpdate], 1000);
 
   const onDragStart = (index: number) => {
     setDragItemIndex(index);
@@ -32,44 +49,83 @@ function RepositoryBoard({ boardData }: Props) {
 
   const onDropHandler = () => {
     setDragItemIndex(-1);
+    setDataUpdate(true);
   };
 
-  // I will try some suspense
-  // https://www.freecodecamp.org/news/how-to-add-drag-and-drop-in-react-with-react-beautiful-dnd/
-  // Add delete button
-  // Add renmae.
+  const onAddModeClick = () => {
+    setAddColumnMode(!addColumnMode);
+    setColumnName('');
+  };
+
+  const onInputNameChange = (e: FormEvent<HTMLInputElement>) => {
+    setColumnName(e.currentTarget.value);
+  };
+
+  const onSaveClick = () => {
+    if (!columns.has(columnName)) {
+      setColumns(columns.add(columnName));
+      setAddColumnMode(!addColumnMode);
+      setColumnName('');
+      setDataUpdate(true);
+    }
+  };
+
   return (
-    <HStack>
-      {[...columns].map((value, index) => (
-        <Box
-          key={value}
-          minW="xs"
-          maxW="xs"
-          minH="sm"
-          borderWidth="1px"
-          borderRadius="lg"
-          borderColor={dragItemIndex === index ? 'purple.300' : 'gray.600'}
-          bgColor="gray.700"
-          boxShadow="dark-sm"
-          w="100%"
-          onDragStart={() => onDragStart(index)}
-          onDragEnter={() => onDragEnter(index)}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={onDropHandler}
-          onDragEnd={onDropHandler}
-        >
-          <Box p="5" display="flex" flexDirection="column" h="100%" draggable>
-            <HStack justifyContent="space-between" pb="1em">
-              <Heading as="h4" size="sm" color={dragItemIndex === index ? 'purple.300' : 'whiteAlpha.900'}>
-                {value}
-              </Heading>
-              <DragHandleIcon color="gray.600" _hover={{ cursor: 'move', color: 'gray.300' }} />
-            </HStack>
-            <Divider mb="1" bgColor={dragItemIndex === index ? 'purple.300' : 'gray.600'} />
-          </Box>
-        </Box>
-      ))}
-    </HStack>
+    <Box display="flex" justifyContent="space-between">
+      <HStack>
+        {[...columns].map((value, index) => (
+          <BoardColumn
+            // eslint-disable-next-line quotes
+            key={value.split(" ").join("_")}
+            value={value}
+            index={index}
+            done={data.doneColumnName === value}
+            dragItemIndex={dragItemIndex}
+            actions={{
+              onDragStart,
+              onDragEnter,
+              onDropHandler,
+            }}
+          />
+        ))}
+      </HStack>
+      <Box ml="1em" display="flex">
+        {addColumnMode && (
+          <VStack alignItems="end">
+            <Input
+              placeholder="Column name"
+              minW="10em"
+              focusBorderColor="purple.400"
+              onChange={onInputNameChange}
+              isInvalid={columns.has(columnName)}
+            />
+            <ButtonGroup variant="outline" spacing="2">
+              <IconButton
+                variant="outline"
+                aria-label="Close add column"
+                icon={<CloseIcon color="gray.300" w="3" h="3" />}
+                onClick={onAddModeClick}
+              />
+              <IconButton
+                variant="outline"
+                aria-label="Save column"
+                icon={<CheckIcon color="green.300" />}
+                onClick={onSaveClick}
+              />
+            </ButtonGroup>
+          </VStack>
+        )}
+        {!addColumnMode && (
+          <IconButton
+            ml="0.5em"
+            variant="outline"
+            aria-label="Add column"
+            icon={<AddIcon />}
+            onClick={onAddModeClick}
+          />
+        )}
+      </Box>
+    </Box>
   );
 }
 

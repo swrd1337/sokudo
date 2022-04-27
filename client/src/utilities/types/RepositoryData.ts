@@ -5,7 +5,7 @@ interface RepositoryData {
   defaultBranch: string;
   visibility: string;
   boardColumns: Set<string>;
-  doneColumnIndex: number;
+  doneColumnName: string;
 }
 
 export default RepositoryData;

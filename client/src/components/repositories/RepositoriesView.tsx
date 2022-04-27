@@ -2,7 +2,7 @@ import { SimpleGrid } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { fetchRepositoriesData } from '../../api/repositoriesApi';
 import UserContext from '../../context/UserContext';
-import Repository from '../../utilities/Repository';
+import Repository from '../../utilities/types/Repository';
 import ViewContainer from '../../ViewContainer';
 import MainSkeleton from './MainSkeleton';
 import RepositoryCard from './RepositoryCard';

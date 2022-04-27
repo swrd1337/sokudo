@@ -2,6 +2,10 @@ package com.swrd1337.sokudo.api.services;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.swrd1337.sokudo.api.entities.Repository;
 import com.swrd1337.sokudo.api.entities.RepositoryData;
@@ -19,7 +23,11 @@ public class ApiRepoService {
 
   private static final String TO_DO_COL_NAME = "To Do";
 
-  private static final int DEFAULT_DONE_CULUMN_INDEX = 2;
+  private static final Set<String> COLUMNS_SET = new LinkedHashSet<String>(){{
+    add(TO_DO_COL_NAME);
+    add(DOING_COL_NAME);
+    add(DOING_COL_NAME);
+  }};
 
   @Autowired
   private ApiRepoRepository repository;
@@ -30,26 +38,23 @@ public class ApiRepoService {
   public RepositoryData getRepositoryData(String owner, String repo) {
     return repository.findByOwnerNameAndRepoName(owner, repo);
   }
-
+  // TODO BUG of hash set order...
   public RepositoryData saveRepositoryData(Repository repo) {
     RepositoryData repositoryData = new RepositoryData(
       repo.getOwner().getLogin(),
       repo.getName(),
       repo.getDefaultBranch(),
       repo.getVisibility(),
-      new HashSet<String>(
-        Arrays.asList(TO_DO_COL_NAME, DOING_COL_NAME, DONE_COL_NAME)
-      ),
-      DEFAULT_DONE_CULUMN_INDEX
+      COLUMNS_SET,
+      DONE_COL_NAME
     );
-
     repositoryData.setId(sequenceGeneratorService.generateSequence(RepositoryData.SEQUENCE_NAME));
 
     return repository.save(repositoryData);
   }
 
-  public void updateRepositoryData(RepositoryData repositoryData) {
-    // Pass
+  public RepositoryData updateRepositoryData(RepositoryData newRepositoryData) {
+    return repository.save(newRepositoryData);
   }
 
 }

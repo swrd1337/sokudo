@@ -1,12 +1,13 @@
 import { ArrowLeftIcon } from '@chakra-ui/icons';
 import {
-  Badge, Container, Heading, HStack, IconButton, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs,
+  Badge, Container, Heading, HStack, IconButton, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs
 } from '@chakra-ui/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchRepositoryData, fetchCreateRepositoryData } from '../../api/repositoriesApi';
+import { fetchCreateRepositoryData, fetchRepositoryData } from '../../api/repositoriesApi';
 import UserContext from '../../context/UserContext';
-import RepositoryData from '../../utilities/RepositoryData';
+import useDebouncedEffect from '../../utilities/debounce';
+import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
 
@@ -16,20 +17,18 @@ function RepositoryView() {
   const { user } = useContext(UserContext);
   const [repositoryData, setRepositoryData] = useState<RepositoryData>();
 
-  useEffect(() => {
+  useDebouncedEffect(() => {
     if (user && repo && owner) {
       const fetchRepoData = async () => {
         let data = await fetchRepositoryData(owner, repo, user?.accessToken);
-        console.log(data)
-        // if (!data) {
-        //   data = await fetchCreateRepositoryData(owner, repo, user?.accessToken);
-        // }
-        // setRepositoryData(data);
+        if (!data) {
+          data = await fetchCreateRepositoryData(owner, repo, user?.accessToken);
+        }
+        setRepositoryData(data);
       };
-      console.log("HERE")
       fetchRepoData();
     }
-  }, [user]);
+  }, [user], 1000);
 
   const onBackClick = () => {
     navigate('/');
@@ -47,7 +46,7 @@ function RepositoryView() {
               size="sm"
               onClick={onBackClick}
             />
-            <Skeleton isLoaded={!!repositoryData} h="2em" w="10em">
+            <Skeleton isLoaded={!!repositoryData} h="2em" minW="10em">
               <Heading as="h4" size="md">
                 {repositoryData?.repoName}
               </Heading>
@@ -75,15 +74,12 @@ function RepositoryView() {
             <Tab fontWeight="semibold">Markdown Notes</Tab>
             <Tab fontWeight="semibold">Versions</Tab>
           </TabList>
-          <Skeleton isLoaded={!!repositoryData} height="80%">
-            <TabPanels flexGrow={1} display="flex">
-              <TabPanel overflowX="auto">
+          <Skeleton isLoaded={!!repositoryData} h="100%">
+            <TabPanels display="flex" h="100%">
+              <TabPanel overflowX="auto" w="100%">
                 {repositoryData && (
                   <RepositoryBoard
-                    boardData={{
-                      columns: repositoryData.boardColumns,
-                      doneIndex: repositoryData.doneColumnIndex,
-                    }}
+                    data={repositoryData}
                   />
                 )}
               </TabPanel>

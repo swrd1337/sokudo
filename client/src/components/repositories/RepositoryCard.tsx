@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Repository from '../../utilities/Repository';
+import Repository from '../../utilities/types/Repository';
 
 type Props = {
   repository: Repository

@@ -1,4 +1,4 @@
-import User from '../utilities/User';
+import User from '../utilities/types/User';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 

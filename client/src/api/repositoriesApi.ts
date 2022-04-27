@@ -1,5 +1,5 @@
-import Repositories from '../utilities/Repositories';
-import RepositoryData from '../utilities/RepositoryData';
+import Repositories from '../utilities/types/Repositories';
+import RepositoryData from '../utilities/types/RepositoryData';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -11,7 +11,6 @@ async function fetchRepositoriesData(accessToken: string) {
   });
   return await response.json() as Promise<Repositories>;
 }
-
 
 async function fetchCreateRepositoryData(owner: string, repo: string, accessToken: string) {
   const response: Response = await fetch(`${apiBaseUrl}/api/repositories/${owner}/${repo}/data`, {
@@ -30,13 +29,30 @@ async function fetchRepositoryData(owner: string, repo: string, accessToken: str
     },
   });
 
-  if (response.status === 404) {
-    console.log("HUH")
-    const data = await fetchCreateRepositoryData(owner, repo, accessToken);
-    console.log(data)
+  if (response.status === 204) {
+    return undefined;
   }
 
   return await response.json() as Promise<RepositoryData>;
 }
 
-export { fetchRepositoriesData, fetchRepositoryData, fetchCreateRepositoryData };
+async function fetchUpdateRepositoryData(data: RepositoryData, accessToken: string) {
+  const json = JSON.stringify(data, (_key, value) => (value instanceof Set ? [...value] : value));
+
+  const response: Response = await fetch(`${apiBaseUrl}/api/repositories/${data.id}/data/`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: json,
+  });
+  return await response.json() as Promise<RepositoryData>;
+}
+
+export {
+  fetchRepositoriesData,
+  fetchRepositoryData,
+  fetchCreateRepositoryData,
+  fetchUpdateRepositoryData,
+};

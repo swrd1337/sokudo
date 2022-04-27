@@ -1,7 +1,5 @@
 package com.swrd1337.sokudo.api.repositories;
 
-import java.util.Optional;
-
 import com.swrd1337.sokudo.api.entities.User;
 
 import org.springframework.data.mongodb.repository.MongoRepository;

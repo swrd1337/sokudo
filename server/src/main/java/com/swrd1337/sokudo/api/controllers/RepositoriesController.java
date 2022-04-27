@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +35,7 @@ public class RepositoriesController {
   @Autowired
   private ApiRepoService apiRepoService;
 
-  private Gson gson = new GsonBuilder()
+  private Gson apiGson = new GsonBuilder()
       .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
       .create();
 
@@ -42,7 +44,7 @@ public class RepositoriesController {
     String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
     // Get all repos from GitHub API
     String response = gitApi.fetchAllRepositories(accessToken).getBody();
-    Repository[] repositories = gson.fromJson(response, Repository[].class);
+    Repository[] repositories = apiGson.fromJson(response, Repository[].class);
     return new ResponseEntity<>(new RepositoriesDTO(repositories), HttpStatus.OK);
   }
 
@@ -54,7 +56,7 @@ public class RepositoriesController {
   ) {
     RepositoryData repositoryData = apiRepoService.getRepositoryData(owner, repo);
     if (repositoryData == null) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     return new ResponseEntity<>(repositoryData, HttpStatus.OK);
   }
@@ -66,13 +68,25 @@ public class RepositoriesController {
     ApiAuthenticationToken principal
   ) {
     RepositoryData repositoryData = apiRepoService.getRepositoryData(owner, repo);
+    System.err.println("WHAT" + repositoryData);
     if (repositoryData == null) {
       String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
       String response = gitApi.fetchRepositoryById(owner, repo, accessToken).getBody();
-      Repository repository = gson.fromJson(response, Repository.class);
+      Repository repository = apiGson.fromJson(response, Repository.class);
       repositoryData = apiRepoService.saveRepositoryData(repository);
     }
     return  new ResponseEntity<>(apiRepoService.getRepositoryData(owner, repo), HttpStatus.OK);
+  }
+
+  @PutMapping(value = "/{id}/data", consumes = "application/json")
+  public ResponseEntity<RepositoryData> updateRepositoryData(
+    @PathVariable Long id,
+    @RequestBody String json,
+    ApiAuthenticationToken principal
+  ) {
+    RepositoryData newData = new Gson().fromJson(json, RepositoryData.class);
+    RepositoryData updatedRepositoryData = apiRepoService.updateRepositoryData(newData);
+    return new ResponseEntity<>(updatedRepositoryData, HttpStatus.OK);
   }
 
 }

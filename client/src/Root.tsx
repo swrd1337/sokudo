@@ -9,7 +9,7 @@ import Login from './components/login/Login';
 import RepositoriesView from './components/repositories/RepositoriesView';
 import RepositoryView from './components/repositories/RepositoryView';
 import UserContext from './context/UserContext';
-import User from './utilities/User';
+import User from './utilities/types/User';
 
 function Root() {
   const [user, setUser] = useState<User>();

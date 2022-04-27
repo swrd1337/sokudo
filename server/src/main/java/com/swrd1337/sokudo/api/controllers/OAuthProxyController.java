@@ -37,9 +37,6 @@ public class OAuthProxyController {
   @Autowired
   private AppProperties properties;
   
-  /**
-   * TODO: Move to a service class.
-   */
   @CrossOrigin(origins = "*")
   @GetMapping("/{code}")
   public ResponseEntity<UserEntityDTO> getJwtToken(@PathVariable String code) {

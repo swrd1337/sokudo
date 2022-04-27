@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import User from '../../utilities/User';
+import User from '../../utilities/types/User';
 
 type Props = {
   user: User | undefined,

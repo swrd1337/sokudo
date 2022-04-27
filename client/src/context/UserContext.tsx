@@ -1,5 +1,5 @@
 import React from 'react';
-import User from '../utilities/User';
+import User from '../utilities/types/User';
 
 interface UserContextInterface {
   user?: User
