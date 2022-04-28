@@ -4,4 +4,5 @@
 ### To Do:
 * Add caching for external API calls.
 * Move from OAuth App to GitHub App config.
-* Add code docs for API
+* Add code docs for API.
+* Dark/White theme switch.
