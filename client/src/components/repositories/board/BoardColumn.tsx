@@ -74,7 +74,7 @@ function BoardColumn({
       onDrop={actions.onDropHandler}
       onDragEnd={actions.onDropHandler}
     >
-      <Box p="5" display="flex" flexDirection="column" flexGrow={1}>
+      <Box p="5" display="flex" flexDirection="column" flexGrow={1} draggable>
         <HStack justifyContent="space-between" pb="1em">
           <HStack color={titleColor}>
             { done && <CheckIcon /> }
@@ -92,9 +92,7 @@ function BoardColumn({
               </Editable>
             </Heading>
           </HStack>
-          <Box draggable>
-            <DragHandleIcon color="gray.600" _hover={{ cursor: 'move', color: 'gray.300' }} />
-          </Box>
+          <DragHandleIcon color="gray.600" _hover={{ cursor: 'move', color: 'gray.300' }} />
         </HStack>
         <Divider mb="1" bgColor={localColor} />
         {children}
