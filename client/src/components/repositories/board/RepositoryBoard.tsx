@@ -1,6 +1,6 @@
 import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
-  Box, ButtonGroup, HStack, IconButton, Input, VStack,
+  Box, Button, ButtonGroup, HStack, IconButton, Input, VStack,
 } from '@chakra-ui/react';
 import React, { FormEvent, useContext, useState } from 'react';
 import { fetchUpdateRepositoryData } from '../../../api/repositoriesApi';
@@ -19,6 +19,7 @@ function RepositoryBoard({ data }: Props) {
   const [addColumnMode, setAddColumnMode] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>('');
   const [dataUpdate, setDataUpdate] = useState<boolean>(false);
+  const [doneColumnName, setDoneColumnName] = useState<string>(data.doneColumnName);
 
   const { user } = useContext(UserContext);
 
@@ -27,6 +28,7 @@ function RepositoryBoard({ data }: Props) {
       const updateRepoData = async () => {
         const newData = { ...data };
         newData.boardColumns = columns;
+        newData.doneColumnName = doneColumnName;
         await fetchUpdateRepositoryData(newData, user.accessToken); // Return
         setDataUpdate(false);
       };
@@ -70,6 +72,17 @@ function RepositoryBoard({ data }: Props) {
     }
   };
 
+  const renameColumn = (oldName: string, newName: string) => {
+    if (oldName === data.doneColumnName) {
+      setDoneColumnName(newName);
+    }
+    const newColums = [...columns];
+    const index = newColums.indexOf(oldName);
+    newColums[index] = newName;
+    setColumns(new Set(newColums));
+    setDataUpdate(true);
+  };
+
   return (
     <Box display="flex" justifyContent="space-between">
       <HStack>
@@ -79,14 +92,24 @@ function RepositoryBoard({ data }: Props) {
             key={value.split(" ").join("_")}
             value={value}
             index={index}
-            done={data.doneColumnName === value}
+            done={doneColumnName === value}
             dragItemIndex={dragItemIndex}
+            columns={columns}
             actions={{
               onDragStart,
               onDragEnter,
               onDropHandler,
+              renameColumn,
             }}
-          />
+          >
+            <HStack justifyContent="center" pt="0.5em">
+              {doneColumnName !== value && (
+                <Button variant="ghost" colorScheme="purple">
+                  Add Task
+                </Button>
+              )}
+            </HStack>
+          </BoardColumn>
         ))}
       </HStack>
       <Box ml="1em" display="flex">
@@ -94,7 +117,7 @@ function RepositoryBoard({ data }: Props) {
           <VStack alignItems="end">
             <Input
               placeholder="Column name"
-              minW="10em"
+              minW="13em"
               focusBorderColor="purple.400"
               onChange={onInputNameChange}
               isInvalid={columns.has(columnName)}

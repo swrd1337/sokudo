@@ -68,7 +68,6 @@ public class RepositoriesController {
     ApiAuthenticationToken principal
   ) {
     RepositoryData repositoryData = apiRepoService.getRepositoryData(owner, repo);
-    System.err.println("WHAT" + repositoryData);
     if (repositoryData == null) {
       String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
       String response = gitApi.fetchRepositoryById(owner, repo, accessToken).getBody();

@@ -72,7 +72,7 @@ function RepositoryView() {
           <TabList>
             <Tab fontWeight="semibold">Kanban Board</Tab>
             <Tab fontWeight="semibold">Markdown Notes</Tab>
-            <Tab fontWeight="semibold">Versions</Tab>
+            <Tab fontWeight="semibold">Code Analytics</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%">
             <TabPanels display="flex" h="100%">
@@ -87,7 +87,7 @@ function RepositoryView() {
                 <p>TODO: MARKDOWN NOTES!</p>
               </TabPanel>
               <TabPanel>
-                <p>TODO: VERSIONS!</p>
+                <p>TODO: GH API Analytics</p>
               </TabPanel>
             </TabPanels>
           </Skeleton>

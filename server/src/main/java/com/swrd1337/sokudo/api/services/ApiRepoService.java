@@ -23,12 +23,6 @@ public class ApiRepoService {
 
   private static final String TO_DO_COL_NAME = "To Do";
 
-  private static final Set<String> COLUMNS_SET = new LinkedHashSet<String>(){{
-    add(TO_DO_COL_NAME);
-    add(DOING_COL_NAME);
-    add(DOING_COL_NAME);
-  }};
-
   @Autowired
   private ApiRepoRepository repository;
 
@@ -38,14 +32,20 @@ public class ApiRepoService {
   public RepositoryData getRepositoryData(String owner, String repo) {
     return repository.findByOwnerNameAndRepoName(owner, repo);
   }
-  // TODO BUG of hash set order...
+
   public RepositoryData saveRepositoryData(Repository repo) {
+    Set<String> defaultCols = new LinkedHashSet<String>(){{
+      add(TO_DO_COL_NAME);
+      add(DOING_COL_NAME);
+      add(DONE_COL_NAME);
+    }};
+
     RepositoryData repositoryData = new RepositoryData(
       repo.getOwner().getLogin(),
       repo.getName(),
       repo.getDefaultBranch(),
       repo.getVisibility(),
-      COLUMNS_SET,
+      defaultCols,
       DONE_COL_NAME
     );
     repositoryData.setId(sequenceGeneratorService.generateSequence(RepositoryData.SEQUENCE_NAME));
