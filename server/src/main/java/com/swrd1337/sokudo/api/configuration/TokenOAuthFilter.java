@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.swrd1337.sokudo.api.entities.ApiAuthenticationToken;
-import com.swrd1337.sokudo.api.entities.TokenUserDetails;
 import com.swrd1337.sokudo.api.services.TokenUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;

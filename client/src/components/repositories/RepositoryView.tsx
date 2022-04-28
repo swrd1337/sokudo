@@ -1,6 +1,6 @@
 import { ArrowLeftIcon } from '@chakra-ui/icons';
 import {
-  Badge, Container, Heading, HStack, IconButton, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs
+  Badge, Container, Heading, HStack, IconButton, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -72,7 +72,7 @@ function RepositoryView() {
           <TabList>
             <Tab fontWeight="semibold">Kanban Board</Tab>
             <Tab fontWeight="semibold">Markdown Notes</Tab>
-            <Tab fontWeight="semibold">Code Analytics</Tab>
+            <Tab fontWeight="semibold">Code Scanning</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%">
             <TabPanels display="flex" h="100%">
@@ -84,10 +84,10 @@ function RepositoryView() {
                 )}
               </TabPanel>
               <TabPanel>
-                <p>TODO: MARKDOWN NOTES!</p>
+                <p>Markdown Notes View</p>
               </TabPanel>
               <TabPanel>
-                <p>TODO: GH API Analytics</p>
+                <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
               </TabPanel>
             </TabPanels>
           </Skeleton>

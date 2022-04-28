@@ -3,12 +3,14 @@ import {
   Box, Divider, Editable, EditableInput, EditablePreview, Heading, HStack,
 } from '@chakra-ui/react';
 import React, { ReactNode, useState } from 'react';
+import BoardMenu from './BoardMenu';
 
 type Actions = {
   onDragStart: (_index: number) => void,
   onDragEnter: (_index: number) => void,
   onDropHandler: () => void,
-  renameColumn: (_old: string, _new: string) => void
+  renameColumn: (_old: string, _new: string) => void,
+  deleteColumn: (_name: string) => void,
 }
 
 type Props = {
@@ -31,6 +33,10 @@ function BoardColumn({
   const titleColor: string = dragItemIndex === index ? 'purple.300' : 'whiteAlpha.900';
   const previewColor = invalid ? 'red.300' : 'white';
 
+  const onChange = (newVal: string) => {
+    setLocalName(newVal);
+  };
+
   const onNameSubmit = (newVal: string) => {
     if (columns.has(newVal)) {
       setInvalid(true);
@@ -45,8 +51,11 @@ function BoardColumn({
     setLocalName(value);
     setInvalid(false);
   };
-  
-  /// ADD DELETE
+
+  const onBlur = () => {
+    setLocalName(value);
+  };
+
   return (
     <Box
       minW="xs"
@@ -58,27 +67,42 @@ function BoardColumn({
       bgColor="gray.700"
       boxShadow="dark-sm"
       w="100%"
+      display="flex"
       onDragStart={() => actions.onDragStart(index)}
       onDragEnter={() => actions.onDragEnter(index)}
       onDragOver={(e) => e.preventDefault()}
       onDrop={actions.onDropHandler}
       onDragEnd={actions.onDropHandler}
     >
-      <Box p="5" display="flex" flexDirection="column" h="100%" draggable>
+      <Box p="5" display="flex" flexDirection="column" flexGrow={1}>
         <HStack justifyContent="space-between" pb="1em">
           <HStack color={titleColor}>
             { done && <CheckIcon /> }
             <Heading as="h4" size="sm">
-              <Editable defaultValue={localName} onSubmit={onNameSubmit} onCancel={onCancel}>
+              <Editable
+                value={localName}
+                onChange={onChange}
+                onSubmit={onNameSubmit}
+                submitOnBlur={false}
+                onBlur={onBlur}
+                onCancel={onCancel}
+              >
                 <EditablePreview color={previewColor} />
                 <EditableInput />
               </Editable>
             </Heading>
           </HStack>
-          <DragHandleIcon color="gray.600" _hover={{ cursor: 'move', color: 'gray.300' }} />
+          <Box draggable>
+            <DragHandleIcon color="gray.600" _hover={{ cursor: 'move', color: 'gray.300' }} />
+          </Box>
         </HStack>
         <Divider mb="1" bgColor={localColor} />
         {children}
+        {!done && (
+          <Box mt="auto" alignSelf="end">
+            <BoardMenu columnName={value} onDelete={actions.deleteColumn} />
+          </Box>
+        )}
       </Box>
     </Box>
   );

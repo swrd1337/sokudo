@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.swrd1337.sokudo.api.entities.Repository;
+import com.swrd1337.sokudo.api.dto.RepositoryDTO;
 import com.swrd1337.sokudo.api.entities.RepositoryData;
 import com.swrd1337.sokudo.api.repositories.ApiRepoRepository;
 
@@ -33,7 +33,7 @@ public class ApiRepoService {
     return repository.findByOwnerNameAndRepoName(owner, repo);
   }
 
-  public RepositoryData saveRepositoryData(Repository repo) {
+  public RepositoryData saveRepositoryData(RepositoryDTO repo) {
     Set<String> defaultCols = new LinkedHashSet<String>(){{
       add(TO_DO_COL_NAME);
       add(DOING_COL_NAME);

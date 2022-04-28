@@ -1,7 +1,7 @@
 package com.swrd1337.sokudo.api.services;
 
-import com.swrd1337.sokudo.api.entities.ApiAuthenticationToken;
-import com.swrd1337.sokudo.api.entities.TokenUserDetails;
+import com.swrd1337.sokudo.api.configuration.ApiAuthenticationToken;
+import com.swrd1337.sokudo.api.configuration.TokenUserDetails;
 
 import org.springframework.stereotype.Service;
 

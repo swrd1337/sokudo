@@ -1,4 +1,4 @@
-package com.swrd1337.sokudo.api.entities;
+package com.swrd1337.sokudo.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString
-public class RepositoryOwner {
+public class RepositoryOwnerDTO {
   
   private String login;
 

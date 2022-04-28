@@ -1,6 +1,6 @@
 package com.swrd1337.sokudo.api.services;
 
-import com.swrd1337.sokudo.api.entities.TokenUserDetails;
+import com.swrd1337.sokudo.api.configuration.TokenUserDetails;
 import com.swrd1337.sokudo.api.entities.User;
 import com.swrd1337.sokudo.api.repositories.UserRepository;
 

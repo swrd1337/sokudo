@@ -1,4 +1,4 @@
-package com.swrd1337.sokudo.api.entities;
+package com.swrd1337.sokudo.api.configuration;
 
 import java.util.Collection;
 

@@ -1,4 +1,4 @@
-package com.swrd1337.sokudo.api.entities;
+package com.swrd1337.sokudo.api.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Repository {
+public class RepositoryDTO {
 
   private long id;
 
@@ -31,6 +31,6 @@ public class Repository {
 
   private String defaultBranch;
 
-  private RepositoryOwner owner;
+  private RepositoryOwnerDTO owner;
 
 }

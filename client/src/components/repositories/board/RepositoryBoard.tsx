@@ -1,6 +1,6 @@
-import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import {
-  Box, Button, ButtonGroup, HStack, IconButton, Input, VStack,
+  Box, HStack, IconButton,
 } from '@chakra-ui/react';
 import React, { FormEvent, useContext, useState } from 'react';
 import { fetchUpdateRepositoryData } from '../../../api/repositoriesApi';
@@ -8,6 +8,8 @@ import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
 import RepositoryData from '../../../utilities/types/RepositoryData';
 import BoardColumn from './BoardColumn';
+import AddNewEntry from './common/AddNewEntry';
+import TaskView from './tasks/TaskView';
 
 type Props = {
   data: RepositoryData
@@ -83,13 +85,18 @@ function RepositoryBoard({ data }: Props) {
     setDataUpdate(true);
   };
 
+  const deleteColumn = (colName: string) => {
+    columns.delete(colName);
+    setColumns(columns);
+    setDataUpdate(true);
+  };
+
   return (
     <Box display="flex" justifyContent="space-between">
-      <HStack>
+      <HStack alignItems="start">
         {[...columns].map((value, index) => (
           <BoardColumn
-            // eslint-disable-next-line quotes
-            key={value.split(" ").join("_")}
+            key={value.split(' ').join('_')}
             value={value}
             index={index}
             done={doneColumnName === value}
@@ -100,43 +107,21 @@ function RepositoryBoard({ data }: Props) {
               onDragEnter,
               onDropHandler,
               renameColumn,
+              deleteColumn,
             }}
           >
-            <HStack justifyContent="center" pt="0.5em">
-              {doneColumnName !== value && (
-                <Button variant="ghost" colorScheme="purple">
-                  Add Task
-                </Button>
-              )}
-            </HStack>
+            <TaskView doneColumnName={doneColumnName} currentColumnName={value} />
           </BoardColumn>
         ))}
       </HStack>
       <Box ml="1em" display="flex">
         {addColumnMode && (
-          <VStack alignItems="end">
-            <Input
-              placeholder="Column name"
-              minW="13em"
-              focusBorderColor="purple.400"
-              onChange={onInputNameChange}
-              isInvalid={columns.has(columnName)}
-            />
-            <ButtonGroup variant="outline" spacing="2">
-              <IconButton
-                variant="outline"
-                aria-label="Close add column"
-                icon={<CloseIcon color="gray.300" w="3" h="3" />}
-                onClick={onAddModeClick}
-              />
-              <IconButton
-                variant="outline"
-                aria-label="Save column"
-                icon={<CheckIcon color="green.300" />}
-                onClick={onSaveClick}
-              />
-            </ButtonGroup>
-          </VStack>
+          <AddNewEntry
+            onInputChange={onInputNameChange}
+            onSubmit={onSaveClick}
+            onCancel={onAddModeClick}
+            isInvalid={columns.has(columnName)}
+          />
         )}
         {!addColumnMode && (
           <IconButton

@@ -3,9 +3,9 @@ package com.swrd1337.sokudo.api.controllers;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.swrd1337.sokudo.api.configuration.ApiAuthenticationToken;
 import com.swrd1337.sokudo.api.dto.RepositoriesDTO;
-import com.swrd1337.sokudo.api.entities.ApiAuthenticationToken;
-import com.swrd1337.sokudo.api.entities.Repository;
+import com.swrd1337.sokudo.api.dto.RepositoryDTO;
 import com.swrd1337.sokudo.api.entities.RepositoryData;
 import com.swrd1337.sokudo.api.services.ApiRepoService;
 import com.swrd1337.sokudo.api.services.AuthTokenService;
@@ -44,7 +44,7 @@ public class RepositoriesController {
     String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
     // Get all repos from GitHub API
     String response = gitApi.fetchAllRepositories(accessToken).getBody();
-    Repository[] repositories = apiGson.fromJson(response, Repository[].class);
+    RepositoryDTO[] repositories = apiGson.fromJson(response, RepositoryDTO[].class);
     return new ResponseEntity<>(new RepositoriesDTO(repositories), HttpStatus.OK);
   }
 
@@ -71,7 +71,7 @@ public class RepositoriesController {
     if (repositoryData == null) {
       String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
       String response = gitApi.fetchRepositoryById(owner, repo, accessToken).getBody();
-      Repository repository = apiGson.fromJson(response, Repository.class);
+      RepositoryDTO repository = apiGson.fromJson(response, RepositoryDTO.class);
       repositoryData = apiRepoService.saveRepositoryData(repository);
     }
     return  new ResponseEntity<>(apiRepoService.getRepositoryData(owner, repo), HttpStatus.OK);
