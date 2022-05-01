@@ -44,7 +44,7 @@ function RepositoryView() {
 
   return (
     <ViewContainer fullH>
-      <Container maxW="100%" display="flex" flexDirection="column" flexGrow={1}>
+      <Container maxW="100%" h="100%" display="flex" flexDirection="column" flexGrow={1}>
         <HStack pb="5" justifyContent="space-between">
           {/* Extract into component */}
           <HStack>
@@ -91,7 +91,7 @@ function RepositoryView() {
                 <TabPanel overflow="auto" w="100%">
                   <RepositoryBoard data={repositoryData} />
                 </TabPanel>
-                <TabPanel overflow="auto" w="100%" display="flex">
+                <TabPanel w="100%" display="flex">
                   <MarkdownsTab repoId={repositoryData.id} />
                 </TabPanel>
                 <TabPanel>

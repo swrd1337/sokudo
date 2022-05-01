@@ -211,7 +211,7 @@ function MarkdownsTab({ repoId }: Props) {
             editMode={contentEditMode}
             value={markdownContent}
             onChange={onContentUpdate}
-            height="66vh"
+            height="100%"
             bgColor="gray.700"
           />
         </Box>
