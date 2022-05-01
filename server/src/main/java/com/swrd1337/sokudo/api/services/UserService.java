@@ -16,9 +16,6 @@ public class UserService {
   @Autowired
   private UserRepository repository;
 
-  @Autowired
-  private SequenceGeneratorService sequenceGeneratorService;
-
   public User getUser(Long id) throws NotFoundException {
     Optional<User> optional = repository.findById(id);
     return optional.orElseThrow(() -> new NotFoundException());
@@ -29,7 +26,7 @@ public class UserService {
   }
 
   public User addUser(GitProviderUser gitUser, String accessToken) {
-    Long id = sequenceGeneratorService.generateSequence(User.SEQUENCE_NAME);
+    Long id = gitUser.getId();
     String username = gitUser.getLogin();
     String avatarUrl = gitUser.getAvatarUrl();
     String pageUrl = gitUser.getHtmlUrl();

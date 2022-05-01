@@ -23,6 +23,7 @@ function AddNewEntry({
         focusBorderColor="purple.400"
         onChange={onInputChange}
         isInvalid={isInvalid}
+        autoFocus
       />
       <ButtonGroup variant="outline" spacing="2">
         <IconButton

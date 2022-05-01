@@ -21,7 +21,8 @@ function BoardMenu({ columnName, onDelete }: Props) {
         aria-label="Options"
         icon={<HamburgerIcon />}
         variant="ghost"
-        width="0.5em"
+        minW="1.8em"
+        h="1.8em"
       />
       <MenuList>
         <MenuItem icon={<DeleteIcon />} onClick={() => onDelete(columnName)}>

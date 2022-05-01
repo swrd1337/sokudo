@@ -3,9 +3,6 @@ package com.swrd1337.sokudo.api.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.swrd1337.sokudo.AppProperties;
 import com.swrd1337.sokudo.api.dto.UserEntityDTO;
 import com.swrd1337.sokudo.api.entities.User;
@@ -13,6 +10,7 @@ import com.swrd1337.sokudo.api.services.UserService;
 import com.swrd1337.sokudo.external.api.GitHostProviderApi;
 import com.swrd1337.sokudo.external.entities.AccessTokenResponse;
 import com.swrd1337.sokudo.external.entities.GitProviderUser;
+import com.swrd1337.sokudo.utilities.GsonWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -36,23 +34,19 @@ public class OAuthProxyController {
   
   @Autowired
   private AppProperties properties;
-  
+
   @CrossOrigin(origins = "*")
   @GetMapping("/{code}")
   public ResponseEntity<UserEntityDTO> getJwtToken(@PathVariable String code) {
     Map<String, String> data = getAccessTokenBodyData(code);
     ResponseEntity<String> response = gitApi.fetchAccessToken(data);
-
-    Gson gson = new GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .create();
-    AccessTokenResponse tokenResponse = gson.fromJson(response.getBody(), AccessTokenResponse.class);
+    AccessTokenResponse tokenResponse = GsonWrapper.getApiGson().fromJson(response.getBody(), AccessTokenResponse.class);
 
     UserEntityDTO userDto = null;
     String accessToken = tokenResponse.getAccessToken();
     if (accessToken != null && !accessToken.isBlank()) {
       response = gitApi.fetchUserData(accessToken);
-      GitProviderUser gitUser =gson.fromJson(response.getBody(), GitProviderUser.class);
+      GitProviderUser gitUser = GsonWrapper.getApiGson().fromJson(response.getBody(), GitProviderUser.class);
       Long id = gitUser.getId();
       if (id != null) {
         User user;

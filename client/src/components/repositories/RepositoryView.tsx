@@ -36,7 +36,7 @@ function RepositoryView() {
 
   return (
     <ViewContainer fullH>
-      <Container maxW="none" display="flex" flexDirection="column" flexGrow={1}>
+      <Container maxW="100%" display="flex" flexDirection="column" flexGrow={1}>
         <HStack pb="5" justifyContent="space-between">
           {/* Extract into component */}
           <HStack>
@@ -68,6 +68,7 @@ function RepositoryView() {
           display="flex"
           flexDirection="column"
           flexGrow={1}
+          isLazy
         >
           <TabList>
             <Tab fontWeight="semibold">Kanban Board</Tab>
@@ -75,8 +76,8 @@ function RepositoryView() {
             <Tab fontWeight="semibold">Code Scanning</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%">
-            <TabPanels display="flex" h="100%">
-              <TabPanel overflowX="auto" w="100%">
+            <TabPanels display="flex" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
+              <TabPanel overflow="auto" w="100%">
                 {repositoryData && (
                   <RepositoryBoard
                     data={repositoryData}

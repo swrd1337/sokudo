@@ -2,11 +2,16 @@ import { AddIcon } from '@chakra-ui/icons';
 import {
   Box, HStack, IconButton,
 } from '@chakra-ui/react';
-import React, { FormEvent, useContext, useState } from 'react';
+import React, {
+  FormEvent, useContext, useEffect, useState,
+} from 'react';
 import { fetchUpdateRepositoryData } from '../../../api/repositoriesApi';
+import { fetchRepositoryTasks, fetchUpdateRepositoryTask } from '../../../api/tasksApi';
+import TasksContext from '../../../context/TaskTasksContext';
 import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
 import RepositoryData from '../../../utilities/types/RepositoryData';
+import Task from '../../../utilities/types/Task';
 import BoardColumn from './BoardColumn';
 import AddNewEntry from './common/AddNewEntry';
 import TaskView from './tasks/TaskView';
@@ -17,43 +22,79 @@ type Props = {
 
 function RepositoryBoard({ data }: Props) {
   const [columns, setColumns] = useState<Set<string>>(new Set(data.boardColumns));
-  const [dragItemIndex, setDragItemIndex] = useState<number>(-1);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const [dragColIndex, setDragColIndex] = useState<number>(-1);
+  const [dragTaskMode, setDragTaskMode] = useState<boolean>(false);
+
+  const [doneColumnName, setDoneColumnName] = useState<string>(data.doneColumnName);
   const [addColumnMode, setAddColumnMode] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>('');
-  const [dataUpdate, setDataUpdate] = useState<boolean>(false);
-  const [doneColumnName, setDoneColumnName] = useState<string>(data.doneColumnName);
 
+  const [dataUpdate, setDataUpdate] = useState<boolean>(false);
+  const [taskUpdate, setTaskUpdate] = useState<boolean>(true);
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    if (user && taskUpdate) {
+      const fetchTasks = async () => {
+        const responseData: Task[] = await fetchRepositoryTasks(data.id, user.accessToken);
+        setTasks(responseData);
+      };
+      fetchTasks();
+      setTaskUpdate(false);
+    }
+  }, [taskUpdate]);
 
   useDebouncedEffect(() => {
     if (user && dataUpdate) {
       const updateRepoData = async () => {
-        const newData = { ...data };
-        newData.boardColumns = columns;
-        newData.doneColumnName = doneColumnName;
-        await fetchUpdateRepositoryData(newData, user.accessToken); // Return
+        const newData = { ...data, boardColumns: columns };
+        await fetchUpdateRepositoryData(newData, user.accessToken);
         setDataUpdate(false);
       };
       updateRepoData();
     }
   }, [columns, dataUpdate], 1000);
 
-  const onDragStart = (index: number) => {
-    setDragItemIndex(index);
+  const onDragStart = (colIndex: number, _taskMode?: boolean) => {
+    setDragColIndex(colIndex);
+    if (_taskMode) {
+      setDragTaskMode(true);
+    }
   };
 
-  const onDragEnter = (index: number) => {
-    const newColums = [...columns];
-    const item = newColums[dragItemIndex];
-    newColums.splice(dragItemIndex, 1);
-    newColums.splice(index, 0, item);
-    setDragItemIndex(index);
-    setColumns(new Set(newColums));
+  const onDragEnter = (colIndex: number) => {
+    setDragColIndex(colIndex);
+    if (!dragTaskMode) {
+      const newColums = [...columns];
+      const item = newColums[dragColIndex];
+      newColums.splice(dragColIndex, 1);
+      newColums.splice(colIndex, 0, item);
+      setColumns(new Set(newColums));
+    }
   };
 
   const onDropHandler = () => {
-    setDragItemIndex(-1);
-    setDataUpdate(true);
+    if (!dragTaskMode) {
+      setDragColIndex(-1);
+      setDataUpdate(true);
+    }
+  };
+
+  const onDragEndHandler = async (task: Task) => {
+    if (dragColIndex > -1) {
+      const dragColumnName = [...columns].at(dragColIndex);
+      if (dragColumnName && dragColumnName !== task.columnName) {
+        const updatedTask = { ...task };
+        updatedTask.columnName = dragColumnName;
+        const tempTasks = tasks.filter((t) => t.id !== task.id);
+        setTasks([...tempTasks, updatedTask]);
+        await fetchUpdateRepositoryTask(updatedTask, user!.accessToken);
+      }
+    }
+    setDragTaskMode(false);
+    setDragColIndex(-1);
   };
 
   const onAddModeClick = () => {
@@ -100,7 +141,7 @@ function RepositoryBoard({ data }: Props) {
             value={value}
             index={index}
             done={doneColumnName === value}
-            dragItemIndex={dragItemIndex}
+            dragItemIndex={dragColIndex}
             columns={columns}
             actions={{
               onDragStart,
@@ -110,11 +151,25 @@ function RepositoryBoard({ data }: Props) {
               deleteColumn,
             }}
           >
-            <TaskView doneColumnName={doneColumnName} currentColumnName={value} />
+            {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
+            <TasksContext.Provider value={{ triggerUpdate: setTaskUpdate }}>
+              <TaskView
+                doneColumnName={doneColumnName}
+                currentColumnName={value}
+                repoDataId={data.id}
+                accessToken={user?.accessToken}
+                tasks={tasks}
+                actions={{
+                  onDragEndHandler,
+                  onDragStart,
+                  setTasks,
+                }}
+              />
+            </TasksContext.Provider>
           </BoardColumn>
         ))}
       </HStack>
-      <Box ml="1em" display="flex">
+      <Box p="0 1em" display="flex">
         {addColumnMode && (
           <AddNewEntry
             onInputChange={onInputNameChange}

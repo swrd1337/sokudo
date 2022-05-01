@@ -3,51 +3,71 @@ import RepositoryData from '../utilities/types/RepositoryData';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function fetchRepositoriesData(accessToken: string) {
-  const response: Response = await fetch(`${apiBaseUrl}/api/repositories`, {
+async function fetchRepositoriesData(accessToken: string): Promise<Repositories> {
+  const response: Response = await fetch(`${apiBaseUrl}/repositories`, {
     headers: {
       Authorization: `token ${accessToken}`,
     },
   });
-  return await response.json() as Promise<Repositories>;
+  return response.json();
 }
 
-async function fetchCreateRepositoryData(owner: string, repo: string, accessToken: string) {
-  const response: Response = await fetch(`${apiBaseUrl}/api/repositories/${owner}/${repo}/data`, {
-    method: 'POST',
-    headers: {
-      Authorization: `token ${accessToken}`,
+async function fetchCreateRepositoryData(
+  owner: string,
+  repo: string,
+  accessToken: string,
+): Promise<RepositoryData> {
+  const response: Response = await fetch(
+    `${apiBaseUrl}/repositories/${owner}/${repo}/data`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
     },
-  });
-  return await response.json() as Promise<RepositoryData>;
+  );
+  return response.json();
 }
 
-async function fetchRepositoryData(owner: string, repo: string, accessToken: string) {
-  const response: Response = await fetch(`${apiBaseUrl}/api/repositories/${owner}/${repo}/data`, {
-    headers: {
-      Authorization: `token ${accessToken}`,
+async function fetchRepositoryData(
+  owner: string,
+  repo: string,
+  accessToken: string,
+): Promise<RepositoryData | undefined > {
+  const response: Response = await fetch(
+    `${apiBaseUrl}/repositories/${owner}/${repo}/data`,
+    {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
     },
-  });
+  );
 
   if (response.status === 204) {
-    return undefined;
+    return Promise.resolve(undefined);
   }
 
-  return await response.json() as Promise<RepositoryData>;
+  return response.json();
 }
 
-async function fetchUpdateRepositoryData(data: RepositoryData, accessToken: string) {
+async function fetchUpdateRepositoryData(
+  data: RepositoryData,
+  accessToken: string,
+): Promise<RepositoryData> {
   const json = JSON.stringify(data, (_key, value) => (value instanceof Set ? [...value] : value));
 
-  const response: Response = await fetch(`${apiBaseUrl}/api/repositories/${data.id}/data/`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `token ${accessToken}`,
-      'Content-Type': 'application/json',
+  const response: Response = await fetch(
+    `${apiBaseUrl}/repositories/${data.id}/data/`,
+    {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: json,
     },
-    body: json,
-  });
-  return await response.json() as Promise<RepositoryData>;
+  );
+  return response.json();
 }
 
 export {

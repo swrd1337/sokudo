@@ -3,8 +3,7 @@ import User from '../utilities/types/User';
 
 interface UserContextInterface {
   user?: User
-  // eslint-disable-next-line no-unused-vars
-  setUser: (user: User | undefined) => void
+  setUser(_user: User | undefined): void
 }
 
 const contextDefaultValue: UserContextInterface = {

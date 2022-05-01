@@ -1,11 +1,7 @@
 package com.swrd1337.sokudo.api.services;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.swrd1337.sokudo.api.dto.RepositoryDTO;
 import com.swrd1337.sokudo.api.entities.RepositoryData;
@@ -49,12 +45,17 @@ public class ApiRepoService {
       DONE_COL_NAME
     );
     repositoryData.setId(sequenceGeneratorService.generateSequence(RepositoryData.SEQUENCE_NAME));
-
     return repository.save(repositoryData);
   }
 
-  public RepositoryData updateRepositoryData(RepositoryData newRepositoryData) {
-    return repository.save(newRepositoryData);
+  public RepositoryData updateRepositoryData(Long repoDataId, RepositoryData newRepositoryData) {
+    return repository.findById(repoDataId)
+        .map(
+            existingRepositoryData -> {
+              existingRepositoryData.setBoardColumns(newRepositoryData.getBoardColumns());
+              return repository.save(existingRepositoryData);
+            })
+        .orElse(null);
   }
 
 }

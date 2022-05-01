@@ -1,4 +1,4 @@
-import { CheckIcon, DragHandleIcon } from '@chakra-ui/icons';
+import { CheckIcon } from '@chakra-ui/icons';
 import {
   Box, Divider, Editable, EditableInput, EditablePreview, Heading, HStack,
 } from '@chakra-ui/react';
@@ -6,11 +6,11 @@ import React, { ReactNode, useState } from 'react';
 import BoardMenu from './BoardMenu';
 
 type Actions = {
-  onDragStart: (_index: number) => void,
-  onDragEnter: (_index: number) => void,
-  onDropHandler: () => void,
-  renameColumn: (_old: string, _new: string) => void,
-  deleteColumn: (_name: string) => void,
+  onDragStart(_colIndex: number): void,
+  onDragEnter(_colIndex: number): void,
+  onDropHandler(): void,
+  renameColumn(_old: string, _new: string): void,
+  deleteColumn(_name: string): void,
 }
 
 type Props = {
@@ -29,8 +29,11 @@ function BoardColumn({
   const [localName, setLocalName] = useState<string>(value);
   const [invalid, setInvalid] = useState<boolean>(false);
 
-  const localColor: string = dragItemIndex === index ? 'purple.300' : 'gray.600';
-  const titleColor: string = dragItemIndex === index ? 'purple.300' : 'whiteAlpha.900';
+  let [localColor, titleColor] = ['gray.600', 'whiteAlpha'];
+  if (dragItemIndex === index) {
+    [localColor, titleColor] = ['purple.300', 'purple.300'];
+  }
+
   const previewColor = invalid ? 'red.300' : 'white';
 
   const onChange = (newVal: string) => {
@@ -38,7 +41,7 @@ function BoardColumn({
   };
 
   const onNameSubmit = (newVal: string) => {
-    if (columns.has(newVal)) {
+    if (columns.has(newVal) && newVal.length > 64) {
       setInvalid(true);
     } else {
       setInvalid(false);
@@ -74,10 +77,18 @@ function BoardColumn({
       onDrop={actions.onDropHandler}
       onDragEnd={actions.onDropHandler}
     >
-      <Box p="5" display="flex" flexDirection="column" flexGrow={1} draggable>
-        <HStack justifyContent="space-between" pb="1em">
+      <Box
+        w="100%"
+        p="5"
+        display="flex"
+        flexDirection="column"
+        flexGrow={1}
+        _hover={{ cursor: 'grab' }}
+        draggable
+      >
+        <HStack justifyContent="space-between" pb="0.5em">
           <HStack color={titleColor}>
-            { done && <CheckIcon /> }
+            {done && <CheckIcon />}
             <Heading as="h4" size="sm">
               <Editable
                 value={localName}
@@ -92,15 +103,14 @@ function BoardColumn({
               </Editable>
             </Heading>
           </HStack>
-          <DragHandleIcon color="gray.600" _hover={{ cursor: 'move', color: 'gray.300' }} />
+          {!done && (
+            <Box mt="auto" alignSelf="end">
+              <BoardMenu columnName={value} onDelete={actions.deleteColumn} />
+            </Box>
+          )}
         </HStack>
         <Divider mb="1" bgColor={localColor} />
         {children}
-        {!done && (
-          <Box mt="auto" alignSelf="end">
-            <BoardMenu columnName={value} onDelete={actions.deleteColumn} />
-          </Box>
-        )}
       </Box>
     </Box>
   );

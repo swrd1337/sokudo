@@ -1,10 +1,10 @@
 import User from '../utilities/types/User';
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const oatuhProxyUrl = import.meta.env.VITE_OAUTH_PROXY_URL;
 
 async function fetchAuthorizeUser(code: string): Promise<User> {
-  const response: Response = await fetch(`${apiBaseUrl}/proxy/oauth/${code}`);
-  return await response.json() as Promise<User>;
+  const response: Response = await fetch(`${oatuhProxyUrl}/${code}`);
+  return response.json();
 }
 
 export default fetchAuthorizeUser;
