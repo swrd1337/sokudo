@@ -3,16 +3,19 @@ import {
   Badge, Container, Heading, HStack, IconButton, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { fetchCreateRepositoryData, fetchRepositoryData } from '../../api/repositoriesApi';
 import UserContext from '../../context/UserContext';
 import useDebouncedEffect from '../../utilities/debounce';
 import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
+import MarkdownsTab from './markdownNotes/MarkdownsTab';
 
 function RepositoryView() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { owner, repo } = useParams();
   const { user } = useContext(UserContext);
   const [repositoryData, setRepositoryData] = useState<RepositoryData>();
@@ -28,10 +31,15 @@ function RepositoryView() {
       };
       fetchRepoData();
     }
-  }, [user], 1000);
+  }, [user], 300);
 
   const onBackClick = () => {
     navigate('/');
+  };
+
+  const onTabChange = (index: number) => {
+    searchParams.set('tab', index.toString());
+    setSearchParams(searchParams);
   };
 
   return (
@@ -69,6 +77,8 @@ function RepositoryView() {
           flexDirection="column"
           flexGrow={1}
           isLazy
+          index={+(searchParams.get('tab') ?? 0)}
+          onChange={onTabChange}
         >
           <TabList>
             <Tab fontWeight="semibold">Kanban Board</Tab>
@@ -76,21 +86,19 @@ function RepositoryView() {
             <Tab fontWeight="semibold">Code Scanning</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%">
-            <TabPanels display="flex" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
-              <TabPanel overflow="auto" w="100%">
-                {repositoryData && (
-                  <RepositoryBoard
-                    data={repositoryData}
-                  />
-                )}
-              </TabPanel>
-              <TabPanel>
-                <p>Markdown Notes View</p>
-              </TabPanel>
-              <TabPanel>
-                <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
-              </TabPanel>
-            </TabPanels>
+            {repositoryData && (
+              <TabPanels display="flex" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
+                <TabPanel overflow="auto" w="100%">
+                  <RepositoryBoard data={repositoryData} />
+                </TabPanel>
+                <TabPanel overflow="auto" w="100%" display="flex">
+                  <MarkdownsTab repoId={repositoryData.id} />
+                </TabPanel>
+                <TabPanel>
+                  <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
+                </TabPanel>
+              </TabPanels>
+            )}
           </Skeleton>
         </Tabs>
       </Container>

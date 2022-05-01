@@ -8,12 +8,13 @@ type Props = {
   onInputChange: (_e: FormEvent<HTMLInputElement>) => void
   onSubmit: () => void
   onCancel: () => void,
+  value: string,
   width?: string,
   isInvalid?: boolean,
 }
 
 function AddNewEntry({
-  onInputChange, onSubmit, onCancel, width, isInvalid,
+  onInputChange, onSubmit, onCancel, width, isInvalid, value,
 }: Props) {
   return (
     <VStack alignItems="end" w={width}>
@@ -23,6 +24,7 @@ function AddNewEntry({
         focusBorderColor="purple.400"
         onChange={onInputChange}
         isInvalid={isInvalid}
+        value={value}
         autoFocus
       />
       <ButtonGroup variant="outline" spacing="2">

@@ -8,6 +8,7 @@ import AppBar from './components/AppBar';
 import Login from './components/login/Login';
 import RepositoriesView from './components/repositories/RepositoriesView';
 import RepositoryView from './components/repositories/RepositoryView';
+import TaskView from './components/repositories/tasks/TaskView';
 import UserContext from './context/UserContext';
 import User from './utilities/types/User';
 
@@ -54,6 +55,7 @@ function Root() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<RepositoriesView />} />
+            <Route path="/tasks/:taskId" element={<TaskView />} />
             <Route path="/repositories/:owner/:repo" element={<RepositoryView />} />
           </Routes>
         </Box>

@@ -13,4 +13,9 @@ public class AuthTokenService {
     return userDetails.getAccessToken();
   }
 
+  public Long getUserIdFromAuthToken(ApiAuthenticationToken authToken) {
+    TokenUserDetails userDetails = (TokenUserDetails) authToken.getDetails();
+    return userDetails.getId();
+  }
+
 }

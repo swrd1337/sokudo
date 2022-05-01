@@ -15,7 +15,7 @@ type Props = {
   accessToken: string | undefined,
 }
 
-function TaskView({
+function TaskList({
   tasks, doneColumnName, currentColumnName, repoDataId, accessToken, actions,
 }: Props) {
   const [openAddTask, setOpenAddTask] = useState<boolean>(false);
@@ -33,16 +33,16 @@ function TaskView({
 
   const onSubmit = async () => {
     if ((newTaskTitle && newTaskTitle.length < 64) && accessToken) {
-      const newTask: Task = {
+      let newTask: Task = {
         id: -1,
         title: newTaskTitle,
         columnName: currentColumnName,
         repositoryDataId: repoDataId,
       };
-      actions.setTasks([...tasks, newTask]);
       setOpenAddTask(!openAddTask);
       setInvalidTitle(false);
-      await fetchSaveRepositoryTask(newTask, accessToken);
+      newTask = await fetchSaveRepositoryTask(newTask, accessToken);
+      actions.setTasks([...tasks, newTask]);
     } else {
       setInvalidTitle(true);
     }
@@ -53,13 +53,10 @@ function TaskView({
     setInvalidTitle(false);
   };
 
-  // https://codepen.io/gtb104/pen/ZEEQob
-  // https://www.youtube.com/watch?v=wv7pvH1O5Ho
-  // https://www.digitalocean.com/community/tutorials/js-drag-and-drop-vanilla-js
   return (
     <HStack justifyContent="center" pt="0.5em">
       <VStack w="100%">
-        {tasks.filter((t) => t.columnName === currentColumnName).map((t) => (
+        {tasks?.filter((t) => t.columnName === currentColumnName).map((t) => (
           <TaskCard key={t.id} task={t} actions={actions} />
         ))}
         {openAddTask && (
@@ -68,6 +65,7 @@ function TaskView({
             onSubmit={onSubmit}
             onCancel={handleAddTask}
             isInvalid={invalidTitle}
+            value={newTaskTitle}
             width="100%"
           />
         )}
@@ -81,4 +79,4 @@ function TaskView({
   );
 }
 
-export default TaskView;
+export default TaskList;

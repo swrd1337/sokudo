@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.swrd1337.sokudo.api.entities.Task;
 import com.swrd1337.sokudo.api.services.TasksService;
-import com.swrd1337.sokudo.utilities.GsonWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -27,13 +26,19 @@ public class TasksController {
   @Autowired
   private TasksService tasksService;
 
-  @GetMapping(value = "/{repoDataId}")
+  @GetMapping("/repo/{repoDataId}")
   public ResponseEntity<List<Task>> getAllRepositoryTasks(@PathVariable Long repoDataId) {
     List<Task> tasks = tasksService.getAllTasks(repoDataId);
     if (tasks == null) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     return new ResponseEntity<>(tasks, HttpStatus.OK);
+  }
+
+  @GetMapping("/{taskId}")
+  public ResponseEntity<Task> getTask(@PathVariable Long taskId) throws NotFoundException {
+    Task updatedTask = tasksService.getTask(taskId);
+    return new ResponseEntity<>(updatedTask, HttpStatus.OK);
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -48,7 +53,7 @@ public class TasksController {
     return new ResponseEntity<>(updatedTask, HttpStatus.OK);
   } 
 
-  @DeleteMapping(value = "/{taskId}")
+  @DeleteMapping("/{taskId}")
   public void daleteTask(@PathVariable Long taskId) throws NotFoundException {
     tasksService.deleteTask(taskId);
   } 

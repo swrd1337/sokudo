@@ -15,7 +15,7 @@ function RepositoryCard({ repository }: Props) {
   const navigate = useNavigate();
 
   const onOpenClick = () => {
-    navigate(`/repositories/${owner.login}/${repository.name}`);
+    navigate(`/repositories/${owner.login}/${repository.name}/?tab=0`);
   };
 
   return (

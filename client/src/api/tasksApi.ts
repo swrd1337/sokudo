@@ -3,7 +3,7 @@ import Task from '../utilities/types/Task';
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 async function fetchRepositoryTasks(repoDataId: number, accessToken: string): Promise<Task[]> {
-  const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/${repoDataId}`, {
+  const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/repo/${repoDataId}`, {
     headers: {
       Authorization: `token ${accessToken}`,
     },
@@ -35,6 +35,15 @@ async function fetchUpdateRepositoryTask(task: Task, accessToken: string): Promi
   return response.json();
 }
 
+async function fetchRepositoryTask(taskId: number, accessToken: string): Promise<Task> {
+  const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/${taskId}`, {
+    headers: {
+      Authorization: `token ${accessToken}`,
+    },
+  });
+  return response.json();
+}
+
 async function fetchDeleteRepositoryTask(taskId: number, accessToken: string) {
   await fetch(`${apiBaseUrl}/repositories/tasks/${taskId}`, {
     method: 'DELETE',
@@ -49,4 +58,5 @@ export {
   fetchRepositoryTasks,
   fetchUpdateRepositoryTask,
   fetchDeleteRepositoryTask,
+  fetchRepositoryTask,
 };

@@ -14,6 +14,8 @@ public class UserEntityDTO {
   
   private String username;
 
+  private long id;
+
   private String avatarUrl;
 
   private String pageUrl;
@@ -24,6 +26,7 @@ public class UserEntityDTO {
 
   public UserEntityDTO(@NonNull User user) {
     this.username = user.getUsername();
+    this.id = user.getId();
     this.avatarUrl = user.getAvatarUrl();
     this.pageUrl = user.getPageUrl();
     this.name = user.getName();

@@ -7,14 +7,13 @@ import React, {
 } from 'react';
 import { fetchUpdateRepositoryData } from '../../../api/repositoriesApi';
 import { fetchRepositoryTasks, fetchUpdateRepositoryTask } from '../../../api/tasksApi';
-import TasksContext from '../../../context/TaskTasksContext';
 import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
 import RepositoryData from '../../../utilities/types/RepositoryData';
 import Task from '../../../utilities/types/Task';
 import BoardColumn from './BoardColumn';
 import AddNewEntry from './common/AddNewEntry';
-import TaskView from './tasks/TaskView';
+import TaskList from './tasks/TaskList';
 
 type Props = {
   data: RepositoryData
@@ -32,19 +31,17 @@ function RepositoryBoard({ data }: Props) {
   const [columnName, setColumnName] = useState<string>('');
 
   const [dataUpdate, setDataUpdate] = useState<boolean>(false);
-  const [taskUpdate, setTaskUpdate] = useState<boolean>(true);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (user && taskUpdate) {
+    if (user) {
       const fetchTasks = async () => {
         const responseData: Task[] = await fetchRepositoryTasks(data.id, user.accessToken);
         setTasks(responseData);
       };
       fetchTasks();
-      setTaskUpdate(false);
     }
-  }, [taskUpdate]);
+  }, []);
 
   useDebouncedEffect(() => {
     if (user && dataUpdate) {
@@ -151,21 +148,18 @@ function RepositoryBoard({ data }: Props) {
               deleteColumn,
             }}
           >
-            {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
-            <TasksContext.Provider value={{ triggerUpdate: setTaskUpdate }}>
-              <TaskView
-                doneColumnName={doneColumnName}
-                currentColumnName={value}
-                repoDataId={data.id}
-                accessToken={user?.accessToken}
-                tasks={tasks}
-                actions={{
-                  onDragEndHandler,
-                  onDragStart,
-                  setTasks,
-                }}
-              />
-            </TasksContext.Provider>
+            <TaskList
+              doneColumnName={doneColumnName}
+              currentColumnName={value}
+              repoDataId={data.id}
+              accessToken={user?.accessToken}
+              tasks={tasks}
+              actions={{
+                onDragEndHandler,
+                onDragStart,
+                setTasks,
+              }}
+            />
           </BoardColumn>
         ))}
       </HStack>
@@ -176,6 +170,7 @@ function RepositoryBoard({ data }: Props) {
             onSubmit={onSaveClick}
             onCancel={onAddModeClick}
             isInvalid={columns.has(columnName)}
+            value={columnName}
           />
         )}
         {!addColumnMode && (
