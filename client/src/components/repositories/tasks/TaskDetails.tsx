@@ -1,6 +1,7 @@
 import { EditIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Divider,
   Editable,
   EditableInput,
   EditablePreview, HStack,
@@ -165,7 +166,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
           </RadioGroup>
         </HStack>
         {/* SOMETHING GOOD TO BE EXTRACTED AS MD COMPONENT */}
-        <Stack spacing={5} borderBottom="1px solid" borderColor="gray.600" pb="1em">
+        <Stack pb="1em">
           <HStack justifyContent="space-between">
             <Text fontWeight="semibold">Description:</Text>
             <IconButton
@@ -176,9 +177,10 @@ function TaskDetails({ task, user, updateTask }: Props) {
           </HStack>
           <MarkdownComponent height="20em" editMode={editMode} value={descValue} onChange={onDescriptionChange} />
         </Stack>
-        <Stack border="1px solid" borderColor="teal.600" bgColor="gray.800" borderRadius="1em">
+        <Divider />
+        <Stack border="1px solid" borderColor="teal.600" bgColor="gray.800" borderRadius="md">
           <HStack spacing={5} justifyContent="center">
-            <Text fontWeight="semibold" fontSize="xl" color="teal.300" p="1em">Comments</Text>
+            <Text fontWeight="semibold" fontSize="xl" color="teal.300" p="16px">Comments</Text>
           </HStack>
           <CommentsContainer user={user} taskId={task.id} />
         </Stack>
