@@ -124,7 +124,11 @@ function TaskDetails({ task, user, updateTask }: Props) {
           </HStack>
           <TaskOptionsMenu onDelete={onDeleteTask} />
         </Box>
-        <Box display="flex" justifyContent="space-between">
+        <HStack spacing={5} pb="10px">
+          <Text fontWeight="semibold">Created by:</Text>
+          <Text fontWeight="bold" color="purple.200">{task.author}</Text>
+        </HStack>
+        <Box display="flex">
           <HStack spacing={5}>
             <Text fontWeight="semibold">Estimation:</Text>
             <NumberInput

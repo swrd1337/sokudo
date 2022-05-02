@@ -152,7 +152,8 @@ function RepositoryBoard({ data }: Props) {
               doneColumnName={doneColumnName}
               currentColumnName={value}
               repoDataId={data.id}
-              accessToken={user?.accessToken}
+              accessToken={user!.accessToken}
+              username={user!.username}
               tasks={tasks}
               actions={{
                 onDragEndHandler,

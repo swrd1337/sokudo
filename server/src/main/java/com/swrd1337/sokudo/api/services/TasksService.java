@@ -28,7 +28,8 @@ public class TasksService {
         task.getTitle(),
         task.getDescription(),
         task.getRepositoryDataId(),
-        task.getColumnName()
+        task.getColumnName(),
+        task.getAuthor()
     );
     newTask.setId(sequenceGeneratorService.generateSequence(Task.SEQUENCE_NAME));
     return tasksRepository.save(newTask);

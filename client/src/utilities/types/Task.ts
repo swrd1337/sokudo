@@ -6,6 +6,7 @@ interface Task {
   description?: string;
   repositoryDataId: number;
   columnName: string;
+  author: string;
   type?: TaskTypes;
   storyPoints?: number;
 }

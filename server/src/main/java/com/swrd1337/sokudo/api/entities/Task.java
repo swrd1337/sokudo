@@ -38,18 +38,22 @@ public class Task {
 
   private String columnName;
 
+  private String author;
+
   private TaskTypes type = TaskTypes.OTHER;
 
   private int storyPoints = 0;
+
   
   @DBRef
   private List<Comment> comments = Collections.emptyList();
 
-  public Task(String title, String description, long repositoryDataId, String columnName) {
+  public Task(String title, String description, long repositoryDataId, String columnName, String author) {
     this.title = title;
     this.description = description;
     this.repositoryDataId = repositoryDataId;
     this.columnName = columnName;
+    this.author = author;
   }
 
 }

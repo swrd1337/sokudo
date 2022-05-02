@@ -12,11 +12,12 @@ type Props = {
   currentColumnName: string,
   repoDataId: number,
   actions: TaskActions,
-  accessToken: string | undefined,
+  accessToken: string,
+  username: string
 }
 
 function TaskList({
-  tasks, doneColumnName, currentColumnName, repoDataId, accessToken, actions,
+  tasks, doneColumnName, currentColumnName, repoDataId, accessToken, username, actions,
 }: Props) {
   const [openAddTask, setOpenAddTask] = useState<boolean>(false);
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
@@ -38,6 +39,7 @@ function TaskList({
         title: newTaskTitle,
         columnName: currentColumnName,
         repositoryDataId: repoDataId,
+        author: username,
       };
       setOpenAddTask(!openAddTask);
       setInvalidTitle(false);

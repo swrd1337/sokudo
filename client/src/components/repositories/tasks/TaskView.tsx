@@ -50,7 +50,7 @@ function TaskView() {
               onClick={onBackClick}
             />
             <HStack flexGrow={1}>
-              <Skeleton isLoaded={!!task} h="2em" minW="10em">
+              <Skeleton isLoaded={!!task} h="2em">
                 <HStack>
                   <Heading as="h4" size="md" color="purple.300">
                     Task title:
@@ -62,7 +62,7 @@ function TaskView() {
               </Skeleton>
               <Skeleton isLoaded={!!task} h="2em" minW="5em">
                 <HStack>
-                  <Badge colorScheme={getTypeColor(task?.type as string)} borderRadius="full">
+                  <Badge colorScheme={getTypeColor(task?.type as string)} borderRadius="full" p="0 10px">
                     {task?.type}
                   </Badge>
                 </HStack>
