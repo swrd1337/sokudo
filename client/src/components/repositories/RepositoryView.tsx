@@ -72,7 +72,7 @@ function RepositoryView() {
               <Badge borderRadius="full" px="2" colorScheme="teal">
                 {repositoryData?.visibility}
               </Badge>
-              <Badge borderRadius="full" px="2" colorScheme="purple">
+              <Badge borderRadius="full" px="2" ml={1} colorScheme="purple">
                 {repositoryData?.defaultBranch}
               </Badge>
             </Skeleton>

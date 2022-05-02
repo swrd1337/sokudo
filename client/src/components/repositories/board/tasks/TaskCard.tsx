@@ -73,7 +73,7 @@ function TaskCard({ task, actions }: Props) {
         <HStack justify="space-between" w="100%" p={2} borderTop="1px solid" borderColor="whiteAlpha.300">
           <Text color="purple.300" fontWeight="semibold">{task.author}</Text>
           {task.comments?.length && (
-            <Badge colorScheme="green">
+            <Badge colorScheme="green" px={2} borderRadius="full">
               {`${task.comments.length} comments`}
             </Badge>
           )}
