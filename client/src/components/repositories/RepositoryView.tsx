@@ -77,17 +77,15 @@ function RepositoryView() {
           flexDirection="column"
           flexGrow={1}
           overflow="auto"
-          p="3px"
-          pb="0"
           isLazy
           index={+(searchParams.get('tab') ?? 0)}
           onChange={onTabChange}
         >
           <TabList>
-            <Tab fontWeight="semibold">Kanban Board</Tab>
-            <Tab fontWeight="semibold">Markdown Notes</Tab>
-            <Tab fontWeight="semibold">Code Scanning</Tab>
-            <Tab fontWeight="semibold">Commits (maybe)</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Kanban Board</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Markdown Notes</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Code Scanning</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Commits (maybe)</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%" overflow="auto">
             {repositoryData && (

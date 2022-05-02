@@ -145,8 +145,8 @@ function MarkdownsNotes({ repoId }: Props) {
         borderRight="1px solid"
         borderColor="whiteAlpha.300"
         p="10px"
-        minW="15em"
-        maxW="15em"
+        minW="18em"
+        maxW="18em"
         overflow="auto"
       >
         <Box display="flex" justifyContent="start" pb="1em">
