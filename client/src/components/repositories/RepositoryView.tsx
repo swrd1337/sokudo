@@ -63,12 +63,12 @@ function RepositoryView() {
               size="sm"
               onClick={onBackClick}
             />
-            <Skeleton isLoaded={!!repositoryData} h={8} minW={40}>
+            <Skeleton isLoaded={!!repositoryData} h={8} minW={20}>
               <Heading as="h4" size="md">
                 {repositoryData?.repoName}
               </Heading>
             </Skeleton>
-            <Skeleton isLoaded={!!repositoryData} h={8} minW={40}>
+            <Skeleton isLoaded={!!repositoryData} h={8} minW={20}>
               <Badge borderRadius="full" px="2" colorScheme="teal">
                 {repositoryData?.visibility}
               </Badge>
@@ -77,7 +77,7 @@ function RepositoryView() {
               </Badge>
             </Skeleton>
           </HStack>
-          <Skeleton isLoaded={!!repositoryData} h={8} minW={30}>
+          <Skeleton isLoaded={!!repositoryData} h={8} minW={20}>
             {repositoryData && (
               <RepositoryDataSelector name={repositoryData.name} />
             )}
