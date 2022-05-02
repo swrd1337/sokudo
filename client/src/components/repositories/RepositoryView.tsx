@@ -87,6 +87,7 @@ function RepositoryView() {
             <Tab fontWeight="semibold">Kanban Board</Tab>
             <Tab fontWeight="semibold">Markdown Notes</Tab>
             <Tab fontWeight="semibold">Code Scanning</Tab>
+            <Tab fontWeight="semibold">Commits (maybe)</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%" overflow="auto">
             {repositoryData && (
@@ -99,6 +100,9 @@ function RepositoryView() {
                 </TabPanel>
                 <TabPanel>
                   <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
+                </TabPanel>
+                <TabPanel>
+                  <p>Commits View: https://docs.github.com/en/rest/commits/commits</p>
                 </TabPanel>
               </TabPanels>
             )}

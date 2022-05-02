@@ -36,20 +36,20 @@ function TaskView() {
   const onBackClick = () => {
     navigate(-1);
   };
-
+  // Add created by.
   return (
     <ViewContainer fullH>
       <Container maxW="100%" h="100%" display="flex" flexDirection="column">
-        <HStack pb="5" justifyContent="space-between">
+        <HStack pb="5">
           {/* Extract into component */}
-          <HStack flexGrow={1}>
+          <HStack flexGrow={1} pb="16px" borderBottom="1px solid" borderColor="whiteAlpha.300">
             <IconButton
               aria-label="Back to all"
               icon={<ArrowLeftIcon color="gray.500" />}
               size="sm"
               onClick={onBackClick}
             />
-            <HStack flexGrow={1} justifyContent="space-between">
+            <HStack flexGrow={1}>
               <Skeleton isLoaded={!!task} h="2em" minW="10em">
                 <HStack>
                   <Heading as="h4" size="md" color="purple.300">
@@ -62,7 +62,7 @@ function TaskView() {
               </Skeleton>
               <Skeleton isLoaded={!!task} h="2em" minW="5em">
                 <HStack>
-                  <Badge colorScheme={getTypeColor(task?.type as string)} fontSize="md">
+                  <Badge colorScheme={getTypeColor(task?.type as string)} borderRadius="full">
                     {task?.type}
                   </Badge>
                 </HStack>

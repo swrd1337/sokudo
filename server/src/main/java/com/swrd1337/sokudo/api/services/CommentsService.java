@@ -27,7 +27,6 @@ public class CommentsService {
   public List<Comment> getCommentsByTaskId(Long taskId) throws NotFoundException {
     Task task = tasksRepository.findById(taskId)
         .orElseThrow(NotFoundException::new);
-        System.out.println(task);
     return task.getComments();
   }
 
