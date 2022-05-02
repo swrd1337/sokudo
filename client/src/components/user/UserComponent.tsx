@@ -25,7 +25,7 @@ function UserComponent({ user, setUser }: Props) {
     <Skeleton isLoaded={Boolean(user)}>
       <Box display="flex" alignItems="center">
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} mr="1em">
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} mr={4}>
             {`Hello, ${user?.username}!`}
           </MenuButton>
           <MenuList>

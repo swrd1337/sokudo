@@ -145,11 +145,11 @@ function MarkdownsNotes({ repoId }: Props) {
         borderRight="1px solid"
         borderColor="whiteAlpha.300"
         p="10px"
-        minW="18em"
-        maxW="18em"
+        minW={300}
+        maxW={300}
         overflow="auto"
       >
-        <Box display="flex" justifyContent="start" pb="1em">
+        <Box display="flex" justifyContent="start" pb={2}>
           {addMdMode && (
             <AddNewEntry
               onSubmit={onSubmitClick}
@@ -202,7 +202,7 @@ function MarkdownsNotes({ repoId }: Props) {
               <EditableInput />
             </Editable>
             <HStack>
-              <HStack pr="1em">
+              <HStack pr={2}>
                 <Text fontStyle="italic">Author: </Text>
                 <Text fontWeight="semibold" color="teal.300">{mds[selectedIndex].author}</Text>
               </HStack>

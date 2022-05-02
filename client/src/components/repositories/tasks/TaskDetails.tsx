@@ -98,7 +98,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
       borderColor="gray.600"
       bgColor="gray.700"
       borderRadius="lg"
-      mb="1em"
+      mb={4}
       overflow="auto"
     >
       <Stack flexGrow={1} padding="16px" overflow="auto">
@@ -107,7 +107,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
           display="flex"
           borderBottom="1px solid"
           borderColor="gray.600"
-          pb="1em"
+          pb={4}
         >
           <HStack spacing={5}>
             <Text fontWeight="semibold">Summary:</Text>
@@ -126,13 +126,15 @@ function TaskDetails({ task, user, updateTask }: Props) {
         </Box>
         <HStack spacing={5} pb="10px">
           <Text fontWeight="semibold">Created by:</Text>
-          <Text fontWeight="bold" color="purple.200">{task.author}</Text>
+          <Text fontWeight="bold" color="purple.200">
+            {task.author}
+          </Text>
         </HStack>
         <Box display="flex">
           <HStack spacing={5}>
             <Text fontWeight="semibold">Estimation:</Text>
             <NumberInput
-              maxW="5em"
+              maxW={20}
               value={estValue}
               min={0}
               max={100}
@@ -150,11 +152,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
         </Box>
         <HStack spacing={5} borderBottom="1px solid" borderColor="gray.600">
           <Text fontWeight="semibold">Type:</Text>
-          <RadioGroup
-            p="0.8em"
-            defaultValue={task?.type}
-            onChange={onTypeChange}
-          >
+          <RadioGroup p={3} defaultValue={task?.type} onChange={onTypeChange}>
             <Stack spacing={5} direction="row" flexWrap="wrap">
               {Object.values(TaskTypes).map((type) => {
                 const color = getTypeColor(type);
@@ -170,7 +168,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
           </RadioGroup>
         </HStack>
         {/* SOMETHING GOOD TO BE EXTRACTED AS MD COMPONENT */}
-        <Stack pb="1em">
+        <Stack pb={4}>
           <HStack justifyContent="space-between">
             <Text fontWeight="semibold">Description:</Text>
             <IconButton
@@ -179,12 +177,24 @@ function TaskDetails({ task, user, updateTask }: Props) {
               onClick={onEditClick}
             />
           </HStack>
-          <MarkdownComponent height="20em" editMode={editMode} value={descValue} onChange={onDescriptionChange} />
+          <MarkdownComponent
+            height={80}
+            editMode={editMode}
+            value={descValue}
+            onChange={onDescriptionChange}
+          />
         </Stack>
         <Divider />
-        <Stack border="1px solid" borderColor="teal.600" bgColor="gray.800" borderRadius="md">
+        <Stack
+          border="1px solid"
+          borderColor="teal.600"
+          bgColor="gray.800"
+          borderRadius="md"
+        >
           <HStack spacing={5} justifyContent="center">
-            <Text fontWeight="semibold" fontSize="xl" color="teal.300" p="16px">Comments</Text>
+            <Text fontWeight="semibold" fontSize="xl" color="teal.300" p="16px">
+              Comments
+            </Text>
           </HStack>
           <CommentsContainer user={user} taskId={task.id} />
         </Stack>

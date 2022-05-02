@@ -56,7 +56,7 @@ function TaskList({
   };
 
   return (
-    <HStack justifyContent="center" pt="0.5em">
+    <HStack justifyContent="center" pt={2}>
       <VStack w="100%">
         {tasks?.filter((t) => t.columnName === currentColumnName).map((t) => (
           <TaskCard key={t.id} task={t} actions={actions} />

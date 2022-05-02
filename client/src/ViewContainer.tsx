@@ -8,7 +8,7 @@ type Props = {
 
 function ViewContainer({ children, fullH }: Props) {
   return (
-    <Center pt={8} flexDirection="column" h={fullH ? '100%' : 'auto'}>
+    <Center pt={4} flexDirection="column" h={fullH ? '100%' : 'auto'}>
       {children}
     </Center>
   );

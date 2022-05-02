@@ -24,8 +24,8 @@ function AppBar() {
       <HStack
         spacing="5px"
         justifyContent="space-between"
-        mr="1em"
-        ml="1em"
+        mr={4}
+        ml={4}
         width="100%"
       >
         <Heading color="whiteAlpha.900" size="lg">

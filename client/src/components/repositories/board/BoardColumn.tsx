@@ -86,7 +86,7 @@ function BoardColumn({
         _hover={{ cursor: 'grab' }}
         draggable
       >
-        <HStack justifyContent="space-between" pb="0.5em">
+        <HStack justifyContent="space-between" pb={2}>
           <HStack color={titleColor}>
             {done && <CheckIcon />}
             <Heading as="h4" size="sm">

@@ -7,7 +7,7 @@ type Props = {
   editMode: boolean,
   value: string,
   onChange(_e: FormEvent<HTMLTextAreaElement>): void,
-  height: string,
+  height: number | string,
   bgColor?: string,
 }
 
@@ -33,7 +33,7 @@ function MarkdownComponent({
           border="1px solid"
           borderColor="teal.600"
           bgColor={bgColor}
-          p="1em"
+          p={4}
           borderRadius="md"
         >
           <ReactMarkdown components={ChakraUIRenderer()}>{value}</ReactMarkdown>

@@ -54,13 +54,13 @@ function RepositoryView() {
               size="sm"
               onClick={onBackClick}
             />
-            <Skeleton isLoaded={!!repositoryData} h="2em" minW="10em">
+            <Skeleton isLoaded={!!repositoryData} h={8} minW={40}>
               <Heading as="h4" size="md">
                 {repositoryData?.repoName}
               </Heading>
             </Skeleton>
           </HStack>
-          <Skeleton isLoaded={!!repositoryData} h="2em" w="10em">
+          <Skeleton isLoaded={!!repositoryData} h={8} minW={40}>
             <HStack>
               <Badge borderRadius="full" px="2" colorScheme="teal">
                 {repositoryData?.visibility}

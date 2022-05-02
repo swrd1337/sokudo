@@ -21,7 +21,7 @@ function RepositoryCard({ repository }: Props) {
   return (
     <Box maxW="lg" borderWidth="1px" borderRadius="lg" bgColor="gray.700" boxShadow="dark-sm">
       <Box p="5" display="flex" flexDirection="column" h="100%">
-        <HStack justifyContent="space-between" pb="1em">
+        <HStack justifyContent="space-between" pb={4}>
           <Heading as="h4" size="md">
             {repository.name}
           </Heading>
@@ -58,7 +58,7 @@ function RepositoryCard({ repository }: Props) {
         </VStack>
         <Box w="100%" display="flex" justifyContent="flex-end" mt="auto" flexDirection="column">
           <Divider mt="1" mb="1" />
-          <Box display="flex" justifyContent="space-between" alignItems="center" pt="1em">
+          <Box display="flex" justifyContent="space-between" alignItems="center" pt={4}>
             <Button colorScheme="teal" variant="outline" onClick={onOpenClick}>Open</Button>
             <HStack>
               <Link href={owner.htmlUrl} target="_blank" color="cyan.500" fontWeight="semibold">{owner.login}</Link>

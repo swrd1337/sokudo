@@ -33,7 +33,7 @@ function TaskCard({ task, actions }: Props) {
     <Box
       display="flex"
       w="100%"
-      minH="3em"
+      minH={12}
       borderWidth="2px"
       borderRadius="lg"
       bgColor={dragMode ? 'whiteAlpha.300' : 'whiteAlpha.50'}

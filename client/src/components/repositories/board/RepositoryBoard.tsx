@@ -164,7 +164,7 @@ function RepositoryBoard({ data }: Props) {
           </BoardColumn>
         ))}
       </HStack>
-      <Box p="0 1em" display="flex">
+      <Box pr={4} pl={2} display="flex">
         {addColumnMode && (
           <AddNewEntry
             onInputChange={onInputNameChange}
@@ -176,7 +176,7 @@ function RepositoryBoard({ data }: Props) {
         )}
         {!addColumnMode && (
           <IconButton
-            ml="0.5em"
+            ml={2}
             variant="outline"
             aria-label="Add column"
             icon={<AddIcon />}

@@ -20,7 +20,7 @@ function AddNewEntry({
     <VStack alignItems="end" w={width}>
       <Input
         placeholder="Name"
-        minW="13em"
+        minW={52}
         focusBorderColor="purple.400"
         onChange={onInputChange}
         isInvalid={isInvalid}
