@@ -1,3 +1,4 @@
+import Comment from './Comment';
 import TaskTypes from './TaskTypes';
 
 interface Task {
@@ -9,6 +10,7 @@ interface Task {
   author: string;
   type?: TaskTypes;
   storyPoints?: number;
+  comments?: Comment[];
 }
 
 export default Task;

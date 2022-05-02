@@ -1,6 +1,15 @@
 import { ArrowLeftIcon } from '@chakra-ui/icons';
 import {
-  Badge, Container, Heading, HStack, IconButton, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs,
+  Badge,
+  Container,
+  Heading,
+  HStack,
+  IconButton, Skeleton,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -11,6 +20,7 @@ import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
 import MarkdownsNotes from './notes/MarkdownsNotes';
+import RepositoryDataSelector from './RepositoryDataSelector';
 
 function RepositoryView() {
   const navigate = useNavigate();
@@ -45,9 +55,8 @@ function RepositoryView() {
   return (
     <ViewContainer fullH>
       <Container maxW="100%" h="100%" display="flex" flexDirection="column" flexGrow={1}>
-        <HStack pb="5" justifyContent="space-between">
-          {/* Extract into component */}
-          <HStack>
+        <HStack pb={3} justifyContent="space-between">
+          <HStack justifyContent="start">
             <IconButton
               aria-label="Back to all"
               icon={<ArrowLeftIcon color="gray.500" />}
@@ -59,16 +68,19 @@ function RepositoryView() {
                 {repositoryData?.repoName}
               </Heading>
             </Skeleton>
-          </HStack>
-          <Skeleton isLoaded={!!repositoryData} h={8} minW={40}>
-            <HStack>
+            <Skeleton isLoaded={!!repositoryData} h={8} minW={40}>
               <Badge borderRadius="full" px="2" colorScheme="teal">
                 {repositoryData?.visibility}
               </Badge>
               <Badge borderRadius="full" px="2" colorScheme="purple">
                 {repositoryData?.defaultBranch}
               </Badge>
-            </HStack>
+            </Skeleton>
+          </HStack>
+          <Skeleton isLoaded={!!repositoryData} h={8} minW={30}>
+            {repositoryData && (
+              <RepositoryDataSelector name={repositoryData.name} />
+            )}
           </Skeleton>
         </HStack>
         <Tabs
@@ -85,12 +97,13 @@ function RepositoryView() {
             <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Kanban Board</Tab>
             <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Markdown Notes</Tab>
             <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Code Scanning</Tab>
-            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Commits (maybe)</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Latest Commits</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Statistics</Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%" overflow="auto">
             {repositoryData && (
               <TabPanels display="flex" overflow="auto" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
-                <TabPanel overflow="auto" w="100%">
+                <TabPanel overflow="auto" w="100%" p="0">
                   <RepositoryBoard data={repositoryData} />
                 </TabPanel>
                 <TabPanel w="100%" display="flex" p="0">

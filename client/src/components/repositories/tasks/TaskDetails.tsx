@@ -70,6 +70,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
 
   const onTypeChange = (nextValue: string) => {
     const newTask = { ...task, type: nextValue as TaskTypes };
+    updateTask(newTask);
     fetchUpdate(newTask, user!.accessToken);
   };
 

@@ -1,7 +1,8 @@
 import {
-  Box, Text,
+  Badge,
+  Box, HStack, Text, VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Task from '../../../../utilities/types/Task';
 import TaskActions from './TaskActions';
@@ -25,8 +26,12 @@ function TaskCard({ task, actions }: Props) {
     actions.onDragStart(-1, true);
   };
 
-  const onClick = () => {
-    navigate(`/tasks/${task.id}`);
+  const onCardInteraction = () => navigate(`/tasks/${task.id}`);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      onCardInteraction();
+    }
   };
 
   return (
@@ -38,7 +43,7 @@ function TaskCard({ task, actions }: Props) {
       borderRadius="lg"
       bgColor={dragMode ? 'whiteAlpha.300' : 'whiteAlpha.50'}
       boxShadow="inner"
-      p="5px 10px"
+      // p="5px 10px"
       alignItems="center"
       draggable
       _hover={{
@@ -56,11 +61,24 @@ function TaskCard({ task, actions }: Props) {
       _focusVisible={{
         outline: 'none',
       }}
-      onClick={onClick}
+      onKeyDown={onKeyDown}
+      onClick={onCardInteraction}
     >
-      <Text fontSize="md" overflowX="hidden">
-        {task.title}
-      </Text>
+      <VStack alignItems="start" w="100%">
+        <Box p={2} pb={0}>
+          <Text fontSize="lg" fontWeight="semibold" overflowX="hidden">
+            {task.title}
+          </Text>
+        </Box>
+        <HStack justify="space-between" w="100%" p={2} borderTop="1px solid" borderColor="whiteAlpha.300">
+          <Text color="purple.300" fontWeight="semibold">{task.author}</Text>
+          {task.comments?.length && (
+            <Badge colorScheme="green">
+              {`${task.comments.length} comments`}
+            </Badge>
+          )}
+        </HStack>
+      </VStack>
     </Box>
   );
 }

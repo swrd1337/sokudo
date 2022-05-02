@@ -1,5 +1,6 @@
 interface RepositoryData {
   id: number;
+  name: string;
   ownerName: string;
   repoName: string;
   defaultBranch: string;

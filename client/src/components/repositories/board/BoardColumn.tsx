@@ -71,6 +71,7 @@ function BoardColumn({
       boxShadow="dark-sm"
       w="100%"
       display="flex"
+      draggable
       onDragStart={() => actions.onDragStart(index)}
       onDragEnter={() => actions.onDragEnter(index)}
       onDragOver={(e) => e.preventDefault()}
@@ -84,7 +85,6 @@ function BoardColumn({
         flexDirection="column"
         flexGrow={1}
         _hover={{ cursor: 'grab' }}
-        draggable
       >
         <HStack justifyContent="space-between" pb={2}>
           <HStack color={titleColor}>

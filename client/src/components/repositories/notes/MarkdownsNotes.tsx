@@ -1,5 +1,5 @@
 import {
-  AddIcon, DeleteIcon, EditIcon, ViewIcon,
+  AddIcon, ArrowDownIcon, ArrowUpIcon, DeleteIcon, EditIcon, ViewIcon,
 } from '@chakra-ui/icons';
 import {
   Box, Button, Editable, EditableInput, EditablePreview, HStack, IconButton, Text,
@@ -34,6 +34,8 @@ function MarkdownsNotes({ repoId }: Props) {
 
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [mdContentUpdateTrigger, setMdContentUpdateTrigger] = useState<boolean>(false);
+
+  const [reverse, setReverse] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -100,6 +102,8 @@ function MarkdownsNotes({ repoId }: Props) {
     setSelectedIndex(index);
     setMarkdownTitle(mds[index].title);
     setMarkdownContent(mds[index].content);
+    setAddMdMode(false);
+    setContentEditMode(false);
   };
 
   const toggleContentEditMode = () => {
@@ -111,6 +115,10 @@ function MarkdownsNotes({ repoId }: Props) {
       const mdId = mds[selectedIndex].id;
       mds.splice(selectedIndex, 1);
       setMds([...mds]);
+      const lastIndex = mds.length - 1;
+      setSelectedIndex(lastIndex);
+      setMarkdownTitle(mds[lastIndex].title);
+      setMarkdownContent(mds[lastIndex].content);
       await fetchDeleteMarkdown(mdId, user!.accessToken);
     }
   };
@@ -139,17 +147,41 @@ function MarkdownsNotes({ repoId }: Props) {
     }
   };
 
+  const mdsMapCallback = (md: Markdown, index: number) => (
+    <Button
+      key={md.id}
+      mb="5px"
+      w="100%"
+      variant="ghost"
+      bgColor="gray.900"
+      justifyContent="start"
+      color={index === selectedIndex ? 'purple.300' : 'whiteAlpha.600'}
+      onClick={() => onMdButtonClick(index)}
+    >
+      {md.title}
+    </Button>
+  );
+
+  const onReverseOrderClick = () => setReverse(!reverse);
+
   return (
     <Box w="100%" flexGrow={1} display="flex">
       <Box
         borderRight="1px solid"
         borderColor="whiteAlpha.300"
-        p="10px"
+        p={2}
         minW={300}
         maxW={300}
         overflow="auto"
       >
-        <Box display="flex" justifyContent="start" pb={2}>
+        <Box
+          display="flex"
+          justifyContent="start"
+          pb={2}
+          mb={2}
+          borderBottom="1px solid"
+          borderColor="whiteAlpha.300"
+        >
           {addMdMode && (
             <AddNewEntry
               onSubmit={onSubmitClick}
@@ -161,72 +193,79 @@ function MarkdownsNotes({ repoId }: Props) {
             />
           )}
           {!addMdMode && (
-            <IconButton
-              variant="outline"
-              aria-label="Add note"
-              icon={<AddIcon />}
-              onClick={onAddModeClick}
-            />
+            <HStack justifyContent="space-between" w="100%">
+              <IconButton
+                variant="outline"
+                aria-label="Add note"
+                icon={<AddIcon />}
+                onClick={onAddModeClick}
+              />
+              <Text fontSize="md" fontWeight="semibold">
+                Explorer
+              </Text>
+              <IconButton
+                variant="outline"
+                aria-label="Reverse order"
+                icon={reverse ? <ArrowDownIcon /> : <ArrowUpIcon />}
+                onClick={onReverseOrderClick}
+              />
+            </HStack>
           )}
         </Box>
-        {mds.map((md, index) => (
-          <Button
-            key={md.id}
-            mb="5px"
-            w="100%"
-            variant="outline"
-            bgColor="gray.900"
-            justifyContent="start"
-            borderColor={
-              index === selectedIndex ? 'purple.300' : 'whiteAlpha.300'
-            }
-            onClick={() => onMdButtonClick(index)}
-          >
-            {md.title}
-          </Button>
-        ))}
+        {reverse ? mds.map(mdsMapCallback).reverse() : mds.map(mdsMapCallback)}
       </Box>
       {selectedIndex >= 0 && (
-        <Box flexGrow={1} p="10px" pt="0" display="flex" flexDir="column">
-          <HStack spacing={3} p="10px" justifyContent="space-between">
-            <Editable
-              value={markdownTitle}
-              onChange={onTitleUpdateChange}
-              onSubmit={onTitleUpdateConfirm}
-              onCancel={onTitleUpdateConfirm}
-              color="purple.300"
-              fontSize="2xl"
-              fontWeight="semibold"
-            >
-              <EditablePreview />
-              <EditableInput />
-            </Editable>
-            <HStack>
-              <HStack pr={2}>
-                <Text fontStyle="italic">Author: </Text>
-                <Text fontWeight="semibold" color="teal.300">{mds[selectedIndex].author}</Text>
+        <Box
+          flexGrow={1}
+          p="10px"
+          pt="0"
+          display="flex"
+          flexDir="column"
+          alignItems="center"
+        >
+          <Box height="100%" w="6xl" display="flex" flexDir="column">
+            <HStack spacing={3} p="10px" justifyContent="space-between">
+              <Editable
+                value={markdownTitle}
+                onChange={onTitleUpdateChange}
+                onSubmit={onTitleUpdateConfirm}
+                onCancel={onTitleUpdateConfirm}
+                color="purple.300"
+                fontSize="2xl"
+                fontWeight="semibold"
+              >
+                <EditablePreview />
+                <EditableInput />
+              </Editable>
+              <HStack>
+                <HStack pr={2}>
+                  <Text fontStyle="italic">Author: </Text>
+                  <Text fontWeight="semibold" color="teal.300">
+                    {mds[selectedIndex].author}
+                  </Text>
+                </HStack>
+                <IconButton
+                  aria-label="Edit/View description"
+                  icon={contentEditMode ? <ViewIcon /> : <EditIcon />}
+                  onClick={toggleContentEditMode}
+                />
+                <Button leftIcon={<DeleteIcon />} onClick={onDeleteClick}>
+                  Delete
+                </Button>
               </HStack>
-              <IconButton
-                aria-label="Edit/View description"
-                icon={contentEditMode ? <ViewIcon /> : <EditIcon />}
-                onClick={toggleContentEditMode}
-              />
-              <Button leftIcon={<DeleteIcon />} onClick={onDeleteClick}>
-                Delete
-              </Button>
             </HStack>
-          </HStack>
-          <MarkdownComponent
-            editMode={contentEditMode}
-            value={markdownContent}
-            onChange={onContentUpdate}
-            height="100%"
-            bgColor="gray.700"
-          />
+            <MarkdownComponent
+              editMode={contentEditMode}
+              value={markdownContent}
+              onChange={onContentUpdate}
+              height="100%"
+              bgColor="gray.700"
+            />
+          </Box>
         </Box>
       )}
     </Box>
   );
 }
-// TODO: ADD DELETE CONFIRMATION MODAL...
+
 export default MarkdownsNotes;

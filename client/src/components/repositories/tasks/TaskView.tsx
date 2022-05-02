@@ -40,7 +40,7 @@ function TaskView() {
   return (
     <ViewContainer fullH>
       <Container maxW="100%" h="100%" display="flex" flexDirection="column">
-        <HStack pb="5">
+        <HStack pb={3}>
           {/* Extract into component */}
           <HStack flexGrow={1} pb="16px" borderBottom="1px solid" borderColor="whiteAlpha.300">
             <IconButton

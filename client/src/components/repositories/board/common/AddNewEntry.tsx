@@ -1,6 +1,6 @@
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
-  ButtonGroup, IconButton, Input, VStack,
+  ButtonGroup, IconButton, Input, Stack,
 } from '@chakra-ui/react';
 import React, { FormEvent } from 'react';
 
@@ -9,15 +9,16 @@ type Props = {
   onSubmit: () => void
   onCancel: () => void,
   value: string,
+  inline?: boolean,
   width?: string,
   isInvalid?: boolean,
 }
 
 function AddNewEntry({
-  onInputChange, onSubmit, onCancel, width, isInvalid, value,
+  onInputChange, onSubmit, onCancel, width, isInvalid, value, inline,
 }: Props) {
   return (
-    <VStack alignItems="end" w={width}>
+    <Stack alignItems="end" w={width} flexDir={inline ? 'row' : 'column'} spacing={inline ? 0 : 2}>
       <Input
         placeholder="Name"
         minW={52}
@@ -27,27 +28,28 @@ function AddNewEntry({
         value={value}
         autoFocus
       />
-      <ButtonGroup variant="outline" spacing="2">
-        <IconButton
-          variant="outline"
-          aria-label="Close"
-          icon={<CloseIcon color="gray.300" w="3" h="3" />}
-          onClick={onCancel}
-        />
+      <ButtonGroup variant="outline" spacing={2} pl={2}>
         <IconButton
           variant="outline"
           aria-label="Save"
           icon={<CheckIcon color="green.300" />}
           onClick={onSubmit}
         />
+        <IconButton
+          variant="outline"
+          aria-label="Close"
+          icon={<CloseIcon color="gray.300" w="3" h="3" />}
+          onClick={onCancel}
+        />
       </ButtonGroup>
-    </VStack>
+    </Stack>
   );
 }
 
 AddNewEntry.defaultProps = {
   isInvalid: false,
   width: 'unset',
+  inline: false,
 };
 
 export default AddNewEntry;

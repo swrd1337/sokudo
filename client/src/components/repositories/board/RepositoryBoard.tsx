@@ -130,8 +130,39 @@ function RepositoryBoard({ data }: Props) {
   };
 
   return (
-    <Box display="flex" justifyContent="space-between">
-      <HStack alignItems="start">
+    <Box display="flex" justifyContent="space-between" flexDir="column" h="100%">
+      <HStack
+        w="100%"
+        pos="sticky"
+        top={0}
+        bgColor="gray.800"
+        zIndex={1}
+        p={2}
+        borderBottom="1px solid"
+        borderTop="1px solid"
+        borderColor="whiteAlpha.300"
+        justifyContent="end"
+      >
+        {!addColumnMode && (
+          <IconButton
+            variant="outline"
+            aria-label="Add column"
+            icon={<AddIcon />}
+            onClick={onAddModeClick}
+          />
+        )}
+        {addColumnMode && (
+          <AddNewEntry
+            onInputChange={onInputNameChange}
+            onSubmit={onSaveClick}
+            onCancel={onAddModeClick}
+            isInvalid={columns.has(columnName)}
+            value={columnName}
+            inline
+          />
+        )}
+      </HStack>
+      <HStack alignItems="start" p={3} overflow="auto" h="100%">
         {[...columns].map((value, index) => (
           <BoardColumn
             key={value.split(' ').join('_')}
@@ -164,26 +195,6 @@ function RepositoryBoard({ data }: Props) {
           </BoardColumn>
         ))}
       </HStack>
-      <Box pr={4} pl={2} display="flex">
-        {addColumnMode && (
-          <AddNewEntry
-            onInputChange={onInputNameChange}
-            onSubmit={onSaveClick}
-            onCancel={onAddModeClick}
-            isInvalid={columns.has(columnName)}
-            value={columnName}
-          />
-        )}
-        {!addColumnMode && (
-          <IconButton
-            ml={2}
-            variant="outline"
-            aria-label="Add column"
-            icon={<AddIcon />}
-            onClick={onAddModeClick}
-          />
-        )}
-      </Box>
     </Box>
   );
 }

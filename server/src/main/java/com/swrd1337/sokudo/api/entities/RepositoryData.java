@@ -20,11 +20,15 @@ import lombok.ToString;
 @Document(collection = "repository_data")
 public class RepositoryData {
 
+  public static final String DEFAULT_NAME = "Default";
+
   @Transient
   public static final String SEQUENCE_NAME = "repo_data_sequence";
 
   @Id
   private long id;
+
+  private String name = DEFAULT_NAME;
 
   private String ownerName;
 

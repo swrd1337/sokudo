@@ -17,6 +17,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class TokenOAuthFilter extends OncePerRequestFilter {
 
+  private static final String TOKEN_PREFIX = "token ";
+
   @Autowired
   private TokenUserDetailsService userDetailsService;
 
@@ -25,8 +27,8 @@ public class TokenOAuthFilter extends OncePerRequestFilter {
     throws ServletException, IOException {
     
     String authHeader = request.getHeader("Authorization");
-    if (authHeader != null && authHeader.startsWith("token ")) {
-      String token = authHeader.substring("token ".length());
+    if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
+      String token = authHeader.substring(TOKEN_PREFIX.length());
       TokenUserDetails userDetails = userDetailsService.loadByTokenValue(token);
       if (userDetails != null) {
         ApiAuthenticationToken authentication = new ApiAuthenticationToken(userDetails);
