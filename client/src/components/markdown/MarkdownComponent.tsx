@@ -36,9 +36,7 @@ function MarkdownComponent({
           p="1em"
           borderRadius="md"
         >
-          <ReactMarkdown components={ChakraUIRenderer()}>
-            {value}
-          </ReactMarkdown>
+          <ReactMarkdown components={ChakraUIRenderer()}>{value}</ReactMarkdown>
         </Box>
       )}
     </Box>

@@ -20,7 +20,7 @@ type Props = {
   repoId: number
 }
 
-function MarkdownsTab({ repoId }: Props) {
+function MarkdownsNotes({ repoId }: Props) {
   const { user } = useContext(UserContext);
 
   const [mds, setMds] = useState<Markdown[]>([]);
@@ -40,6 +40,11 @@ function MarkdownsTab({ repoId }: Props) {
       const fetchMds = async () => {
         const data = await fetchMarkdowns(repoId, user.accessToken);
         setMds(data);
+        if (data.length > 0) {
+          setSelectedIndex(0);
+          setMarkdownTitle(data[0].title);
+          setMarkdownContent(data[0].content);
+        }
       };
       fetchMds();
     }
@@ -140,22 +145,7 @@ function MarkdownsTab({ repoId }: Props) {
         minW="15em"
         maxW="15em"
       >
-        {mds.map((md, index) => (
-          <Button
-            key={md.id}
-            mb="5px"
-            w="100%"
-            variant="outline"
-            bgColor="gray.900"
-            borderColor={
-              index === selectedIndex ? 'purple.300' : 'whiteAlpha.300'
-            }
-            onClick={() => onMdButtonClick(index)}
-          >
-            {md.title}
-          </Button>
-        ))}
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="start" pb="1em">
           {addMdMode && (
             <AddNewEntry
               onSubmit={onSubmitClick}
@@ -168,7 +158,6 @@ function MarkdownsTab({ repoId }: Props) {
           )}
           {!addMdMode && (
             <IconButton
-              ml="0.5em"
               variant="outline"
               aria-label="Add note"
               icon={<AddIcon />}
@@ -176,6 +165,22 @@ function MarkdownsTab({ repoId }: Props) {
             />
           )}
         </Box>
+        {mds.map((md, index) => (
+          <Button
+            key={md.id}
+            mb="5px"
+            w="100%"
+            variant="outline"
+            bgColor="gray.900"
+            justifyContent="start"
+            borderColor={
+              index === selectedIndex ? 'purple.300' : 'whiteAlpha.300'
+            }
+            onClick={() => onMdButtonClick(index)}
+          >
+            {md.title}
+          </Button>
+        ))}
       </Box>
       {selectedIndex >= 0 && (
         <Box flexGrow={1} pl="1em" display="flex" flexDir="column">
@@ -220,4 +225,4 @@ function MarkdownsTab({ repoId }: Props) {
   );
 }
 // TODO: ADD DELETE CONFIRMATION MODAL...
-export default MarkdownsTab;
+export default MarkdownsNotes;

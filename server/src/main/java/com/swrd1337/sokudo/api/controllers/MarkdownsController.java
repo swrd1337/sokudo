@@ -46,8 +46,9 @@ public class MarkdownsController {
   }
   
   @DeleteMapping("/{markdownId}")
-  public void deleteMarkdown(@PathVariable Long markdownId) throws NotFoundException {
+  public ResponseEntity<Void> deleteMarkdown(@PathVariable Long markdownId) throws NotFoundException {
     markdownsService.deleteMarkdown(markdownId);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
 }

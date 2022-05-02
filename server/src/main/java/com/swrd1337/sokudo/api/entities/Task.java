@@ -1,17 +1,14 @@
 package com.swrd1337.sokudo.api.entities;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import com.swrd1337.sokudo.utilities.tasks.TaskTypes;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
