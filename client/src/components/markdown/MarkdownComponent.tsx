@@ -15,7 +15,7 @@ function MarkdownComponent({
   editMode, value, onChange, height, bgColor,
 }: Props) {
   return (
-    <Box display="flex" h={height}>
+    <Box display="flex" h={height} overflow="auto">
       {editMode ? (
         <Textarea
           resize="none"

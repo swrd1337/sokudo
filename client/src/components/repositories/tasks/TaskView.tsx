@@ -70,9 +70,9 @@ function TaskView() {
             </HStack>
           </HStack>
         </HStack>
-        <Skeleton isLoaded={!!task} h="100%">
+        <Skeleton isLoaded={!!task} h="100%" overflow="auto">
           { user && task && (
-            <Box display="flex" justifyContent="center">
+            <Box display="flex" justifyContent="center" h="100%">
               <TaskDetails user={user} task={task} updateTask={setTask} />
             </Box>
           )}

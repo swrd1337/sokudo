@@ -81,6 +81,9 @@ function MarkdownsNotes({ repoId }: Props) {
       newMd = await fetchSaveMarkdown(newMd, user!.accessToken);
       setMds([...mds, newMd]);
       setNewTitle('');
+      setSelectedIndex(mds.length);
+      setMarkdownTitle(newMd.title);
+      setMarkdownContent(newMd.content);
     } else {
       setInvalidTitle(true);
     }
@@ -141,9 +144,10 @@ function MarkdownsNotes({ repoId }: Props) {
       <Box
         borderRight="1px solid"
         borderColor="whiteAlpha.300"
-        pr="1em"
+        p="10px"
         minW="15em"
         maxW="15em"
+        overflow="auto"
       >
         <Box display="flex" justifyContent="start" pb="1em">
           {addMdMode && (
@@ -183,7 +187,7 @@ function MarkdownsNotes({ repoId }: Props) {
         ))}
       </Box>
       {selectedIndex >= 0 && (
-        <Box flexGrow={1} pl="1em" display="flex" flexDir="column">
+        <Box flexGrow={1} p="10px" pt="0" display="flex" flexDir="column">
           <HStack spacing={3} p="10px" justifyContent="space-between">
             <Editable
               value={markdownTitle}

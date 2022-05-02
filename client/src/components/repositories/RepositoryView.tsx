@@ -88,21 +88,21 @@ function RepositoryView() {
             <Tab fontWeight="semibold">Markdown Notes</Tab>
             <Tab fontWeight="semibold">Code Scanning</Tab>
           </TabList>
-          {/* <Skeleton isLoaded={!!repositoryData} h="100%"> */}
-          {repositoryData && (
-            <TabPanels display="flex" overflow="auto" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
-              <TabPanel overflow="auto" w="100%">
-                <RepositoryBoard data={repositoryData} />
-              </TabPanel>
-              <TabPanel w="100%" display="flex">
-                <MarkdownsNotes repoId={repositoryData.id} />
-              </TabPanel>
-              <TabPanel>
-                <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
-              </TabPanel>
-            </TabPanels>
-          )}
-          {/* </Skeleton> */}
+          <Skeleton isLoaded={!!repositoryData} h="100%" overflow="auto">
+            {repositoryData && (
+              <TabPanels display="flex" overflow="auto" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
+                <TabPanel overflow="auto" w="100%">
+                  <RepositoryBoard data={repositoryData} />
+                </TabPanel>
+                <TabPanel w="100%" display="flex" p="0">
+                  <MarkdownsNotes repoId={repositoryData.id} />
+                </TabPanel>
+                <TabPanel>
+                  <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
+                </TabPanel>
+              </TabPanels>
+            )}
+          </Skeleton>
         </Tabs>
       </Container>
     </ViewContainer>

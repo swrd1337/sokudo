@@ -98,8 +98,9 @@ function TaskDetails({ task, user, updateTask }: Props) {
       bgColor="gray.700"
       borderRadius="lg"
       mb="1em"
+      overflow="auto"
     >
-      <Stack spacing={6} flexGrow={1} padding="2em">
+      <Stack flexGrow={1} padding="16px" overflow="auto">
         <Box
           justifyContent="space-between"
           display="flex"
@@ -175,7 +176,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
           </HStack>
           <MarkdownComponent height="20em" editMode={editMode} value={descValue} onChange={onDescriptionChange} />
         </Stack>
-        <Stack border="1px solid" borderColor="teal.600" bgColor="gray.800" pb="2em" borderRadius="1em">
+        <Stack border="1px solid" borderColor="teal.600" bgColor="gray.800" borderRadius="1em">
           <HStack spacing={5} justifyContent="center">
             <Text fontWeight="semibold" fontSize="xl" color="teal.300" p="1em">Comments</Text>
           </HStack>
