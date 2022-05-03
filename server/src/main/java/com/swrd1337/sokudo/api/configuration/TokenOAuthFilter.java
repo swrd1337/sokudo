@@ -25,7 +25,6 @@ public class TokenOAuthFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
-    
     String authHeader = request.getHeader("Authorization");
     if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
       String token = authHeader.substring(TOKEN_PREFIX.length());

@@ -7,4 +7,9 @@ async function fetchAuthorizeUser(code: string): Promise<User> {
   return response.json();
 }
 
-export default fetchAuthorizeUser;
+async function fetchLogout(): Promise<boolean> {
+  const response: Response = await fetch(`${oatuhProxyUrl}/logout`);
+  return response.ok;
+}
+
+export { fetchAuthorizeUser, fetchLogout };

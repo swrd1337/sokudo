@@ -2,8 +2,8 @@ import Task from '../utilities/types/Task';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function fetchRepositoryTasks(repoDataId: number, accessToken: string): Promise<Task[]> {
-  const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/repo/${repoDataId}`, {
+async function fetchTasks(boardId: number, accessToken: string): Promise<Task[]> {
+  const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/repo/${boardId}`, {
     headers: {
       Authorization: `token ${accessToken}`,
     },
@@ -11,7 +11,7 @@ async function fetchRepositoryTasks(repoDataId: number, accessToken: string): Pr
   return response.json();
 }
 
-async function fetchSaveRepositoryTask(task: Task, accessToken: string): Promise<Task> {
+async function fetchSaveTask(task: Task, accessToken: string): Promise<Task> {
   const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks`, {
     method: 'POST',
     headers: {
@@ -23,7 +23,7 @@ async function fetchSaveRepositoryTask(task: Task, accessToken: string): Promise
   return response.json();
 }
 
-async function fetchUpdateRepositoryTask(task: Task, accessToken: string): Promise<Task> {
+async function fetchUpdateTask(task: Task, accessToken: string): Promise<Task> {
   const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/${task.id}`, {
     method: 'PUT',
     headers: {
@@ -35,7 +35,7 @@ async function fetchUpdateRepositoryTask(task: Task, accessToken: string): Promi
   return response.json();
 }
 
-async function fetchRepositoryTask(taskId: number, accessToken: string): Promise<Task> {
+async function fetchTask(taskId: number, accessToken: string): Promise<Task> {
   const response: Response = await fetch(`${apiBaseUrl}/repositories/tasks/${taskId}`, {
     headers: {
       Authorization: `token ${accessToken}`,
@@ -44,7 +44,7 @@ async function fetchRepositoryTask(taskId: number, accessToken: string): Promise
   return response.json();
 }
 
-async function fetchDeleteRepositoryTask(taskId: number, accessToken: string) {
+async function fetchDeleteTask(taskId: number, accessToken: string) {
   await fetch(`${apiBaseUrl}/repositories/tasks/${taskId}`, {
     method: 'DELETE',
     headers: {
@@ -54,9 +54,9 @@ async function fetchDeleteRepositoryTask(taskId: number, accessToken: string) {
 }
 
 export {
-  fetchSaveRepositoryTask,
-  fetchRepositoryTasks,
-  fetchUpdateRepositoryTask,
-  fetchDeleteRepositoryTask,
-  fetchRepositoryTask,
+  fetchSaveTask,
+  fetchTasks,
+  fetchUpdateTask,
+  fetchDeleteTask,
+  fetchTask,
 };

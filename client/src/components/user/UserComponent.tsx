@@ -1,9 +1,10 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
-  Avatar, Box, Button, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton,
+  Avatar, Box, Button, Link, Menu, MenuButton, MenuItem, MenuList, Skeleton, useToast,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchLogout } from '../../api/userApi';
 import User from '../../utilities/types/User';
 
 type Props = {
@@ -14,8 +15,18 @@ type Props = {
 
 function UserComponent({ user, setUser }: Props) {
   const navigate = useNavigate();
+  const toast = useToast();
 
-  const onLogout = () => {
+  const onLogout = async () => {
+    const logoutSuccess = await fetchLogout();
+    if (logoutSuccess) {
+      toast({
+        title: 'Succesfull logout!',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
     sessionStorage.removeItem('user');
     navigate('/login');
     setUser(undefined);
@@ -37,6 +48,7 @@ function UserComponent({ user, setUser }: Props) {
         </Menu>
         <Avatar src={user?.avatarUrl} size="md" />
       </Box>
+      {/* <Button */}
     </Skeleton>
   );
 }

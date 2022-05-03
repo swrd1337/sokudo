@@ -50,29 +50,8 @@ async function fetchRepositoryData(
   return response.json();
 }
 
-async function fetchUpdateRepositoryData(
-  data: RepositoryData,
-  accessToken: string,
-): Promise<RepositoryData> {
-  const json = JSON.stringify(data, (_key, value) => (value instanceof Set ? [...value] : value));
-
-  const response: Response = await fetch(
-    `${apiBaseUrl}/repositories/${data.id}/data/`,
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `token ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: json,
-    },
-  );
-  return response.json();
-}
-
 export {
   fetchRepositoriesData,
   fetchRepositoryData,
   fetchCreateRepositoryData,
-  fetchUpdateRepositoryData,
 };

@@ -1,3 +1,5 @@
+import Board from './Board';
+
 interface RepositoryData {
   id: number;
   name: string;
@@ -5,8 +7,7 @@ interface RepositoryData {
   repoName: string;
   defaultBranch: string;
   visibility: string;
-  boardColumns: Set<string>;
-  doneColumnName: string;
+  boards: Board[];
 }
 
 export default RepositoryData;

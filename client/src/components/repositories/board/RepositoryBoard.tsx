@@ -5,28 +5,29 @@ import {
 import React, {
   FormEvent, useContext, useEffect, useState,
 } from 'react';
-import { fetchUpdateRepositoryData } from '../../../api/repositoriesApi';
-import { fetchRepositoryTasks, fetchUpdateRepositoryTask } from '../../../api/tasksApi';
+import { fetchUpdateBoard } from '../../../api/boardApi';
+import { fetchTasks, fetchUpdateTask } from '../../../api/tasksApi';
 import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
-import RepositoryData from '../../../utilities/types/RepositoryData';
+import Board from '../../../utilities/types/Board';
 import Task from '../../../utilities/types/Task';
 import BoardColumn from './BoardColumn';
+import BoardSelector from './BoardSelector';
 import AddNewEntry from './common/AddNewEntry';
 import TaskList from './tasks/TaskList';
 
 type Props = {
-  data: RepositoryData
+  board: Board
 }
 
-function RepositoryBoard({ data }: Props) {
-  const [columns, setColumns] = useState<Set<string>>(new Set(data.boardColumns));
+function RepositoryBoard({ board }: Props) {
+  const [columns, setColumns] = useState<Set<string>>(new Set(board.boardColumns));
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [dragColIndex, setDragColIndex] = useState<number>(-1);
   const [dragTaskMode, setDragTaskMode] = useState<boolean>(false);
 
-  const [doneColumnName, setDoneColumnName] = useState<string>(data.doneColumnName);
+  const [doneColumnName, setDoneColumnName] = useState<string>(board.doneColumnName);
   const [addColumnMode, setAddColumnMode] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>('');
 
@@ -35,19 +36,19 @@ function RepositoryBoard({ data }: Props) {
 
   useEffect(() => {
     if (user) {
-      const fetchTasks = async () => {
-        const responseData: Task[] = await fetchRepositoryTasks(data.id, user.accessToken);
+      const getTasks = async () => {
+        const responseData: Task[] = await fetchTasks(board.id, user.accessToken);
         setTasks(responseData);
       };
-      fetchTasks();
+      getTasks();
     }
   }, []);
 
   useDebouncedEffect(() => {
     if (user && dataUpdate) {
       const updateRepoData = async () => {
-        const newData = { ...data, boardColumns: columns };
-        await fetchUpdateRepositoryData(newData, user.accessToken);
+        const newBoard = { ...board, boardColumns: columns };
+        await fetchUpdateBoard(board.id, newBoard, user.accessToken);
         setDataUpdate(false);
       };
       updateRepoData();
@@ -87,7 +88,7 @@ function RepositoryBoard({ data }: Props) {
         updatedTask.columnName = dragColumnName;
         const tempTasks = tasks.filter((t) => t.id !== task.id);
         setTasks([...tempTasks, updatedTask]);
-        await fetchUpdateRepositoryTask(updatedTask, user!.accessToken);
+        await fetchUpdateTask(updatedTask, user!.accessToken);
       }
     }
     setDragTaskMode(false);
@@ -113,7 +114,7 @@ function RepositoryBoard({ data }: Props) {
   };
 
   const renameColumn = (oldName: string, newName: string) => {
-    if (oldName === data.doneColumnName) {
+    if (oldName === board.doneColumnName) {
       setDoneColumnName(newName);
     }
     const newColums = [...columns];
@@ -131,37 +132,43 @@ function RepositoryBoard({ data }: Props) {
 
   return (
     <Box display="flex" justifyContent="space-between" flexDir="column" h="100%">
-      <HStack
+      <Box
         w="100%"
+        p={2}
         pos="sticky"
+        display="flex"
         top={0}
         bgColor="gray.800"
         zIndex={1}
-        p={2}
         borderBottom="1px solid"
         borderTop="1px solid"
         borderColor="whiteAlpha.300"
         justifyContent="end"
       >
-        {!addColumnMode && (
-          <IconButton
-            variant="outline"
-            aria-label="Add column"
-            icon={<AddIcon />}
-            onClick={onAddModeClick}
-          />
+        {board && (
+          <BoardSelector name={board.name} />
         )}
-        {addColumnMode && (
-          <AddNewEntry
-            onInputChange={onInputNameChange}
-            onSubmit={onSaveClick}
-            onCancel={onAddModeClick}
-            isInvalid={columns.has(columnName)}
-            value={columnName}
-            inline
-          />
-        )}
-      </HStack>
+        <HStack>
+          {!addColumnMode && (
+            <IconButton
+              variant="outline"
+              aria-label="Add column"
+              icon={<AddIcon />}
+              onClick={onAddModeClick}
+            />
+          )}
+          {addColumnMode && (
+            <AddNewEntry
+              onInputChange={onInputNameChange}
+              onSubmit={onSaveClick}
+              onCancel={onAddModeClick}
+              isInvalid={columns.has(columnName)}
+              value={columnName}
+              inline
+            />
+          )}
+        </HStack>
+      </Box>
       <HStack alignItems="start" p={3} overflow="auto" h="100%">
         {[...columns].map((value, index) => (
           <BoardColumn
@@ -182,7 +189,7 @@ function RepositoryBoard({ data }: Props) {
             <TaskList
               doneColumnName={doneColumnName}
               currentColumnName={value}
-              repoDataId={data.id}
+              boardId={board.id}
               accessToken={user!.accessToken}
               username={user!.username}
               tasks={tasks}

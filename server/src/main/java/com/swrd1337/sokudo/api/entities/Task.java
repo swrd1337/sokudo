@@ -1,6 +1,6 @@
 package com.swrd1337.sokudo.api.entities;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.swrd1337.sokudo.utilities.tasks.TaskTypes;
@@ -25,7 +25,7 @@ import lombok.ToString;
 public class Task {
   
   @Transient
-  public static final String SEQUENCE_NAME = "repo_data_sequence";
+  public static final String SEQUENCE_NAME = "task_sequence";
 
   @Id
   private long id;
@@ -34,7 +34,7 @@ public class Task {
 
   private String description;
 
-  private long repositoryDataId;
+  private long boardId;
 
   private String columnName;
 
@@ -44,16 +44,16 @@ public class Task {
 
   private int storyPoints = 0;
 
-  
   @DBRef
-  private List<Comment> comments = Collections.emptyList();
+  private List<Comment> comments;
 
-  public Task(String title, String description, long repositoryDataId, String columnName, String author) {
+  public Task(String title, String description, long boardId, String columnName, String author) {
     this.title = title;
     this.description = description;
-    this.repositoryDataId = repositoryDataId;
+    this.boardId = boardId;
     this.columnName = columnName;
     this.author = author;
+    this.comments = new ArrayList<>();
   }
 
 }

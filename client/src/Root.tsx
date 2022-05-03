@@ -1,9 +1,9 @@
-import { Box } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import {
   Route, Routes, useLocation, useNavigate, useSearchParams,
 } from 'react-router-dom';
-import fetchAuthorizeUser from './api/userApi';
+import { fetchAuthorizeUser } from './api/userApi';
 import AppBar from './components/AppBar';
 import Login from './components/login/Login';
 import RepositoriesView from './components/repositories/RepositoriesView';
@@ -17,6 +17,7 @@ function Root() {
   const navigate = useNavigate();
   const location = useLocation();
   const [params] = useSearchParams();
+  const toast = useToast();
 
   useEffect(() => {
     const loadUser = async (code: string) => {
@@ -26,13 +27,19 @@ function Root() {
           const userValue = await fetchAuthorizeUser(code) as User;
           sessionStorage.setItem('user', JSON.stringify(userValue));
           setUser(userValue);
+          toast({
+            title: `Welcome, ${userValue.name}! 🎉🎉🎉`,
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+          });
         } catch (error) {
           // TODO: Later.
         }
       }
     };
 
-    // Check for user in ource session storage;
+    // Check for user in our session storage;
     const userStringValue = sessionStorage.getItem('user');
     if (userStringValue) {
       const userValue = JSON.parse(userStringValue) as User;

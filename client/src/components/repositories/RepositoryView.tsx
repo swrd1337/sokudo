@@ -20,7 +20,6 @@ import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
 import MarkdownsNotes from './notes/MarkdownsNotes';
-import RepositoryDataSelector from './RepositoryDataSelector';
 
 function RepositoryView() {
   const navigate = useNavigate();
@@ -29,6 +28,8 @@ function RepositoryView() {
   const { owner, repo } = useParams();
   const { user } = useContext(UserContext);
   const [repositoryData, setRepositoryData] = useState<RepositoryData>();
+
+  const [boardIndex, setBoardIndex] = useState<number>(0);
 
   useDebouncedEffect(() => {
     if (user && repo && owner) {
@@ -77,11 +78,6 @@ function RepositoryView() {
               </Badge>
             </Skeleton>
           </HStack>
-          <Skeleton isLoaded={!!repositoryData} h={8} minW={20}>
-            {repositoryData && (
-              <RepositoryDataSelector name={repositoryData.name} />
-            )}
-          </Skeleton>
         </HStack>
         <Tabs
           variant="enclosed"
@@ -104,7 +100,7 @@ function RepositoryView() {
             {repositoryData && (
               <TabPanels display="flex" overflow="auto" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
                 <TabPanel overflow="auto" w="100%" p="0">
-                  <RepositoryBoard data={repositoryData} />
+                  <RepositoryBoard board={repositoryData.boards[boardIndex]} />
                 </TabPanel>
                 <TabPanel w="100%" display="flex" p="0">
                   <MarkdownsNotes repoId={repositoryData.id} />

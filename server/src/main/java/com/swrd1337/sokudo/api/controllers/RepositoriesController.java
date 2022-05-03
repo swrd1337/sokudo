@@ -72,14 +72,4 @@ public class RepositoriesController {
     return  new ResponseEntity<>(apiRepoService.getRepositoryData(owner, repo), HttpStatus.OK);
   }
 
-  @PutMapping(value = "/{repoDataId}/data", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<RepositoryData> updateRepositoryData(
-      @PathVariable Long repoDataId,
-      @RequestBody String json,
-      ApiAuthenticationToken principal) {
-    RepositoryData repositoryData = GsonWrapper.getGson().fromJson(json, RepositoryData.class);
-    RepositoryData updatedRepositoryData = apiRepoService.updateRepositoryData(repoDataId, repositoryData);
-    return new ResponseEntity<>(updatedRepositoryData, HttpStatus.OK);
-  }
-
 }

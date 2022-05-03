@@ -27,7 +27,7 @@ public class TasksService {
     Task newTask = new Task(
         task.getTitle(),
         task.getDescription(),
-        task.getRepositoryDataId(),
+        task.getBoardId(),
         task.getColumnName(),
         task.getAuthor()
     );
@@ -35,8 +35,8 @@ public class TasksService {
     return tasksRepository.save(newTask);
   }
 
-  public List<Task> getAllTasks(Long repoDataId) {
-    return tasksRepository.findAllByRepositoryDataId(repoDataId);
+  public List<Task> getAllTasks(Long boardId) {
+    return tasksRepository.findAllByBoardId(boardId);
   }
 
   public Task updateTask(Long taskId, Task task) throws NotFoundException {
@@ -47,7 +47,7 @@ public class TasksService {
               existingTask.setDescription(task.getDescription());
               existingTask.setColumnName(task.getColumnName());
               existingTask.setType(task.getType());
-              existingTask.setStoryPoints(existingTask.getStoryPoints());
+              existingTask.setStoryPoints(task.getStoryPoints());
 
               List<Comment> comments = task.getComments();
               if (!comments.isEmpty()) {

@@ -8,10 +8,10 @@ type Props = {
   name: string
 }
 
-function RepositoryDataSelector({ name }: Props) {
+function BoardSelector({ name }: Props) {
   return (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+    <Menu flip isLazy>
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" mr={2}>
         {name}
       </MenuButton>
       <MenuList zIndex={2}>
@@ -26,4 +26,4 @@ function RepositoryDataSelector({ name }: Props) {
   );
 }
 
-export default RepositoryDataSelector;
+export default BoardSelector;

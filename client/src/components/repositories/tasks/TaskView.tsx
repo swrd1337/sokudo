@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchRepositoryTask } from '../../../api/tasksApi';
+import { fetchTask } from '../../../api/tasksApi';
 import UserContext from '../../../context/UserContext';
 import { getTypeColor } from '../../../utilities/taskTypes';
 import Task from '../../../utilities/types/Task';
@@ -25,11 +25,11 @@ function TaskView() {
 
   useEffect(() => {
     if (user && taskId) {
-      const fetchTask = async () => {
-        const data = await fetchRepositoryTask(+taskId, user.accessToken);
+      const getTask = async () => {
+        const data = await fetchTask(+taskId, user.accessToken);
         setTask(data);
       };
-      fetchTask();
+      getTask();
     }
   }, [user]);
 

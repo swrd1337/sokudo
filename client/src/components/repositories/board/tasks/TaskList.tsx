@@ -1,6 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import React, { FormEvent, useState } from 'react';
-import { fetchSaveRepositoryTask } from '../../../../api/tasksApi';
+import { fetchSaveTask } from '../../../../api/tasksApi';
 import Task from '../../../../utilities/types/Task';
 import AddNewEntry from '../common/AddNewEntry';
 import TaskActions from './TaskActions';
@@ -10,14 +10,14 @@ type Props = {
   tasks: Task[],
   doneColumnName: string,
   currentColumnName: string,
-  repoDataId: number,
+  boardId: number,
   actions: TaskActions,
   accessToken: string,
   username: string
 }
 
 function TaskList({
-  tasks, doneColumnName, currentColumnName, repoDataId, accessToken, username, actions,
+  tasks, doneColumnName, currentColumnName, boardId, accessToken, username, actions,
 }: Props) {
   const [openAddTask, setOpenAddTask] = useState<boolean>(false);
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
@@ -38,13 +38,14 @@ function TaskList({
         id: -1,
         title: newTaskTitle,
         columnName: currentColumnName,
-        repositoryDataId: repoDataId,
         author: username,
+        boardId,
       };
-      setOpenAddTask(!openAddTask);
-      setInvalidTitle(false);
-      newTask = await fetchSaveRepositoryTask(newTask, accessToken);
+      newTask = await fetchSaveTask(newTask, accessToken);
       actions.setTasks([...tasks, newTask]);
+      setOpenAddTask(!openAddTask);
+      setNewTaskTitle('');
+      setInvalidTitle(false);
     } else {
       setInvalidTitle(true);
     }
@@ -59,7 +60,7 @@ function TaskList({
     <HStack justifyContent="center" pt={2}>
       <VStack w="100%">
         {tasks?.filter((t) => t.columnName === currentColumnName).map((t) => (
-          <TaskCard key={t.id} task={t} actions={actions} />
+          <TaskCard key={`task-${t.id}`} task={t} actions={actions} />
         ))}
         {openAddTask && (
           <AddNewEntry

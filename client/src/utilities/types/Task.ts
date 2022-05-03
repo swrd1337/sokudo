@@ -5,7 +5,7 @@ interface Task {
   id: number;
   title: string;
   description?: string;
-  repositoryDataId: number;
+  boardId: number;
   columnName: string;
   author: string;
   type?: TaskTypes;

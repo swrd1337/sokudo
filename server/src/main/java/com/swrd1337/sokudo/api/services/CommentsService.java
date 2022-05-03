@@ -50,13 +50,15 @@ public class CommentsService {
     return commentsRepository.save(newComment);
   }
 
-  public void deleteComment(Long commentId) {
+  public void deleteComment(Long commentId, Long userId) {
     commentsRepository.findById(commentId).ifPresent(comment -> {
-      tasksRepository.findById(comment.getTaskId()).ifPresent(task -> {
-        task.getComments().remove(comment);
-        tasksRepository.save(task);
-      });
-      commentsRepository.delete(comment);
+      if (userId == comment.getUserId()) {
+        tasksRepository.findById(comment.getTaskId()).ifPresent(task -> {
+          task.getComments().remove(comment);
+          tasksRepository.save(task);
+        });
+        commentsRepository.delete(comment);
+      }
     });
   }
 

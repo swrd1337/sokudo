@@ -1,9 +1,14 @@
 package com.swrd1337.sokudo.api.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -38,18 +43,15 @@ public class RepositoryData {
 
   private String visibility;
 
-  private Set<String> boardColumns;
+  @DBRef
+  private List<Board> boards;
 
-  private String doneColumnName;
-
-  public RepositoryData(String ownerName, String name, String defaultBranch, String visibility,
-      Set<String> boardColumns, String doneColumnName) {
+  public RepositoryData(String ownerName, String name, String defaultBranch, String visibility) {
     this.ownerName = ownerName;
     this.repoName = name;
     this.defaultBranch = defaultBranch;
     this.visibility = visibility;
-    this.boardColumns = boardColumns;
-    this.doneColumnName = doneColumnName;
+    this.boards = new ArrayList<>();
   }
 
 }

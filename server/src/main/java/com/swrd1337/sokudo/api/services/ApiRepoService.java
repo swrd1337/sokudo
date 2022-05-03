@@ -4,8 +4,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.swrd1337.sokudo.api.dto.RepositoryDTO;
+import com.swrd1337.sokudo.api.entities.Board;
 import com.swrd1337.sokudo.api.entities.RepositoryData;
 import com.swrd1337.sokudo.api.repositories.ApiRepoRepository;
+import com.swrd1337.sokudo.api.repositories.BoardsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiRepoService {
   
+  private static final String DEFAULT_BOARD_NAME = "Default";
+
   private static final String DONE_COL_NAME = "Done";
 
   private static final String DOING_COL_NAME = "Doing";
@@ -21,9 +25,13 @@ public class ApiRepoService {
 
   @Autowired
   private ApiRepoRepository repository;
+  
+  @Autowired
+  private BoardsRepository boardsRepository;
 
   @Autowired
   private SequenceGeneratorService sequenceGeneratorService;
+
 
   public RepositoryData getRepositoryData(String owner, String repo) {
     return repository.findByOwnerNameAndRepoName(owner, repo);
@@ -40,22 +48,18 @@ public class ApiRepoService {
       repo.getOwner().getLogin(),
       repo.getName(),
       repo.getDefaultBranch(),
-      repo.getVisibility(),
-      defaultCols,
-      DONE_COL_NAME
+      repo.getVisibility()
     );
-    repositoryData.setId(sequenceGeneratorService.generateSequence(RepositoryData.SEQUENCE_NAME));
-    return repository.save(repositoryData);
-  }
 
-  public RepositoryData updateRepositoryData(Long repoDataId, RepositoryData newRepositoryData) {
-    return repository.findById(repoDataId)
-        .map(
-            existingRepositoryData -> {
-              existingRepositoryData.setBoardColumns(newRepositoryData.getBoardColumns());
-              return repository.save(existingRepositoryData);
-            })
-        .orElse(null);
+    long repoDataId = sequenceGeneratorService.generateSequence(RepositoryData.SEQUENCE_NAME);
+    repositoryData.setId(repoDataId);
+
+    Board defaultBoard = new Board(DEFAULT_BOARD_NAME, defaultCols, DONE_COL_NAME, repoDataId);
+    defaultBoard.setId(sequenceGeneratorService.generateSequence(Board.SEQUENCE_NAME));
+    boardsRepository.save(defaultBoard);
+
+    repositoryData.getBoards().add(defaultBoard);
+    return repository.save(repositoryData);
   }
 
 }

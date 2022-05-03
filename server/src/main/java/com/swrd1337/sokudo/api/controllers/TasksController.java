@@ -26,9 +26,9 @@ public class TasksController {
   @Autowired
   private TasksService tasksService;
 
-  @GetMapping("/repo/{repoDataId}")
-  public ResponseEntity<List<Task>> getAllRepositoryTasks(@PathVariable Long repoDataId) {
-    List<Task> tasks = tasksService.getAllTasks(repoDataId);
+  @GetMapping("/repo/{boardId}")
+  public ResponseEntity<List<Task>> getAllRepositoryTasks(@PathVariable Long boardId) {
+    List<Task> tasks = tasksService.getAllTasks(boardId);
     if (tasks == null) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

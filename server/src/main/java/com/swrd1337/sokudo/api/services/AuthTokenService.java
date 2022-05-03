@@ -18,4 +18,9 @@ public class AuthTokenService {
     return userDetails.getId();
   }
 
+  public String getUsernameFromAuthToken(ApiAuthenticationToken authToken) {
+    TokenUserDetails userDetails = (TokenUserDetails) authToken.getDetails();
+    return userDetails.getUsername();
+  }
+
 }
