@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiRepoService {
   
+  public static final String DONE_COL_NAME = "Done";
+  
+  public static final String DOING_COL_NAME = "Doing";
+  
+  public static final String TO_DO_COL_NAME = "To Do";
+
   private static final String DEFAULT_BOARD_NAME = "Default";
-
-  private static final String DONE_COL_NAME = "Done";
-
-  private static final String DOING_COL_NAME = "Doing";
-
-  private static final String TO_DO_COL_NAME = "To Do";
-
+  
   @Autowired
   private ApiRepoRepository repository;
   

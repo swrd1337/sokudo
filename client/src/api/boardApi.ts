@@ -20,5 +20,19 @@ async function fetchUpdateBoard(
   return response.json();
 }
 
+async function fetchCreateBoard(
+  boardTitle: string,
+  repoId: number,
+  accessToken: string,
+): Promise<Board> {
+  const response: Response = await fetch(`${apiBaseUrl}/boards?title=${boardTitle}&repoId=${repoId}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `token ${accessToken}`,
+    },
+  });
+  return response.json();
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export { fetchUpdateBoard };
+export { fetchUpdateBoard, fetchCreateBoard };
