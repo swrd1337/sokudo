@@ -16,5 +16,6 @@ const rootElement: React.ReactNode = (
 );
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container!);
 root.render(rootElement);
