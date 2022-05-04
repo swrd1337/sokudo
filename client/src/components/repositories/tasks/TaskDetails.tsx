@@ -2,7 +2,6 @@ import { EditIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Box,
-  Divider,
   Editable,
   EditableInput,
   EditablePreview, HStack,
@@ -97,17 +96,15 @@ function TaskDetails({ task, user, updateTask }: Props) {
   };
 
   return (
-    <HStack pb={2}>
+    <HStack pb={4} w="100%">
       <Box
         display="flex"
-        // w="6xl"
         h="100%"
+        w="100%"
         border="1px solid"
         borderColor="gray.600"
         bgColor="gray.700"
         borderRadius="lg"
-        // mb={4}
-        // overflow="auto"
       >
         <Stack flexGrow={1} padding="16px" overflow="auto">
           <Box
@@ -175,8 +172,8 @@ function TaskDetails({ task, user, updateTask }: Props) {
               </Stack>
             </RadioGroup>
           </HStack>
-          {/* SOMETHING GOOD TO BE EXTRACTED AS MD COMPONENT */}
-          <Stack pb={4}>
+          {/* SOMETHING GOOD - TO BE EXTRACTED AS MD COMPONENT */}
+          <Stack h="100%">
             <HStack justifyContent="space-between">
               <Text fontWeight="semibold">Description:</Text>
               <IconButton
@@ -186,7 +183,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
               />
             </HStack>
             <MarkdownComponent
-              height={80}
+              height="46vh"
               editMode={editMode}
               value={descValue}
               onChange={onDescriptionChange}
@@ -200,17 +197,25 @@ function TaskDetails({ task, user, updateTask }: Props) {
         bgColor="gray.800"
         borderRadius="md"
         h="100%"
+        w="100%"
         overflow="auto"
       >
-        <HStack spacing={5} justifyContent="center">
-          <Text fontWeight="semibold" fontSize="xl" color="teal.300" p="16px">
+        <HStack spacing={1} justifyContent="center">
+          <Text fontWeight="semibold" fontSize="xl" color="teal.300" p={3}>
             Comments
-            <Badge>{task.comments?.length}</Badge>
           </Text>
+          <Badge
+            colorScheme="purple"
+            pl="10px"
+            pr="10px"
+            borderRadius="full"
+            variant="outline"
+          >
+            {task.comments?.length}
+          </Badge>
         </HStack>
         <CommentsContainer user={user} taskId={task.id} />
       </Stack>
-
     </HStack>
   );
 }
