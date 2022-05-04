@@ -14,8 +14,10 @@ import {
 import React, { useContext, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { fetchCreateRepositoryData, fetchRepositoryData } from '../../api/repositoriesApi';
+import BoardsContext from '../../context/BoardsContext';
 import UserContext from '../../context/UserContext';
 import useDebouncedEffect from '../../utilities/debounce';
+import Board from '../../utilities/types/Board';
 import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
@@ -53,9 +55,22 @@ function RepositoryView() {
     setSearchParams(searchParams);
   };
 
+  const addBoard = (newBoard: Board) => {
+    if (repositoryData) {
+      repositoryData.boards.push(newBoard);
+      setRepositoryData(repositoryData);
+    }
+  };
+
   return (
     <ViewContainer fullH>
-      <Container maxW="100%" h="100%" display="flex" flexDirection="column" flexGrow={1}>
+      <Container
+        maxW="100%"
+        h="100%"
+        display="flex"
+        flexDirection="column"
+        flexGrow={1}
+      >
         <HStack pb={3} justifyContent="space-between">
           <HStack justifyContent="start">
             <IconButton
@@ -90,26 +105,60 @@ function RepositoryView() {
           onChange={onTabChange}
         >
           <TabList>
-            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Kanban Board</Tab>
-            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Markdown Notes</Tab>
-            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Code Scanning</Tab>
-            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Latest Commits</Tab>
-            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>Statistics</Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
+              Kanban Board
+            </Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
+              Markdown Notes
+            </Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
+              Code Scanning
+            </Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
+              Latest Commits
+            </Tab>
+            <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
+              Statistics
+            </Tab>
           </TabList>
           <Skeleton isLoaded={!!repositoryData} h="100%" overflow="auto">
             {repositoryData && (
-              <TabPanels display="flex" overflow="auto" h="100%" borderLeft="1px solid" borderRight="1px solid" borderColor="whiteAlpha.300">
+              <TabPanels
+                display="flex"
+                overflow="auto"
+                h="100%"
+                borderLeft="1px solid"
+                borderRight="1px solid"
+                borderColor="whiteAlpha.300"
+              >
                 <TabPanel overflow="auto" w="100%" p="0">
-                  <RepositoryBoard board={repositoryData.boards[boardIndex]} />
+                  {/* eslint-disable-next-line react/jsx-no-constructed-context-values */ }
+                  <BoardsContext.Provider value={{
+                    boardIndex,
+                    repoData: repositoryData,
+                    setBoardIndex,
+                    addBoard,
+                  }}
+                  >
+                    <RepositoryBoard
+                      board={repositoryData.boards[boardIndex]}
+                    />
+                  </BoardsContext.Provider>
                 </TabPanel>
                 <TabPanel w="100%" display="flex" p="0">
                   <MarkdownsNotes repoId={repositoryData.id} />
                 </TabPanel>
                 <TabPanel>
-                  <p>Code Scanning View: https://docs.github.com/en/rest/code-scanning</p>
+                  <p>
+                    Code Scanning View:
+                    https://docs.github.com/en/rest/code-scanning
+                  </p>
                 </TabPanel>
                 <TabPanel>
-                  <p>Commits View: https://docs.github.com/en/rest/commits/commits</p>
+                  <p>
+                    Commits View:
+                    https://docs.github.com/en/rest/commits/commits
+                  </p>
                 </TabPanel>
               </TabPanels>
             )}

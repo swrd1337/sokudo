@@ -1,28 +1,78 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { AddIcon, ChevronDownIcon, DeleteIcon } from '@chakra-ui/icons';
 import {
-  Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
+  Button, HStack, Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList, Text, Tooltip,
+  useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
+import BoardsContext from '../../../context/BoardsContext';
+import DeleteConfirmation from '../../modals/DeleteConfirmation';
+import NewBoardModal from './NewBoardModal';
 
-type Props = {
-  name: string
-}
+function BoardSelector() {
+  const {
+    boardIndex, setBoardIndex, repoData, addBoard,
+  } = useContext(BoardsContext);
+  const { boards } = repoData!;
 
-function BoardSelector({ name }: Props) {
+  const newBoardModal = useDisclosure();
+  const deleteModal = useDisclosure();
+
+  const onItemClick = (_index: number) => setBoardIndex(_index);
+
   return (
-    <Menu flip isLazy>
-      <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" mr={2}>
-        {name}
-      </MenuButton>
-      <MenuList zIndex={2}>
-        <MenuItem>Download</MenuItem>
-        <MenuItem>Create a Copy</MenuItem>
-        <MenuItem>Mark as Draft</MenuItem>
-        <MenuItem>Delete</MenuItem>
-        <MenuDivider />
-        <MenuItem>Attend a Workshop</MenuItem>
-      </MenuList>
-    </Menu>
+    <>
+      <Menu flip isLazy>
+        <Tooltip
+          label="Switch boards"
+          hasArrow
+          isDisabled={newBoardModal.isOpen || deleteModal.isOpen}
+        >
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            variant="outline"
+            mr={2}
+          >
+            {boards[boardIndex].name}
+          </MenuButton>
+        </Tooltip>
+        <MenuList zIndex={2}>
+          {boards.map((board, index) => index !== boardIndex
+            && (
+              <MenuItem key={board.id} onClick={() => onItemClick(index)}>
+                {board.name}
+              </MenuItem>
+            ))}
+          {boards.length > 1 && <MenuDivider />}
+          <MenuItem onClick={newBoardModal.onOpen} icon={<AddIcon />}>
+            Create new board
+          </MenuItem>
+          <MenuItem onClick={deleteModal.onOpen} icon={<DeleteIcon />}>
+            <HStack spacing={1}>
+              <Text>Delete</Text>
+              <Text fontWeight="semibold" color="purple.200">
+                {`"${boards[boardIndex].name}"`}
+              </Text>
+            </HStack>
+          </MenuItem>
+        </MenuList>
+      </Menu>
+      <NewBoardModal
+        isOpen={newBoardModal.isOpen}
+        onClose={newBoardModal.onClose}
+        repoData={repoData!}
+        addBoard={addBoard}
+      />
+      <DeleteConfirmation
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.onClose}
+        onConfirmClick={() => {}}
+      />
+    </>
   );
 }
 

@@ -1,6 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons';
 import {
-  Box, HStack, IconButton,
+  Box, Editable, EditableInput, EditablePreview, HStack, IconButton, Tooltip,
 } from '@chakra-ui/react';
 import React, {
   FormEvent, useContext, useEffect, useState,
@@ -42,7 +42,7 @@ function RepositoryBoard({ board }: Props) {
       };
       getTasks();
     }
-  }, []);
+  }, [board]);
 
   useDebouncedEffect(() => {
     if (user && dataUpdate) {
@@ -143,31 +143,46 @@ function RepositoryBoard({ board }: Props) {
         borderBottom="1px solid"
         borderTop="1px solid"
         borderColor="whiteAlpha.300"
-        justifyContent="end"
+        justifyContent="space-between"
       >
-        {board && (
-          <BoardSelector name={board.name} />
-        )}
-        <HStack>
-          {!addColumnMode && (
-            <IconButton
-              variant="outline"
-              aria-label="Add column"
-              icon={<AddIcon />}
-              onClick={onAddModeClick}
-            />
-          )}
-          {addColumnMode && (
-            <AddNewEntry
-              onInputChange={onInputNameChange}
-              onSubmit={onSaveClick}
-              onCancel={onAddModeClick}
-              isInvalid={columns.has(columnName)}
-              value={columnName}
-              inline
-            />
-          )}
-        </HStack>
+        <Editable
+          pl={2}
+          value={board.name}
+          // onChange={onTitleUpdateChange}
+          // onSubmit={onTitleUpdateConfirm}
+          // onCancel={onTitleUpdateConfirm}
+          color="purple.300"
+          fontSize="xl"
+          fontWeight="semibold"
+        >
+          <EditablePreview />
+          <EditableInput />
+        </Editable>
+        <Box display="flex">
+          {board && (<BoardSelector />)}
+          <HStack>
+            {!addColumnMode && (
+              <Tooltip label="Add collumn" hasArrow>
+                <IconButton
+                  variant="outline"
+                  aria-label="Add column"
+                  icon={<AddIcon />}
+                  onClick={onAddModeClick}
+                />
+              </Tooltip>
+            )}
+            {addColumnMode && (
+              <AddNewEntry
+                onInputChange={onInputNameChange}
+                onSubmit={onSaveClick}
+                onCancel={onAddModeClick}
+                isInvalid={columns.has(columnName)}
+                value={columnName}
+                inline
+              />
+            )}
+          </HStack>
+        </Box>
       </Box>
       <HStack alignItems="start" p={3} overflow="auto" h="100%">
         {[...columns].map((value, index) => (
