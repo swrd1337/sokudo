@@ -54,10 +54,10 @@ function CommentsContainer({ user, taskId }: Props) {
   };
 
   return (
-    <Stack spacing={5} overflow="auto" p={3} w="100%">
-      <HStack pb={4}>
+    <Stack spacing={3} overflow="auto" w="100%">
+      <HStack pr={3} pl={3}>
         <Input
-          placeholder="Add new commnet"
+          placeholder="Add new comment..."
           value={commentValue}
           onChange={onChange}
         />
@@ -65,8 +65,15 @@ function CommentsContainer({ user, taskId }: Props) {
           Add
         </Button>
       </HStack>
-      <Skeleton isLoaded={!!comments} w="100%" minH={16} overflow="auto">
-        { comments.length ? (
+      <Skeleton
+        isLoaded={!!comments}
+        w="100%"
+        minH={16}
+        overflow="auto"
+        borderTop="1px solid"
+        borderColor="teal.600"
+      >
+        {comments.length ? (
           comments.map((com) => com && (
             <CommentCard
               key={com.id}

@@ -23,11 +23,11 @@ function CommentCard({ comment, user, removeComment }: Props) {
   };
 
   return (
-    <Box pb={4}>
+    <Box p={2}>
       <HStack spacing={3}>
         <Avatar src={comment.avatarUrl} alignSelf="start" />
         <Box bgColor="gray.700" pl={4} border="1px solid" borderRadius="lg" borderColor="teal.700" display="flex">
-          <Box>
+          <Box wordBreak="break-all">
             <Text fontSize="lg" color="purple.300" fontWeight="semibold">{comment.username}</Text>
             <ReactMarkdown components={ChakraUIRenderer()}>
               {comment.content}

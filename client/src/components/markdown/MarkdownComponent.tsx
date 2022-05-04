@@ -35,6 +35,7 @@ function MarkdownComponent({
           bgColor={bgColor}
           p={4}
           borderRadius="md"
+          wordBreak="break-all"
         >
           <ReactMarkdown components={ChakraUIRenderer()}>{value}</ReactMarkdown>
         </Box>
