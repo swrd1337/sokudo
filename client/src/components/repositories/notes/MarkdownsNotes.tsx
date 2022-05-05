@@ -2,7 +2,7 @@ import {
   AddIcon, ArrowDownIcon, ArrowUpIcon, DeleteIcon, EditIcon, ViewIcon,
 } from '@chakra-ui/icons';
 import {
-  Box, Button, Editable, EditableInput, EditablePreview, HStack, IconButton, Text,
+  Box, Button, Editable, EditableInput, EditablePreview, HStack, IconButton, Text, Tooltip,
 } from '@chakra-ui/react';
 import React, {
   FormEvent, useContext, useEffect, useState,
@@ -206,21 +206,25 @@ function MarkdownsNotes({ repoId }: Props) {
           )}
           {!addMdMode && (
             <HStack justifyContent="space-between" w="100%">
-              <IconButton
-                variant="outline"
-                aria-label="Add note"
-                icon={<AddIcon color="green.300" />}
-                onClick={onAddModeClick}
-              />
+              <Tooltip label="Create note" hasArrow>
+                <IconButton
+                  variant="outline"
+                  aria-label="Add note"
+                  icon={<AddIcon color="green.300" />}
+                  onClick={onAddModeClick}
+                />
+              </Tooltip>
               <Text fontSize="md" fontWeight="semibold">
                 Workspace
               </Text>
-              <IconButton
-                variant="outline"
-                aria-label="Reverse order"
-                icon={reverse ? <ArrowDownIcon /> : <ArrowUpIcon />}
-                onClick={onReverseOrderClick}
-              />
+              <Tooltip label="Change order" hasArrow>
+                <IconButton
+                  variant="outline"
+                  aria-label="Reverse order"
+                  icon={reverse ? <ArrowDownIcon /> : <ArrowUpIcon />}
+                  onClick={onReverseOrderClick}
+                />
+              </Tooltip>
             </HStack>
           )}
         </Box>
