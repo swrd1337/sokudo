@@ -46,7 +46,7 @@ function BoardSelector() {
               {board.name}
             </MenuItem>
           ))}
-          {boards.length > 1 && <MenuDivider />}
+          <MenuDivider />
           <MenuItem onClick={newBoardModal.onOpen} icon={<AddIcon />}>
             Create new board
           </MenuItem>
