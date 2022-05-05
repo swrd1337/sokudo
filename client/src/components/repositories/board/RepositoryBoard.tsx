@@ -166,7 +166,7 @@ function RepositoryBoard({ board }: Props) {
                 <IconButton
                   variant="outline"
                   aria-label="Add column"
-                  icon={<AddIcon />}
+                  icon={<AddIcon color="green.300" />}
                   onClick={onAddModeClick}
                 />
               </Tooltip>

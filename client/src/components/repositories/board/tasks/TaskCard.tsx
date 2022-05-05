@@ -43,7 +43,6 @@ function TaskCard({ task, actions }: Props) {
       borderRadius="lg"
       bgColor={dragMode ? 'whiteAlpha.300' : 'whiteAlpha.50'}
       boxShadow="inner"
-      // p="5px 10px"
       alignItems="center"
       draggable
       _hover={{

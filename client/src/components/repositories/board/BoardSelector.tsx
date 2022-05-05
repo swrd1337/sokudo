@@ -4,7 +4,8 @@ import {
   MenuButton,
   MenuDivider,
   MenuItem,
-  MenuList, Text, Tooltip,
+  MenuList,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useContext } from 'react';
@@ -26,27 +27,25 @@ function BoardSelector() {
   return (
     <>
       <Menu flip isLazy>
-        <Tooltip
-          label="Switch boards"
-          hasArrow
-          isDisabled={newBoardModal.isOpen || deleteModal.isOpen}
+        <MenuButton
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+          variant="outline"
+          mr={2}
         >
-          <MenuButton
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-            variant="outline"
-            mr={2}
-          >
-            {boards[boardIndex].name}
-          </MenuButton>
-        </Tooltip>
+          Switch boards
+        </MenuButton>
         <MenuList zIndex={2}>
-          {boards.map((board, index) => index !== boardIndex
-            && (
-              <MenuItem key={board.id} onClick={() => onItemClick(index)}>
-                {board.name}
-              </MenuItem>
-            ))}
+          {boards.map((board, index) => (
+            <MenuItem
+              key={board.id}
+              color={index === boardIndex ? 'purple.200' : 'whiteAlpha'}
+              fontWeight={index === boardIndex ? 'semibold' : 'normal'}
+              onClick={() => onItemClick(index)}
+            >
+              {board.name}
+            </MenuItem>
+          ))}
           {boards.length > 1 && <MenuDivider />}
           <MenuItem onClick={newBoardModal.onOpen} icon={<AddIcon />}>
             Create new board

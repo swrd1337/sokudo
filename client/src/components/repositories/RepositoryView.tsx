@@ -131,7 +131,7 @@ function RepositoryView() {
                 borderRight="1px solid"
                 borderColor="whiteAlpha.300"
               >
-                <TabPanel overflow="auto" w="100%" p="0">
+                <TabPanel w="100%" p="0">
                   {/* eslint-disable-next-line react/jsx-no-constructed-context-values */ }
                   <BoardsContext.Provider value={{
                     boardIndex,
