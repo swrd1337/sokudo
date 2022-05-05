@@ -116,9 +116,15 @@ function MarkdownsNotes({ repoId }: Props) {
       mds.splice(selectedIndex, 1);
       setMds([...mds]);
       const lastIndex = mds.length - 1;
-      setSelectedIndex(lastIndex);
-      setMarkdownTitle(mds[lastIndex].title);
-      setMarkdownContent(mds[lastIndex].content);
+      if (lastIndex < 0) {
+        setSelectedIndex(-1);
+        setMarkdownTitle('');
+        setMarkdownContent('');
+      } else {
+        setSelectedIndex(lastIndex);
+        setMarkdownTitle(mds[lastIndex].title);
+        setMarkdownContent(mds[lastIndex].content);
+      }
       await fetchDeleteMarkdown(mdId, user!.accessToken);
     }
   };
@@ -150,12 +156,16 @@ function MarkdownsNotes({ repoId }: Props) {
   const mdsMapCallback = (md: Markdown, index: number) => (
     <Button
       key={md.id}
-      mb="5px"
+      mb={1}
       w="100%"
-      variant="ghost"
-      bgColor="gray.900"
+      h={10}
+      minH={10}
+      variant="outline"
+      bgColor="whiteAlpha.50"
+      borderColor={index === selectedIndex ? 'purple.300' : 'inherit'}
+      borderWidth="2px"
       justifyContent="start"
-      color={index === selectedIndex ? 'purple.300' : 'whiteAlpha.600'}
+      color={index === selectedIndex ? 'purple.300' : 'whiteAlpha'}
       onClick={() => onMdButtonClick(index)}
     >
       {md.title}
@@ -167,18 +177,20 @@ function MarkdownsNotes({ repoId }: Props) {
   return (
     <Box w="100%" flexGrow={1} display="flex">
       <Box
-        borderRight="1px solid"
-        borderColor="whiteAlpha.300"
-        p={2}
+        border="1px solid"
+        borderColor="gray.600"
+        bgColor="gray.700"
+        borderRadius="lg"
+        m={3}
         minW={300}
         maxW={300}
-        overflow="auto"
+        display="flex"
+        flexDir="column"
       >
         <Box
           display="flex"
           justifyContent="start"
-          pb={2}
-          mb={2}
+          p={2}
           borderBottom="1px solid"
           borderColor="whiteAlpha.300"
         >
@@ -197,11 +209,11 @@ function MarkdownsNotes({ repoId }: Props) {
               <IconButton
                 variant="outline"
                 aria-label="Add note"
-                icon={<AddIcon />}
+                icon={<AddIcon color="green.300" />}
                 onClick={onAddModeClick}
               />
               <Text fontSize="md" fontWeight="semibold">
-                Explorer
+                Workspace
               </Text>
               <IconButton
                 variant="outline"
@@ -212,7 +224,9 @@ function MarkdownsNotes({ repoId }: Props) {
             </HStack>
           )}
         </Box>
-        {reverse ? mds.map(mdsMapCallback).reverse() : mds.map(mdsMapCallback)}
+        <Box display="flex" flexDir="column" overflow="auto" p={2}>
+          {reverse ? mds.map(mdsMapCallback).reverse() : mds.map(mdsMapCallback)}
+        </Box>
       </Box>
       {selectedIndex >= 0 && (
         <Box
