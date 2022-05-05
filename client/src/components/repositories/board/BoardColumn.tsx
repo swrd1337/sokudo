@@ -80,7 +80,8 @@ function BoardColumn({
     >
       <Box
         w="100%"
-        p="5"
+        p={5}
+        pt={2}
         display="flex"
         flexDirection="column"
         flexGrow={1}
