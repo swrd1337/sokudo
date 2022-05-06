@@ -16,7 +16,7 @@ function AppBar() {
       position="fixed"
       bg="gray.900"
       h="7vh"
-      zIndex={1337}
+      zIndex="sticky"
       top="0"
       boxShadow="outline"
       width="100%"

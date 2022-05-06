@@ -17,6 +17,7 @@ function BoardSelector() {
   const {
     boardIndex, setBoardIndex, repoData, addBoard,
   } = useContext(BoardsContext);
+
   const { boards } = repoData!;
 
   const newBoardModal = useDisclosure();
@@ -35,7 +36,7 @@ function BoardSelector() {
         >
           Switch boards
         </MenuButton>
-        <MenuList zIndex={2}>
+        <MenuList zIndex="dropdown">
           {boards.map((board, index) => (
             <MenuItem
               key={board.id}

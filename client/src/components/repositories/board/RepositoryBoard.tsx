@@ -139,7 +139,7 @@ function RepositoryBoard({ board }: Props) {
         display="flex"
         top={0}
         bgColor="gray.800"
-        zIndex={1}
+        zIndex="sticky"
         borderBottom="1px solid"
         borderTop="1px solid"
         borderColor="whiteAlpha.300"

@@ -1,8 +1,8 @@
 import {
-  AddIcon, ArrowDownIcon, ArrowUpIcon, DeleteIcon, EditIcon, ViewIcon,
+  AddIcon, ArrowDownIcon, ArrowUpIcon,
 } from '@chakra-ui/icons';
 import {
-  Box, Button, Editable, EditableInput, EditablePreview, HStack, IconButton, Text, Tooltip,
+  Box, HStack, IconButton, Text, Tooltip, useDisclosure,
 } from '@chakra-ui/react';
 import React, {
   FormEvent, useContext, useEffect, useState,
@@ -13,8 +13,10 @@ import {
 import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
 import Markdown from '../../../utilities/types/Markdown';
-import MarkdownComponent from '../../markdown/MarkdownComponent';
+import DeleteConfirmation from '../../modals/DeleteConfirmation';
 import AddNewEntry from '../board/common/AddNewEntry';
+import EditorView from './EditorView';
+import NotesList from './NotesList';
 
 type Props = {
   repoId: number
@@ -23,9 +25,10 @@ type Props = {
 function MarkdownsNotes({ repoId }: Props) {
   const { user } = useContext(UserContext);
 
+  const deleteModal = useDisclosure();
+
   const [mds, setMds] = useState<Markdown[]>([]);
   const [addMdMode, setAddMdMode] = useState<boolean>(false);
-  const [contentEditMode, setContentEditMode] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
   const [newTitle, setNewTitle] = useState<string>('');
@@ -103,11 +106,6 @@ function MarkdownsNotes({ repoId }: Props) {
     setMarkdownTitle(mds[index].title);
     setMarkdownContent(mds[index].content);
     setAddMdMode(false);
-    setContentEditMode(false);
-  };
-
-  const toggleContentEditMode = () => {
-    setContentEditMode(!contentEditMode);
   };
 
   const onDeleteClick = async () => {
@@ -128,51 +126,6 @@ function MarkdownsNotes({ repoId }: Props) {
       await fetchDeleteMarkdown(mdId, user!.accessToken);
     }
   };
-
-  const onTitleUpdateConfirm = async (value: string) => {
-    if (value.length <= 24) {
-      const md = mds[selectedIndex];
-      md.title = value;
-      mds[selectedIndex] = md;
-      setMds([...mds]);
-      await fetchUpdateMarkdown(md.id, md, user!.accessToken);
-    }
-  };
-
-  const onTitleUpdateChange = (value: string) => {
-    if (value.length <= 24) {
-      setMarkdownTitle(value);
-    }
-  };
-
-  const onContentUpdate = async (e: FormEvent<HTMLTextAreaElement>) => {
-    const { value } = e.currentTarget;
-    if (value.length <= 2048) {
-      setMarkdownContent(value);
-      setMdContentUpdateTrigger(true);
-    }
-  };
-
-  const mdsMapCallback = (md: Markdown, index: number) => (
-    <Button
-      key={md.id}
-      mb={1}
-      w="100%"
-      h={10}
-      minH={10}
-      variant="outline"
-      bgColor="whiteAlpha.50"
-      borderColor={index === selectedIndex ? 'purple.300' : 'inherit'}
-      borderWidth="2px"
-      justifyContent="start"
-      color={index === selectedIndex ? 'purple.300' : 'whiteAlpha'}
-      onClick={() => onMdButtonClick(index)}
-    >
-      {md.title}
-    </Button>
-  );
-
-  const onReverseOrderClick = () => setReverse(!reverse);
 
   return (
     <Box w="100%" flexGrow={1} display="flex">
@@ -222,66 +175,45 @@ function MarkdownsNotes({ repoId }: Props) {
                   variant="outline"
                   aria-label="Reverse order"
                   icon={reverse ? <ArrowDownIcon /> : <ArrowUpIcon />}
-                  onClick={onReverseOrderClick}
+                  onClick={() => setReverse(!reverse)}
                 />
               </Tooltip>
             </HStack>
           )}
         </Box>
-        <Box display="flex" flexDir="column" overflow="auto" p={2}>
-          {reverse ? mds.map(mdsMapCallback).reverse() : mds.map(mdsMapCallback)}
-        </Box>
+        <NotesList
+          mds={mds}
+          onMdButtonClick={onMdButtonClick}
+          reverse={reverse}
+          selectedIndex={selectedIndex}
+        />
       </Box>
       {selectedIndex >= 0 && (
-        <Box
-          flexGrow={1}
-          p="10px"
-          pt="0"
-          display="flex"
-          flexDir="column"
-          alignItems="center"
-        >
-          <Box height="100%" w="6xl" display="flex" flexDir="column">
-            <HStack spacing={3} p="10px" justifyContent="space-between">
-              <Editable
-                value={markdownTitle}
-                onChange={onTitleUpdateChange}
-                onSubmit={onTitleUpdateConfirm}
-                onCancel={onTitleUpdateConfirm}
-                color="purple.300"
-                fontSize="2xl"
-                fontWeight="semibold"
-              >
-                <EditablePreview />
-                <EditableInput />
-              </Editable>
-              <HStack>
-                <HStack pr={2}>
-                  <Text fontStyle="italic">Author: </Text>
-                  <Text fontWeight="semibold" color="teal.300">
-                    {mds[selectedIndex].author}
-                  </Text>
-                </HStack>
-                <IconButton
-                  aria-label="Edit/View description"
-                  icon={contentEditMode ? <ViewIcon /> : <EditIcon />}
-                  onClick={toggleContentEditMode}
-                />
-                <Button leftIcon={<DeleteIcon />} onClick={onDeleteClick}>
-                  Delete
-                </Button>
-              </HStack>
-            </HStack>
-            <MarkdownComponent
-              editMode={contentEditMode}
-              value={markdownContent}
-              onChange={onContentUpdate}
-              height="100%"
-              bgColor="gray.700"
-            />
-          </Box>
-        </Box>
+        <EditorView
+          user={user!}
+          mds={mds}
+          setMds={setMds}
+          selectedIndex={selectedIndex}
+          openDeleteModal={deleteModal.onOpen}
+          setMdContentUpdateTrigger={setMdContentUpdateTrigger}
+          titleState={{
+            markdownTitle,
+            setMarkdownTitle,
+          }}
+          contentState={{
+            markdownContent,
+            setMarkdownContent,
+          }}
+        />
       )}
+      <DeleteConfirmation
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.onClose}
+        onConfirmClick={() => {
+          deleteModal.onClose();
+          onDeleteClick();
+        }}
+      />
     </Box>
   );
 }

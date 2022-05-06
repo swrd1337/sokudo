@@ -5,8 +5,10 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
+import DeleteConfirmation from '../../modals/DeleteConfirmation';
 
 type Props = {
   columnName: string,
@@ -14,6 +16,8 @@ type Props = {
 }
 
 function BoardMenu({ columnName, onDelete }: Props) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
   return (
     <Menu>
       <MenuButton
@@ -25,10 +29,18 @@ function BoardMenu({ columnName, onDelete }: Props) {
         h={6}
       />
       <MenuList>
-        <MenuItem icon={<DeleteIcon />} onClick={() => onDelete(columnName)}>
+        <MenuItem icon={<DeleteIcon />} onClick={onOpen}>
           Delete column
         </MenuItem>
       </MenuList>
+      <DeleteConfirmation
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirmClick={() => {
+          onClose();
+          onDelete(columnName);
+        }}
+      />
     </Menu>
   );
 }
