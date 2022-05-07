@@ -42,6 +42,7 @@ public class BoardsService {
                   apiRepoRepository.save(apiRepo);
                 }
               });
+          boardsRepository.delete(board);
         });
   }
 

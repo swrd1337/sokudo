@@ -10,13 +10,14 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useToast,
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { fetchDeleteBoard } from '../../api/boardApi';
 import { fetchCreateRepositoryData, fetchRepositoryData } from '../../api/repositoriesApi';
 import BoardsContext from '../../context/BoardsContext';
 import UserContext from '../../context/UserContext';
-import useDebouncedEffect from '../../utilities/debounce';
 import Board from '../../utilities/types/Board';
 import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
@@ -33,7 +34,9 @@ function RepositoryView() {
 
   const [boardIndex, setBoardIndex] = useState<number>(0);
 
-  useDebouncedEffect(() => {
+  const toast = useToast();
+
+  useEffect(() => {
     if (user && repo && owner) {
       const fetchRepoData = async () => {
         let data = await fetchRepositoryData(owner, repo, user?.accessToken);
@@ -44,7 +47,13 @@ function RepositoryView() {
       };
       fetchRepoData();
     }
-  }, [user], 300);
+  }, [user]);
+
+  useEffect(() => {
+    if (boardIndex === -1) {
+      setBoardIndex(0);
+    }
+  }, [boardIndex]);
 
   const onBackClick = () => {
     navigate('/');
@@ -58,7 +67,33 @@ function RepositoryView() {
   const addBoard = (newBoard: Board) => {
     if (repositoryData) {
       repositoryData.boards.push(newBoard);
+      setBoardIndex(repositoryData.boards.length - 1);
       setRepositoryData(repositoryData);
+    }
+  };
+
+  const deleteBoard = async () => {
+    if (repositoryData && repositoryData.boards.length > 1) {
+      const boardToDelete = repositoryData.boards[boardIndex];
+      repositoryData.boards.splice(boardIndex, 1);
+      setRepositoryData(repositoryData);
+      setBoardIndex(boardIndex === 0 ? -1 : boardIndex - 1);
+      await fetchDeleteBoard(boardToDelete.id, user!.accessToken);
+    } else {
+      toast({
+        title: 'You should have at least one Kanban Board',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const updateBoard = (board: Board) => {
+    if (repositoryData) {
+      const data = { ...repositoryData };
+      data.boards[boardIndex] = board;
+      setRepositoryData(data);
     }
   };
 
@@ -115,7 +150,7 @@ function RepositoryView() {
               Code Scanning
             </Tab>
             <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
-              Latest Commits
+              Pull Requests
             </Tab>
             <Tab fontWeight="semibold" _focus={{ boxShadow: 'none' }}>
               Statistics
@@ -135,14 +170,19 @@ function RepositoryView() {
                   {/* eslint-disable-next-line react/jsx-no-constructed-context-values */ }
                   <BoardsContext.Provider value={{
                     boardIndex,
-                    repoData: repositoryData,
+                    boards: repositoryData.boards,
+                    repoId: repositoryData.id,
                     setBoardIndex,
                     addBoard,
+                    deleteBoard,
                   }}
                   >
-                    <RepositoryBoard
-                      board={repositoryData.boards[boardIndex]}
-                    />
+                    {boardIndex !== -1 && (
+                      <RepositoryBoard
+                        board={repositoryData.boards[boardIndex]}
+                        updateBoard={updateBoard}
+                      />
+                    )}
                   </BoardsContext.Provider>
                 </TabPanel>
                 <TabPanel w="100%" display="flex" p="0">

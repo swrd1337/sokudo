@@ -1,6 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons';
 import {
-  Box, Editable, EditableInput, EditablePreview, HStack, IconButton, Tooltip,
+  Box, Editable, EditableInput, EditablePreview, HStack, IconButton, Tooltip, useToast,
 } from '@chakra-ui/react';
 import React, {
   FormEvent, useContext, useEffect, useState,
@@ -18,16 +18,20 @@ import TaskList from './tasks/TaskList';
 
 type Props = {
   board: Board
+  updateBoard(_board: Board): void,
 }
 
-function RepositoryBoard({ board }: Props) {
-  const [columns, setColumns] = useState<Set<string>>(new Set(board.boardColumns));
+function RepositoryBoard({ board, updateBoard }: Props) {
+  const [boardTitle, setBoardTitle] = useState<string>('');
+  const titleToast = useToast();
+
+  const [columns, setColumns] = useState<Set<string>>(new Set());
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [dragColIndex, setDragColIndex] = useState<number>(-1);
   const [dragTaskMode, setDragTaskMode] = useState<boolean>(false);
 
-  const [doneColumnName, setDoneColumnName] = useState<string>(board.doneColumnName);
+  const [doneColumnName, setDoneColumnName] = useState<string>('');
   const [addColumnMode, setAddColumnMode] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>('');
 
@@ -42,6 +46,9 @@ function RepositoryBoard({ board }: Props) {
       };
       getTasks();
     }
+    setBoardTitle(board.name);
+    setColumns(board.boardColumns);
+    setDoneColumnName(board.doneColumnName);
   }, [board]);
 
   useDebouncedEffect(() => {
@@ -130,6 +137,34 @@ function RepositoryBoard({ board }: Props) {
     setDataUpdate(true);
   };
 
+  const onBoardTitleConfirm = async () => {
+    const { length } = boardTitle;
+    if (length > 0 && length <= 32) {
+      if (boardTitle !== board.name) {
+        const newBoard = { ...board };
+        newBoard.name = boardTitle;
+        updateBoard(newBoard);
+        await fetchUpdateBoard(board.id, newBoard, user!.accessToken);
+        titleToast({
+          title: 'Title updated!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+          position: 'bottom-left',
+        });
+      }
+    } else {
+      setBoardTitle(board.name);
+      titleToast({
+        title: 'Title cannot be empty!',
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-left',
+      });
+    }
+  };
+
   return (
     <Box display="flex" justifyContent="space-between" flexDir="column" h="100%">
       <Box
@@ -147,10 +182,10 @@ function RepositoryBoard({ board }: Props) {
       >
         <Editable
           pl={2}
-          value={board.name}
-          // onChange={onTitleUpdateChange}
-          // onSubmit={onTitleUpdateConfirm}
-          // onCancel={onTitleUpdateConfirm}
+          value={boardTitle}
+          onChange={(value: string) => setBoardTitle(value)}
+          onSubmit={onBoardTitleConfirm}
+          onCancel={() => setBoardTitle(board.name)}
           color="purple.300"
           fontSize="xl"
           fontWeight="semibold"

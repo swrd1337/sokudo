@@ -15,10 +15,8 @@ import NewBoardModal from './NewBoardModal';
 
 function BoardSelector() {
   const {
-    boardIndex, setBoardIndex, repoData, addBoard,
+    boardIndex, repoId, setBoardIndex, boards, addBoard, deleteBoard,
   } = useContext(BoardsContext);
-
-  const { boards } = repoData!;
 
   const newBoardModal = useDisclosure();
   const deleteModal = useDisclosure();
@@ -64,13 +62,16 @@ function BoardSelector() {
       <NewBoardModal
         isOpen={newBoardModal.isOpen}
         onClose={newBoardModal.onClose}
-        repoData={repoData!}
+        repoId={repoId}
         addBoard={addBoard}
       />
       <DeleteConfirmation
         isOpen={deleteModal.isOpen}
         onClose={deleteModal.onClose}
-        onConfirmClick={() => {}}
+        onConfirmClick={() => {
+          deleteModal.onClose();
+          deleteBoard();
+        }}
       />
     </>
   );

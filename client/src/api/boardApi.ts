@@ -34,5 +34,14 @@ async function fetchCreateBoard(
   return response.json();
 }
 
+async function fetchDeleteBoard(boardId: number, accessToken: string) {
+  await fetch(`${apiBaseUrl}/boards/${boardId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `token ${accessToken}`,
+    },
+  });
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export { fetchUpdateBoard, fetchCreateBoard };
+export { fetchUpdateBoard, fetchCreateBoard, fetchDeleteBoard };

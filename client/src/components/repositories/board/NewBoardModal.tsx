@@ -16,17 +16,16 @@ import React, {
 import { fetchCreateBoard } from '../../../api/boardApi';
 import UserContext from '../../../context/UserContext';
 import Board from '../../../utilities/types/Board';
-import RepositoryData from '../../../utilities/types/RepositoryData';
 
 type Props = {
   isOpen: boolean,
-  repoData: RepositoryData,
+  repoId: number,
   onClose(): void,
   addBoard(_board: Board): void,
 }
 
 function NewBoardModal({
-  isOpen, onClose, repoData, addBoard,
+  isOpen, onClose, repoId, addBoard,
 }: Props) {
   const { user } = useContext(UserContext);
   const initialRef = useRef<any>();
@@ -50,7 +49,7 @@ function NewBoardModal({
     if (validTitle) {
       setInvalid(false);
       setTitleValue('');
-      const board = await fetchCreateBoard(titleValue, repoData.id, user!.accessToken);
+      const board = await fetchCreateBoard(titleValue, repoId, user!.accessToken);
       addBoard(board);
       onClose();
     } else {
