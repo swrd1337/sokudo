@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { fetchUpdateBoard } from '../../../api/boardApi';
 import { fetchTasks, fetchUpdateTask } from '../../../api/tasksApi';
+import Validaton from '../../../constants/validationConstants';
 import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
 import Board from '../../../utilities/types/Board';
@@ -139,7 +140,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
 
   const onBoardTitleConfirm = async () => {
     const { length } = boardTitle;
-    if (length > 0 && length <= 32) {
+    if (length > 0 && length <= Validaton.DEFAULT_TITLE_LENGTH) {
       if (boardTitle !== board.name) {
         const newBoard = { ...board };
         newBoard.name = boardTitle;
