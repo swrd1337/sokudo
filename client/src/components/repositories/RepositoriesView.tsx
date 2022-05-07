@@ -17,7 +17,6 @@ function RepositoriesView() {
         const data = await fetchRepositoriesData(user.accessToken);
         setRepositories(data.repositories);
       };
-      // DOUBEL FETCH NO OK
       fetchRepos();
     }
   }, [user]);

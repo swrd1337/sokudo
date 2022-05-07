@@ -1,9 +1,9 @@
 import {
-  Badge,
-  Box, HStack, Text, VStack,
+  Badge, Box, HStack, Text, Tooltip, VStack,
 } from '@chakra-ui/react';
 import React, { KeyboardEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getTypeColor } from '../../../../utilities/taskTypes';
 import Task from '../../../../utilities/types/Task';
 import TaskActions from './TaskActions';
 
@@ -34,6 +34,10 @@ function TaskCard({ task, actions }: Props) {
     }
   };
 
+  const {
+    type, author, comments, title,
+  } = task;
+
   return (
     <Box
       display="flex"
@@ -63,21 +67,23 @@ function TaskCard({ task, actions }: Props) {
       onKeyDown={onKeyDown}
       onClick={onCardInteraction}
     >
-      <VStack alignItems="start" w="100%">
-        <Box p={2} pb={0}>
-          <Text fontSize="lg" fontWeight="semibold" overflowX="hidden">
-            {task.title}
-          </Text>
-        </Box>
-        <HStack justify="space-between" w="100%" p={2} borderTop="1px solid" borderColor="whiteAlpha.300">
-          <Text color="purple.300" fontWeight="semibold">{task.author}</Text>
-          {task.comments?.length && (
-            <Badge colorScheme="green" px={2} borderRadius="full">
-              {`${task.comments.length} comments`}
-            </Badge>
-          )}
-        </HStack>
-      </VStack>
+      <Tooltip color="whiteAlpha.900" bg={`${getTypeColor(type!)}.500`} label={type} borderRadius="lg" placement="right" hasArrow>
+        <VStack alignItems="start" w="100%">
+          <Box p={2} pb={0}>
+            <Text fontSize="lg" fontWeight="semibold" overflowX="hidden">
+              {title}
+            </Text>
+          </Box>
+          <HStack justify="space-between" w="100%" p={2} borderTop="1px solid" borderColor="whiteAlpha.300">
+            <Text color="purple.300" fontWeight="semibold">{author}</Text>
+            {comments?.length && (
+              <Badge colorScheme="green" px={2} borderRadius="full">
+                {`${comments.length} comments`}
+              </Badge>
+            )}
+          </HStack>
+        </VStack>
+      </Tooltip>
     </Box>
   );
 }

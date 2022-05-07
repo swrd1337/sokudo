@@ -1,6 +1,6 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import {
-  Avatar, Box, HStack, IconButton, Text,
+  Avatar, Box, HStack, IconButton, Text, useDisclosure,
 } from '@chakra-ui/react';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import React from 'react';
@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import { fetchDeleteTaskComment } from '../../../../api/commentsApi';
 import Comment from '../../../../utilities/types/Comment';
 import User from '../../../../utilities/types/User';
+import DeleteConfirmation from '../../../modals/DeleteConfirmation';
 
 type Props = {
   comment: Comment,
@@ -16,6 +17,7 @@ type Props = {
 }
 
 function CommentCard({ comment, user, removeComment }: Props) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const onDeleteClick = async () => {
     const { id } = comment;
     removeComment(id);
@@ -34,10 +36,18 @@ function CommentCard({ comment, user, removeComment }: Props) {
             </ReactMarkdown>
           </Box>
           {comment.userId === user.id && (
-            <IconButton m="5px" ml="10px" size="xs" aria-label="Delete comment" icon={<DeleteIcon />} onClick={onDeleteClick} variant="outline" alignSelf="start" />
+            <IconButton m="5px" ml="10px" size="xs" aria-label="Delete comment" icon={<DeleteIcon />} onClick={onOpen} variant="outline" alignSelf="start" />
           )}
         </Box>
       </HStack>
+      <DeleteConfirmation
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirmClick={() => {
+          onClose();
+          onDeleteClick();
+        }}
+      />
     </Box>
   );
 }
