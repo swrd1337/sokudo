@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { fetchAuthorizeUser } from './api/userApi';
 import AppBar from './components/AppBar';
+import PageNotFound from './components/errors/PageNotFound';
 import Login from './components/login/Login';
 import RepositoriesView from './components/repositories/RepositoriesView';
 import RepositoryView from './components/repositories/RepositoryView';
@@ -64,6 +65,7 @@ function Root() {
             <Route path="/" element={<RepositoriesView />} />
             <Route path="/tasks/:taskId" element={<TaskView />} />
             <Route path="/repositories/:owner/:repo" element={<RepositoryView />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Box>
       </>
