@@ -18,6 +18,7 @@ import { fetchDeleteBoard } from '../../api/boardApi';
 import { fetchCreateRepositoryData, fetchRepositoryData } from '../../api/repositoriesApi';
 import BoardsContext from '../../context/BoardsContext';
 import UserContext from '../../context/UserContext';
+import useDebouncedEffect from '../../utilities/debounce';
 import Board from '../../utilities/types/Board';
 import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
@@ -36,7 +37,7 @@ function RepositoryView() {
 
   const toast = useToast();
 
-  useEffect(() => {
+  useDebouncedEffect(() => {
     if (user && repo && owner) {
       const fetchRepoData = async () => {
         let data = await fetchRepositoryData(owner, repo, user?.accessToken);
@@ -47,7 +48,7 @@ function RepositoryView() {
       };
       fetchRepoData();
     }
-  }, [user]);
+  }, [user], 300);
 
   useEffect(() => {
     if (boardIndex === -1) {

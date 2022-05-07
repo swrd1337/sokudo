@@ -3,8 +3,9 @@ import RepositoryData from '../utilities/types/RepositoryData';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function fetchRepositoriesData(accessToken: string): Promise<Repositories> {
-  const response: Response = await fetch(`${apiBaseUrl}/repositories`, {
+async function fetchRepositoriesData(
+  page: number, perPage: number, accessToken: string): Promise<Repositories> {
+  const response: Response = await fetch(`${apiBaseUrl}/repositories?page=${page}&perPage=${perPage}`, {
     headers: {
       Authorization: `token ${accessToken}`,
     },

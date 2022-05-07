@@ -22,11 +22,11 @@ function RepositoryCard({ repository }: Props) {
     <Box maxW="lg" borderWidth="1px" borderRadius="lg" bgColor="gray.700" boxShadow="dark-sm">
       <Box p="5" display="flex" flexDirection="column" h="100%">
         <HStack justifyContent="space-between" pb={4}>
-          <Heading as="h4" size="md">
+          <Heading as="h4" size="md" wordBreak="break-all">
             {repository.name}
           </Heading>
           <HStack>
-            <Badge borderRadius="full" px="2" colorScheme="teal">
+            <Badge borderRadius="full" px="2" colorScheme={repository.visibility === 'private' ? 'red' : 'teal'}>
               {repository.visibility}
             </Badge>
             {repository.fork && (
@@ -43,7 +43,16 @@ function RepositoryCard({ repository }: Props) {
           </Box>
           <Box w="100%" display="flex">
             <Text color="purple.300" fontWeight="semibold" mr="2">Default branch:</Text>
-            <Text color="gray.400" fontWeight="semibold">{repository.defaultBranch}</Text>
+            <Text
+              color="gray.400"
+              fontWeight="semibold"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              maxW="11rem"
+              whiteSpace="nowrap"
+            >
+              {repository.defaultBranch}
+            </Text>
           </Box>
           <Box w="100%" display="flex">
             <Text color="purple.300" fontWeight="semibold" mr="2">Programming language:</Text>
