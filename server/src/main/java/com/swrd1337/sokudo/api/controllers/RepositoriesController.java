@@ -3,6 +3,7 @@ package com.swrd1337.sokudo.api.controllers;
 import com.swrd1337.sokudo.api.configuration.ApiAuthenticationToken;
 import com.swrd1337.sokudo.api.dto.RepositoriesDTO;
 import com.swrd1337.sokudo.api.dto.RepositoryDTO;
+import com.swrd1337.sokudo.api.dto.security.CodeScanningAlertDTO;
 import com.swrd1337.sokudo.api.entities.RepositoryData;
 import com.swrd1337.sokudo.api.services.ApiRepoService;
 import com.swrd1337.sokudo.api.services.AuthTokenService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,10 +34,14 @@ public class RepositoriesController {
   private ApiRepoService apiRepoService;
 
   @GetMapping
-  public ResponseEntity<RepositoriesDTO> getAllRepositories(ApiAuthenticationToken principal) {
+  public ResponseEntity<RepositoriesDTO> getAllRepositories(
+    @RequestParam(defaultValue = "1") Integer page,
+    @RequestParam(defaultValue = "9") Integer perPage,
+    ApiAuthenticationToken principal
+  ) {
     String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
     // Get all repos from GitHub API
-    String response = gitApi.fetchAllRepositories(accessToken).getBody();
+    String response = gitApi.fetchRepositories(accessToken, page, perPage).getBody();
     RepositoryDTO[] repositories = GsonWrapper.getApiGson().fromJson(response, RepositoryDTO[].class);
     return new ResponseEntity<>(new RepositoriesDTO(repositories), HttpStatus.OK);
   }
@@ -67,6 +73,30 @@ public class RepositoriesController {
       repositoryData = apiRepoService.saveRepositoryData(repository);
     }
     return  new ResponseEntity<>(apiRepoService.getRepositoryData(owner, repo), HttpStatus.OK);
+  }
+
+  @GetMapping("/{owner}/{repo}/dependabot")
+  public ResponseEntity<String> getDependabotAlerts(
+    @PathVariable String owner,
+    @PathVariable String repo,
+    @RequestParam(defaultValue = "10", required = false) Integer count,
+    ApiAuthenticationToken principal
+  ) {
+    String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
+    ResponseEntity<String> response = gitApi.fetchDependabotAlerts(owner, repo, count, accessToken);
+    return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+  }
+
+  @GetMapping("/{owner}/{repo}/code/scanning")
+  public ResponseEntity<CodeScanningAlertDTO[]> getCogeScanningAlerts(
+    @PathVariable String owner,
+    @PathVariable String repo,
+    ApiAuthenticationToken principal
+  ) {
+    String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
+    ResponseEntity<String> response = gitApi.fetchCodeScanningAlerts(owner, repo, accessToken);
+    CodeScanningAlertDTO[] codeScanningAlerts = GsonWrapper.getApiGson().fromJson(response.getBody(), CodeScanningAlertDTO[].class);
+    return new ResponseEntity<>(codeScanningAlerts, HttpStatus.OK);
   }
 
 }
