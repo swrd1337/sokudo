@@ -3,23 +3,23 @@ interface DependantotResult {
     repository: {
       vulnerabilityAlerts: {
         nodes: Array<{
-          createdAt: string,
+          createdAt: string;
           securityVulnerability: {
             package: {
-              name: string,
-            },
+              name: string;
+            };
             advisory: {
-              summary: string,
+              summary: string;
               cvss: {
-                score: number,
+                score: number;
               }
             }
           }
         }>
-        totalCount: number,
-      }
-    }
-  }
+        totalCount: number;
+      };
+    };
+  };
 }
 
 export default DependantotResult;
