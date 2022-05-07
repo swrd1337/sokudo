@@ -66,8 +66,8 @@ function RepositoryView() {
 
   const addBoard = (newBoard: Board) => {
     if (repositoryData) {
-      repositoryData.boards.push(newBoard);
-      setBoardIndex(repositoryData.boards.length - 1);
+      repositoryData.boards.splice(0, 0, newBoard);
+      setBoardIndex(-1);
       setRepositoryData(repositoryData);
     }
   };

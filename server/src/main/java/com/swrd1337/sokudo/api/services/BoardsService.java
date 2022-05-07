@@ -59,7 +59,7 @@ public class BoardsService {
 
     apiRepoRepository.findById(repoId).ifPresent(
       repoData -> {
-        repoData.getBoards().add(newBoard);
+        repoData.getBoards().add(0, newBoard);;
         apiRepoRepository.save(repoData);
       }
     );
