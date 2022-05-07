@@ -15,6 +15,7 @@ import {
   RadioGroup,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import React, { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ import {
   fetchDeleteTask,
   fetchUpdateTask,
 } from '../../../api/tasksApi';
+import Validaton from '../../../constants/validationConstants';
 import useDebouncedEffect from '../../../utilities/debounce';
 import { getTypeColor } from '../../../utilities/taskTypes';
 import Task from '../../../utilities/types/Task';
@@ -43,7 +45,9 @@ const fetchUpdate = async (newTask: Task, accessToken: string) => {
 
 function TaskDetails({ task, user, updateTask }: Props) {
   const navigate = useNavigate();
+  const toast = useToast();
 
+  const [titleValue, setTitleValue] = useState<string>(task.title);
   const [descValue, setDescValue] = useState<string>(task.description ?? 'No descritpion.');
   const [estValue, setEstValue] = useState<number>(task.storyPoints ?? 0);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -57,11 +61,26 @@ function TaskDetails({ task, user, updateTask }: Props) {
     }
   }, [descValue, estValue], 1000);
 
-  const onTitleConfirm = async (newTitle: string) => {
-    if (newTitle.length <= 64 && newTitle !== task.title) {
-      const newTask = { ...task, title: newTitle };
+  const onTitleChange = (value: string) => {
+    if (value.length <= Validaton.TASK_TITLE_LENGTH) {
+      setTitleValue(value);
+    }
+  };
+
+  const onTitleConfirm = async () => {
+    if (titleValue.length > 0 && titleValue.length <= Validaton.TASK_TITLE_LENGTH) {
+      const newTask = { ...task, title: titleValue };
       updateTask(newTask);
       await fetchUpdateTask(newTask, user!.accessToken);
+    } else {
+      toast({
+        title: 'Task title cannot be empty!',
+        status: 'warning',
+        position: 'bottom-left',
+        duration: 5000,
+        isClosable: true,
+      });
+      setTitleValue(task.title);
     }
   };
 
@@ -85,7 +104,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
 
   const onDescriptionChange = (e: FormEvent<HTMLTextAreaElement>) => {
     const { value } = e.currentTarget;
-    if (value.length < 1024) {
+    if (value.length <= Validaton.TASK_DESCRIPTION_LENGTH) {
       setDescValue(value);
       setUpdate(true);
     }
@@ -117,9 +136,11 @@ function TaskDetails({ task, user, updateTask }: Props) {
             <HStack spacing={5}>
               <Text fontWeight="semibold">Summary:</Text>
               <Editable
-                defaultValue={task.title}
+                value={titleValue}
+                onChange={onTitleChange}
                 onSubmit={onTitleConfirm}
                 onCancel={onTitleConfirm}
+                submitOnBlur={false}
                 color="purple.300"
                 fontSize="2xl"
               >

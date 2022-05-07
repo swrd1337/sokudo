@@ -1,8 +1,9 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import {
-  Box, Divider, Editable, EditableInput, EditablePreview, Heading, HStack,
+  Box, Divider, Editable, EditableInput, EditablePreview, Heading, HStack, useToast,
 } from '@chakra-ui/react';
 import React, { ReactNode, useState } from 'react';
+import Validaton from '../../../constants/validationConstants';
 import BoardMenu from './BoardMenu';
 
 type Actions = {
@@ -27,24 +28,30 @@ function BoardColumn({
   value, index, done, dragItemIndex, actions, columns, children,
 }: Props) {
   const [localName, setLocalName] = useState<string>(value);
-  const [invalid, setInvalid] = useState<boolean>(false);
+
+  const toast = useToast();
 
   let [localColor, titleColor] = ['gray.600', 'whiteAlpha'];
   if (dragItemIndex === index) {
     [localColor, titleColor] = ['purple.300', 'purple.300'];
   }
 
-  const previewColor = invalid ? 'red.300' : 'white';
-
   const onChange = (newVal: string) => {
     setLocalName(newVal);
   };
 
   const onNameSubmit = (newVal: string) => {
-    if (columns.has(newVal) && newVal.length > 64) {
-      setInvalid(true);
+    if (columns.has(newVal) && (
+      newVal.length > Validaton.DEFAULT_TITLE_LENGTH || newVal.length === 0
+    )) {
+      toast({
+        title: 'Column title cannot be empty!',
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+      });
+      setLocalName(value);
     } else {
-      setInvalid(false);
       setLocalName(newVal);
       actions.renameColumn(value, newVal);
     }
@@ -52,7 +59,6 @@ function BoardColumn({
 
   const onCancel = () => {
     setLocalName(value);
-    setInvalid(false);
   };
 
   const onBlur = () => {
@@ -71,6 +77,7 @@ function BoardColumn({
       boxShadow="dark-sm"
       w="100%"
       display="flex"
+      zIndex="docked"
       draggable
       onDragStart={() => actions.onDragStart(index)}
       onDragEnter={() => actions.onDragEnter(index)}
@@ -99,7 +106,7 @@ function BoardColumn({
                 onBlur={onBlur}
                 onCancel={onCancel}
               >
-                <EditablePreview color={previewColor} />
+                <EditablePreview />
                 <EditableInput />
               </Editable>
             </Heading>

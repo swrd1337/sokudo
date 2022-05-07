@@ -14,6 +14,7 @@ import React, {
   FormEvent, useContext, useRef, useState,
 } from 'react';
 import { fetchCreateBoard } from '../../../api/boardApi';
+import Validaton from '../../../constants/validationConstants';
 import UserContext from '../../../context/UserContext';
 import Board from '../../../utilities/types/Board';
 
@@ -36,7 +37,7 @@ function NewBoardModal({
 
   const onInputChange = (e: FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    if (value.length <= 32) {
+    if (value.length <= Validaton.DEFAULT_TITLE_LENGTH) {
       setTitleValue(value);
       if (invalid) {
         setInvalid(false);

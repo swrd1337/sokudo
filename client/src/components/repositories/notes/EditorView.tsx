@@ -1,11 +1,12 @@
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import {
-  Box, Button, Editable, EditableInput, EditablePreview, HStack, IconButton, Text,
+  Box, Button, Editable, EditableInput, EditablePreview, HStack, IconButton, Text, useToast,
 } from '@chakra-ui/react';
 import React, {
   FormEvent, useEffect, useState,
 } from 'react';
 import { fetchUpdateMarkdown } from '../../../api/markdownsApi';
+import Validaton from '../../../constants/validationConstants';
 import Markdown from '../../../utilities/types/Markdown';
 import User from '../../../utilities/types/User';
 import MarkdownComponent from '../../markdown/MarkdownComponent';
@@ -17,10 +18,7 @@ type Props = {
   selectedIndex: number,
   openDeleteModal(): void,
   setMdContentUpdateTrigger(_value: boolean): void,
-  titleState: {
-    markdownTitle: string,
-    setMarkdownTitle(_value: string): void,
-  },
+  markdownTitle: string,
   contentState: {
     markdownContent: string,
     setMarkdownContent(_value: string): void
@@ -34,13 +32,15 @@ function EditorView({
   selectedIndex,
   openDeleteModal,
   setMdContentUpdateTrigger,
-  titleState,
+  markdownTitle,
   contentState,
 }: Props) {
+  const { markdownContent, setMarkdownContent } = contentState;
+
+  const [newTitle, setNewTitle] = useState<string>(markdownTitle);
   const [contentEditMode, setContentEditMode] = useState<boolean>(false);
 
-  const { markdownTitle, setMarkdownTitle } = titleState;
-  const { markdownContent, setMarkdownContent } = contentState;
+  const toast = useToast();
 
   useEffect(() => {
     setContentEditMode(false);
@@ -51,25 +51,34 @@ function EditorView({
   };
 
   const onTitleUpdateConfirm = async (value: string) => {
-    if (value.length <= 24) {
+    if (value.length > 0 && value.length <= Validaton.DEFAULT_TITLE_LENGTH) {
       const md = mds[selectedIndex];
       md.title = value;
       const newMds = [...mds];
       newMds[selectedIndex] = md;
       setMds([...newMds]);
       await fetchUpdateMarkdown(md.id, md, user!.accessToken);
+    } else {
+      toast({
+        title: 'Title cannot be empty',
+        status: 'warning',
+        isClosable: true,
+        duration: 5000,
+        position: 'bottom-left',
+      });
+      setNewTitle(markdownTitle);
     }
   };
 
   const onTitleUpdateChange = (value: string) => {
-    if (value.length <= 24) {
-      setMarkdownTitle(value);
+    if (value.length <= Validaton.DEFAULT_TITLE_LENGTH) {
+      setNewTitle(value);
     }
   };
 
   const onContentUpdate = async (e: FormEvent<HTMLTextAreaElement>) => {
     const { value } = e.currentTarget;
-    if (value.length <= 2048) {
+    if (value.length <= Validaton.NOTE_CONTENT_LENGTH) {
       setMarkdownContent(value);
       setMdContentUpdateTrigger(true);
     }
@@ -88,7 +97,7 @@ function EditorView({
         <HStack spacing={3} p="10px" justifyContent="space-between">
           <Editable
             onEdit={() => setContentEditMode(false)}
-            value={markdownTitle}
+            value={newTitle}
             onChange={onTitleUpdateChange}
             onSubmit={onTitleUpdateConfirm}
             onCancel={onTitleUpdateConfirm}

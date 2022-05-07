@@ -4,6 +4,7 @@ import {
 } from '@chakra-ui/react';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { fetchSaveTaskComment, fetchTaskComments } from '../../../../api/commentsApi';
+import Validaton from '../../../../constants/validationConstants';
 import Comment from '../../../../utilities/types/Comment';
 import User from '../../../../utilities/types/User';
 import CommentCard from './CommentCard';
@@ -43,7 +44,7 @@ function CommentsContainer({ user, taskId }: Props) {
 
   const onChange = (e: FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    if (value.length <= 256) {
+    if (value.length <= Validaton.COMMENTS_CONTENT_LENGTH) {
       setCommentValue(value);
     }
   };

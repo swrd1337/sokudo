@@ -1,6 +1,7 @@
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import React, { FormEvent, useState } from 'react';
 import { fetchSaveTask } from '../../../../api/tasksApi';
+import Validaton from '../../../../constants/validationConstants';
 import Task from '../../../../utilities/types/Task';
 import AddNewEntry from '../common/AddNewEntry';
 import TaskActions from './TaskActions';
@@ -25,7 +26,7 @@ function TaskList({
 
   const onInputChange = (e: FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    if (value.length < 64) {
+    if (value.length <= Validaton.TASK_TITLE_LENGTH) {
       setNewTaskTitle(value);
     } else {
       setInvalidTitle(true);
@@ -33,7 +34,7 @@ function TaskList({
   };
 
   const onSubmit = async () => {
-    if ((newTaskTitle && newTaskTitle.length < 64) && accessToken) {
+    if ((newTaskTitle && newTaskTitle.length <= Validaton.TASK_TITLE_LENGTH) && accessToken) {
       let newTask: Task = {
         id: -1,
         title: newTaskTitle,

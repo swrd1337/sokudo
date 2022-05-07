@@ -10,6 +10,7 @@ import React, {
 import {
   fetchDeleteMarkdown, fetchMarkdowns, fetchSaveMarkdown, fetchUpdateMarkdown,
 } from '../../../api/markdownsApi';
+import Validaton from '../../../constants/validationConstants';
 import UserContext from '../../../context/UserContext';
 import useDebouncedEffect from '../../../utilities/debounce';
 import Markdown from '../../../utilities/types/Markdown';
@@ -73,7 +74,7 @@ function MarkdownsNotes({ repoId }: Props) {
   };
 
   const onSubmitClick = async () => {
-    if (newTitle && newTitle.length <= 24) {
+    if (newTitle && newTitle.length <= Validaton.DEFAULT_TITLE_LENGTH) {
       setInvalidTitle(false);
       setAddMdMode(false);
       let newMd: Markdown = {
@@ -96,7 +97,7 @@ function MarkdownsNotes({ repoId }: Props) {
 
   const onNewTitleChange = (e: FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    if (value.length <= 24) {
+    if (value.length <= Validaton.DEFAULT_TITLE_LENGTH) {
       setNewTitle(value);
     }
   };
@@ -196,10 +197,7 @@ function MarkdownsNotes({ repoId }: Props) {
           selectedIndex={selectedIndex}
           openDeleteModal={deleteModal.onOpen}
           setMdContentUpdateTrigger={setMdContentUpdateTrigger}
-          titleState={{
-            markdownTitle,
-            setMarkdownTitle,
-          }}
+          markdownTitle={markdownTitle}
           contentState={{
             markdownContent,
             setMarkdownContent,

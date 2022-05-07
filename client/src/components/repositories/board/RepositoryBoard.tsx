@@ -25,7 +25,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
   const [boardTitle, setBoardTitle] = useState<string>('');
   const titleToast = useToast();
 
-  const [columns, setColumns] = useState<Set<string>>(new Set());
+  const [columns, setColumns] = useState<Set<string>>(new Set<string>());
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [dragColIndex, setDragColIndex] = useState<number>(-1);
@@ -47,7 +47,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
       getTasks();
     }
     setBoardTitle(board.name);
-    setColumns(board.boardColumns);
+    setColumns(new Set<string>(board.boardColumns));
     setDoneColumnName(board.doneColumnName);
   }, [board]);
 
