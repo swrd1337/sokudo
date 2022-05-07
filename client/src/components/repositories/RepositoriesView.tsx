@@ -38,7 +38,15 @@ function RepositoriesView() {
             ))}
           </SimpleGrid>
           {repositories && ((currentPage * PER_PAGE_DEFAULT) <= repositories.length) && (
-            <Button mb={2} onClick={() => setCurrentPage(currentPage + 1)}>More</Button>
+            <Button
+              mb={5}
+              onClick={() => setCurrentPage(currentPage + 1)}
+              variant="ghost"
+              color="gray.500"
+              borderRadius="full"
+            >
+              More
+            </Button>
           )}
         </>
       ) : (
