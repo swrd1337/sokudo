@@ -32,7 +32,7 @@ function RepositoriesView() {
     <ViewContainer>
       {repositories ? (
         <>
-          <SimpleGrid columns={3} spacing={10} w="90%" mb={8}>
+          <SimpleGrid columns={{sm: 1, lg: 2, '2xl': 3}} gap={10} mb={8} justifyItems="center">
             {repositories?.map((repo: Repository) => (
               <RepositoryCard key={repo.id} repository={repo} />
             ))}

@@ -121,7 +121,11 @@ function RepositoryView() {
               </Heading>
             </Skeleton>
             <Skeleton isLoaded={!!repositoryData} h={8} minW={20}>
-              <Badge borderRadius="full" px="2" colorScheme="teal">
+              <Badge
+                borderRadius="full"
+                px="2"
+                colorScheme={repositoryData?.visibility === 'private' ? 'red' : 'teal'}
+              >
                 {repositoryData?.visibility}
               </Badge>
               <Badge borderRadius="full" px="2" ml={1} colorScheme="purple">
