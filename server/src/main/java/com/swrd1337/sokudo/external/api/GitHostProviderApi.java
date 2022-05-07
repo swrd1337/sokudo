@@ -18,4 +18,6 @@ public interface GitHostProviderApi {
 
   ResponseEntity<String> fetchCodeScanningAlerts(String owner, String repo, String accessToken);
 
+  ResponseEntity<String> fetchPullRequests(String owner, String repo, String accessToken);
+
 }

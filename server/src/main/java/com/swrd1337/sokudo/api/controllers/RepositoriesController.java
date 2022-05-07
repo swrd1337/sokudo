@@ -1,6 +1,7 @@
 package com.swrd1337.sokudo.api.controllers;
 
 import com.swrd1337.sokudo.api.configuration.ApiAuthenticationToken;
+import com.swrd1337.sokudo.api.dto.PullRequestDTO;
 import com.swrd1337.sokudo.api.dto.RepositoriesDTO;
 import com.swrd1337.sokudo.api.dto.RepositoryDTO;
 import com.swrd1337.sokudo.api.dto.security.CodeScanningAlertDTO;
@@ -97,6 +98,18 @@ public class RepositoriesController {
     ResponseEntity<String> response = gitApi.fetchCodeScanningAlerts(owner, repo, accessToken);
     CodeScanningAlertDTO[] codeScanningAlerts = GsonWrapper.getApiGson().fromJson(response.getBody(), CodeScanningAlertDTO[].class);
     return new ResponseEntity<>(codeScanningAlerts, HttpStatus.OK);
+  }
+
+  @GetMapping("/{owner}/{repo}/pulls")
+  public ResponseEntity<PullRequestDTO[]> getPullRequests(
+    @PathVariable String owner,
+    @PathVariable String repo,
+    ApiAuthenticationToken principal
+  ) {
+    String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
+    ResponseEntity<String> response = gitApi.fetchPullRequests(owner, repo, accessToken);
+    PullRequestDTO[] prs = GsonWrapper.getApiGson().fromJson(response.getBody(), PullRequestDTO[].class);
+    return new ResponseEntity<>(prs, HttpStatus.OK);
   }
 
 }

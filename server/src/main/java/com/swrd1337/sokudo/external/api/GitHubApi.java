@@ -22,11 +22,7 @@ public class GitHubApi implements GitHostProviderApi {
 
   @Override
   public ResponseEntity<String> fetchUserData(String accessToken) {
-    HttpHeaders headers = new HttpHeaders();
-    
-    headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-    headers.add("Authorization", "token " + accessToken);
-
+    HttpHeaders headers = getheaders(accessToken);
     HttpEntity<Void> request = new HttpEntity<>(headers);
 
     RestTemplate restTemplate = new RestTemplate();
@@ -47,11 +43,7 @@ public class GitHubApi implements GitHostProviderApi {
 
   @Override
   public ResponseEntity<String> fetchRepositories(String accessToken, Integer page, Integer perPage) {
-    HttpHeaders headers = new HttpHeaders();
-
-    headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-    headers.add("Authorization", "token " + accessToken);
-
+    HttpHeaders headers = getheaders(accessToken);
     HttpEntity<Void> request = new HttpEntity<>(headers);
 
     RestTemplate restTemplate = new RestTemplate();
@@ -65,24 +57,13 @@ public class GitHubApi implements GitHostProviderApi {
 
   @Override
   public ResponseEntity<String> fetchRepositoryById(String owner, String repo, String accessToken) {
-    HttpHeaders headers = new HttpHeaders();
-
-    headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-    headers.add("Authorization", "token " + accessToken);
-
-    HttpEntity<Void> request = new HttpEntity<>(headers);
-
-    RestTemplate restTemplate = new RestTemplate();
     String url = properties.getGitProviderBaseUrl() + "/repos/" + owner + "/" + repo;
-    return restTemplate.exchange(url , HttpMethod.GET, request, String.class);
+    return executeRequest(url, owner, repo, accessToken);
   }
 
   public ResponseEntity<String> fetchDependabotAlerts(String owner, String repo, Integer count, String accessToken) {
-    HttpHeaders headers = new HttpHeaders();
-
-    headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+    HttpHeaders headers = getheaders(accessToken);
     headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-    headers.add("Authorization", "token " + accessToken);
 
     String reqBody = new Gson().toJson(new DependabotQuery(repo, owner, count));
     HttpEntity<String> request = new HttpEntity<>(reqBody, headers);
@@ -94,16 +75,28 @@ public class GitHubApi implements GitHostProviderApi {
 
   @Override
   public ResponseEntity<String> fetchCodeScanningAlerts(String owner, String repo, String accessToken) {
-    HttpHeaders headers = new HttpHeaders();
+    String url = properties.getGitProviderBaseUrl() + "/repos/" + owner + "/" + repo + "/code-scanning/alerts";
+    return executeRequest(url, owner, repo, accessToken);
+  }
 
+  @Override
+  public ResponseEntity<String> fetchPullRequests(String owner, String repo, String accessToken) {
+    String url = properties.getGitProviderBaseUrl() + "/repos/" + owner + "/" + repo + "/pulls";
+    return executeRequest(url, owner, repo, accessToken);
+  }
+
+  private ResponseEntity<String> executeRequest(String url, String owner, String repo, String accessToken) {
+    HttpHeaders headers = getheaders(accessToken);
+    HttpEntity<Void> request = new HttpEntity<>(headers);
+    RestTemplate restTemplate = new RestTemplate();
+    return restTemplate.exchange(url , HttpMethod.GET, request, String.class);
+  }
+
+  private HttpHeaders getheaders(String accessToken) {
+    HttpHeaders headers = new HttpHeaders();
     headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
     headers.add("Authorization", "token " + accessToken);
-
-    HttpEntity<Void> request = new HttpEntity<>(headers);
-
-    RestTemplate restTemplate = new RestTemplate();
-    String url = properties.getGitProviderBaseUrl() + "/repos/" + owner + "/" + repo + "/code-scanning/alerts";
-    return restTemplate.exchange(url , HttpMethod.GET, request, String.class);
+    return headers;
   }
 
 }
