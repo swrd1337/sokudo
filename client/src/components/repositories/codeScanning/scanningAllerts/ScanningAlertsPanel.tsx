@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
+import { SimpleGrid } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchCodeScanningAlerts } from '../../../../api/repositoriesApi';
