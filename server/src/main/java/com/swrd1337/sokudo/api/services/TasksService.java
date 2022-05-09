@@ -68,4 +68,11 @@ public class TasksService {
     return tasksRepository.findById(taskId).orElseThrow(NotFoundException::new);
   }
 
+  public void deleteTasksByBoardId(Long boardId) {
+    List<Task> tasks = tasksRepository.findAllByBoardId(boardId);
+    tasks.forEach((Task task) -> {
+      deleteTask(task.getId());
+    });
+  }
+
 }

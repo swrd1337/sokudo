@@ -23,6 +23,9 @@ public class BoardsService {
   @Autowired
   private SequenceGeneratorService sequenceGeneratorService;
 
+  @Autowired
+  private TasksService tasksService;
+
   public Board updateBoard(Long boardId, Board newBoard) throws NotFoundException {
     return boardsRepository.findById(boardId).map(
         board -> {
@@ -42,6 +45,7 @@ public class BoardsService {
                   apiRepoRepository.save(apiRepo);
                 }
               });
+          tasksService.deleteTasksByBoardId(boardId);
           boardsRepository.delete(board);
         });
   }

@@ -66,7 +66,10 @@ async function fetchCodeScanningAlerts(
       },
     },
   );
-  // Contionf for 204 NO CONTENT
+
+  if (response.status === 204) {
+    throw new Error('No code scanning alerts found. Make sure you have code scanning enabled!');
+  }
 
   return response.json();
 }

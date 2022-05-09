@@ -27,6 +27,8 @@ function AlertCard({ item, onCreate }: Props) {
       Description:
       
       ${advisory.description}
+
+      From: *Code scanning*
     `;
     onCreate(advisory.summary, desc);
   };

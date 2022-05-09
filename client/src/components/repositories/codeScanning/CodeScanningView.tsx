@@ -62,7 +62,7 @@ function CodeScanningView({ board, user }: Props) {
               <AccordionIcon />
             </AccordionButton>
           </h2>
-          <AccordionPanel pb={4} my={2} bgColor="gray.700" border="2px solid" borderColor="gray.600" borderRadius="lg">
+          <AccordionPanel py={4} my={2} bgColor="gray.700" border="2px solid" borderColor="gray.600" borderRadius="lg">
             <DependabotPanel user={user} createTaskHandler={createTaskHandler} />
           </AccordionPanel>
         </AccordionItem>
