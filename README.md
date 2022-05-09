@@ -3,7 +3,7 @@
 
 ### To Do:
 * Add caching for external API calls.
-* Move from OAuth App to GitHub App config.
+* Pre-authorize using a list of current user repositories.
 * Add code docs for API.
 * Dark/White theme switch.
 * Add README for _client_ and _server_.
