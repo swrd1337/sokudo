@@ -3,7 +3,7 @@ import React from 'react';
 
 function CenteredSpinner() {
   return (
-    <Box display="flex" w="100%" justifyContent="center">
+    <Box m={2} display="flex" w="100%" justifyContent="center">
       <Spinner size="xl" />
     </Box>
   );

@@ -48,7 +48,6 @@ function UserComponent({ user, setUser }: Props) {
         </Menu>
         <Avatar src={user?.avatarUrl} size="md" />
       </Box>
-      {/* <Button */}
     </Skeleton>
   );
 }
