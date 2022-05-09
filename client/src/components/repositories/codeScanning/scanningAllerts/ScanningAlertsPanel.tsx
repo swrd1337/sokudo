@@ -5,6 +5,7 @@ import { fetchCodeScanningAlerts } from '../../../../api/repositoriesApi';
 import CodeScanningAlert from '../../../../utilities/types/security/CodeScanningAlert';
 import User from '../../../../utilities/types/User';
 import CenteredSpinner from '../../../common/CenteredSpinner';
+import ConfirmationDialog from '../../../modals/ConfirmationDialog';
 import NoAlertsMessage from '../NoAlertsMessage';
 import AlertCard from './AlertCard';
 
@@ -40,19 +41,22 @@ function ScanningAlertsPanel({ user, createTaskHandler }: Props) {
   let component;
   if (scanningAlerts.length) {
     component = (
-      <SimpleGrid
-        columns={{
-          sm: 1,
-          lg: 2,
-          '2xl': 3,
-        }}
-        gap={10}
-        justifyItems="center"
-      >
-        {scanningAlerts.map((item) => (
-          <AlertCard key={item.number} item={item} onCreate={createTaskHandler} />
-        ))}
-      </SimpleGrid>
+      <>
+        <SimpleGrid
+          columns={{
+            sm: 1,
+            lg: 2,
+            '2xl': 3,
+          }}
+          gap={10}
+          justifyItems="center"
+        >
+          {scanningAlerts.map((item) => (
+            <AlertCard key={item.number} item={item} onCreate={createTaskHandler} />
+          ))}
+        </SimpleGrid>
+        <ConfirmationDialog />
+      </>
     );
   } else {
     component = <CenteredSpinner />;

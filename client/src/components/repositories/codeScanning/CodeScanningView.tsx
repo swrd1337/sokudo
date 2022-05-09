@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  useToast,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -24,18 +25,28 @@ function CodeScanningView({ board, user }: Props) {
   const { id, boardColumns } = board;
   const navigate = useNavigate();
 
+  const toast = useToast();
+
   const createTaskHandler = async (title: string, description: string) => {
     if (user) {
+      const boardColumnName = [...boardColumns][0];
       let newTask: Task = {
         id: -1,
         boardId: id,
-        columnName: [...boardColumns][0],
+        columnName: boardColumnName,
         title,
         description,
         author: user.username,
       };
       newTask = await fetchSaveTask(newTask, user.accessToken);
       navigate(`/tasks/${newTask.id}`);
+      toast({
+        title: 'Task created!',
+        description: `The given column: ${boardColumnName}`,
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 

@@ -47,6 +47,7 @@ public class OAuthProxyController {
     if (accessToken != null && !accessToken.isBlank()) {
       response = gitApi.fetchUserData(accessToken);
       GitProviderUser gitUser = GsonWrapper.getApiGson().fromJson(response.getBody(), GitProviderUser.class);
+      // TODO: Fetch repos and add this list to out user object.
       Long id = gitUser.getId();
       if (id != null) {
         User user;
