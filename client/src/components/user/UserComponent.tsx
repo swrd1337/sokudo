@@ -41,7 +41,7 @@ function UserComponent({ user, setUser }: Props) {
           </MenuButton>
           <MenuList>
             <MenuItem>
-              <Link href={user?.pageUrl}>GitHub Profile</Link>
+              <Link href={user?.pageUrl} target="_blank">GitHub Profile</Link>
             </MenuItem>
             <MenuItem onClick={onLogout}>Logout</MenuItem>
           </MenuList>

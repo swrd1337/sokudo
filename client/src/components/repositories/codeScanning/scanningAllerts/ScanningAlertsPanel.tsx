@@ -5,7 +5,6 @@ import { fetchCodeScanningAlerts } from '../../../../api/repositoriesApi';
 import CodeScanningAlert from '../../../../utilities/types/security/CodeScanningAlert';
 import User from '../../../../utilities/types/User';
 import CenteredSpinner from '../../../common/CenteredSpinner';
-import ConfirmationDialog from '../../../modals/ConfirmationDialog';
 import NoAlertsMessage from '../NoAlertsMessage';
 import AlertCard from './AlertCard';
 
