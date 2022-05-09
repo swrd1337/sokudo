@@ -141,8 +141,9 @@ function TaskDetails({ task, user, updateTask }: Props) {
                 onSubmit={onTitleConfirm}
                 onCancel={onTitleConfirm}
                 submitOnBlur={false}
-                color="purple.300"
-                fontSize="2xl"
+                color="purple.200"
+                fontWeight="semibold"
+                fontSize="lg"
               >
                 <EditablePreview />
                 <EditableInput />
@@ -152,7 +153,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
           </Box>
           <HStack spacing={5} pb="10px">
             <Text fontWeight="semibold">Created by:</Text>
-            <Text fontWeight="bold" color="purple.200">
+            <Text fontWeight="bold" color="purple.300">
               {task.author}
             </Text>
           </HStack>

@@ -10,6 +10,8 @@ public enum TaskTypes {
 
   FEATURE,
 
+  SECURITY,
+
   OTHER;
   
 }

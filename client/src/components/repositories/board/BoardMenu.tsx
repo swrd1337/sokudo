@@ -19,7 +19,7 @@ function BoardMenu({ columnName, onDelete }: Props) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
-    <Menu>
+    <Menu placement="left-start">
       <MenuButton
         as={IconButton}
         aria-label="Options"
@@ -28,7 +28,7 @@ function BoardMenu({ columnName, onDelete }: Props) {
         minW={6}
         h={6}
       />
-      <MenuList>
+      <MenuList zIndex="100" borderWidth="2px" bgColor="gray.800">
         <MenuItem icon={<DeleteIcon />} onClick={onOpen}>
           Delete column
         </MenuItem>

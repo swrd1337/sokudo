@@ -1,5 +1,7 @@
 import Repositories from '../utilities/types/Repositories';
 import RepositoryData from '../utilities/types/RepositoryData';
+import CodeScanningAlert from '../utilities/types/security/CodeScanningAlert';
+import DependabotResult from '../utilities/types/security/DependabotResult';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -51,8 +53,46 @@ async function fetchRepositoryData(
   return response.json();
 }
 
+async function fetchCodeScanningAlerts(
+  owner: string,
+  repo: string,
+  accessToken: string,
+): Promise<CodeScanningAlert[]> {
+  const response: Response = await fetch(
+    `${apiBaseUrl}/repositories/${owner}/${repo}/code/scanning`,
+    {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    },
+  );
+  // Contionf for 204 NO CONTENT
+
+  return response.json();
+}
+
+async function fetchDependabotAlerts(
+  owner: string,
+  repo: string,
+  count: number,
+  accessToken: string,
+): Promise<DependabotResult> {
+  const response: Response = await fetch(
+    `${apiBaseUrl}/repositories/${owner}/${repo}/dependabot?count=${count}`,
+    {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    },
+  );
+
+  return response.json();
+}
+
 export {
   fetchRepositoriesData,
   fetchRepositoryData,
   fetchCreateRepositoryData,
+  fetchCodeScanningAlerts,
+  fetchDependabotAlerts,
 };

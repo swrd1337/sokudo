@@ -23,14 +23,16 @@ import Board from '../../utilities/types/Board';
 import RepositoryData from '../../utilities/types/RepositoryData';
 import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
+import CodeScanningView from './codeScanning/CodeScanningView';
 import MarkdownsNotes from './notes/MarkdownsNotes';
 
 function RepositoryView() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-
   const { owner, repo } = useParams();
+
   const { user } = useContext(UserContext);
+
   const [repositoryData, setRepositoryData] = useState<RepositoryData>();
 
   const [boardIndex, setBoardIndex] = useState<number>(0);
@@ -193,11 +195,8 @@ function RepositoryView() {
                 <TabPanel w="100%" display="flex" p="0">
                   <MarkdownsNotes repoId={repositoryData.id} />
                 </TabPanel>
-                <TabPanel>
-                  <p>
-                    Code Scanning View:
-                    https://docs.github.com/en/rest/code-scanning
-                  </p>
+                <TabPanel w="100%" display="flex" p="0">
+                  <CodeScanningView board={repositoryData.boards[boardIndex]} user={user!} />
                 </TabPanel>
                 <TabPanel>
                   <p>

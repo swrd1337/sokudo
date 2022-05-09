@@ -20,8 +20,10 @@ public final class DependabotQuery {
                     cvss {
                       score
                     }
+                    description
                   }
                 }
+                number
               }
               totalCount
             }

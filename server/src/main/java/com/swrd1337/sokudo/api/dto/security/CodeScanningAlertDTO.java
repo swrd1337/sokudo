@@ -1,7 +1,5 @@
 package com.swrd1337.sokudo.api.dto.security;
 
-import org.apache.tomcat.util.digester.Rule;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CodeScanningAlertDTO {
+
+  private Integer number;
 
   private String createdAt;
   

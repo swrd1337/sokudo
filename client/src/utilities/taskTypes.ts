@@ -8,6 +8,7 @@ const typeColorMap: {
   [TaskTypes.TASK]: 'cyan',
   [TaskTypes.IMPROVEMENT]: 'green',
   [TaskTypes.FEATURE]: 'purple',
+  [TaskTypes.SECURITY]: 'blue',
   [TaskTypes.OTHER]: 'teal',
 };
 

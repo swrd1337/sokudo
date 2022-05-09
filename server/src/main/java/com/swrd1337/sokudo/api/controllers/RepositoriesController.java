@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/repositories")
 public class RepositoriesController {
@@ -95,9 +99,14 @@ public class RepositoriesController {
     ApiAuthenticationToken principal
   ) {
     String accessToken = authTokenService.getAccessTokenFromAuthToken(principal);
-    ResponseEntity<String> response = gitApi.fetchCodeScanningAlerts(owner, repo, accessToken);
-    CodeScanningAlertDTO[] codeScanningAlerts = GsonWrapper.getApiGson().fromJson(response.getBody(), CodeScanningAlertDTO[].class);
-    return new ResponseEntity<>(codeScanningAlerts, HttpStatus.OK);
+    try {
+      ResponseEntity<String> response = gitApi.fetchCodeScanningAlerts(owner, repo, accessToken);
+      CodeScanningAlertDTO[] codeScanningAlerts = GsonWrapper.getApiGson().fromJson(response.getBody(), CodeScanningAlertDTO[].class);
+      return new ResponseEntity<>(codeScanningAlerts, HttpStatus.OK);
+    } catch (HttpClientErrorException e) {
+      log.error(e.getMessage());
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
   }
 
   @GetMapping("/{owner}/{repo}/pulls")

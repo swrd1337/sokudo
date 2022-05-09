@@ -6,6 +6,7 @@ enum TaskTypes {
   TASK = 'TASK',
   FEATURE = 'FEATURE',
   IMPROVEMENT = 'IMPROVEMENT',
+  SECURITY = 'SECURITY',
   OTHER = 'OTHER'
 }
 

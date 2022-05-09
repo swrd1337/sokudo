@@ -1,4 +1,5 @@
 interface CodeScanningAlert {
+  number: number;
   createdAt: string;
   state: string;
   rule: {

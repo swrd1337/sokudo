@@ -93,7 +93,7 @@ function EditorView({
       flexDir="column"
       alignItems="center"
     >
-      <Box height="100%" w="6xl" display="flex" flexDir="column">
+      <Box height="100%" w={{ sm: '100%', lg: '100%', xl: '5xl' }} display="flex" flexDir="column">
         <HStack spacing={3} p="10px" justifyContent="space-between">
           <Editable
             onEdit={() => setContentEditMode(false)}

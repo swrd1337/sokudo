@@ -27,7 +27,7 @@ function UserComponent({ user, setUser }: Props) {
         isClosable: true,
       });
     }
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('user');
     navigate('/login');
     setUser(undefined);
   };

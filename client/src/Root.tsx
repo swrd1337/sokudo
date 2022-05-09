@@ -26,7 +26,7 @@ function Root() {
         try {
           navigate('/');
           const userValue = await fetchAuthorizeUser(code) as User;
-          sessionStorage.setItem('user', JSON.stringify(userValue));
+          localStorage.setItem('user', JSON.stringify(userValue));
           setUser(userValue);
           toast({
             title: `Welcome, ${userValue.name}! 🎉🎉🎉`,
@@ -41,7 +41,7 @@ function Root() {
     };
 
     // Check for user in our session storage;
-    const userStringValue = sessionStorage.getItem('user');
+    const userStringValue = localStorage.getItem('user');
     if (userStringValue) {
       const userValue = JSON.parse(userStringValue) as User;
       setUser(userValue);

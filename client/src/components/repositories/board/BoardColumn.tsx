@@ -41,9 +41,13 @@ function BoardColumn({
   };
 
   const onNameSubmit = (newVal: string) => {
-    if (columns.has(newVal) && (
-      newVal.length > Validaton.DEFAULT_TITLE_LENGTH || newVal.length === 0
-    )) {
+    if (!columns.has(newVal)
+    && newVal.length <= Validaton.DEFAULT_TITLE_LENGTH
+    && newVal.length > 0
+    ) {
+      setLocalName(newVal);
+      actions.renameColumn(value, newVal);
+    } else {
       toast({
         title: 'Column title cannot be empty!',
         status: 'warning',
@@ -51,9 +55,6 @@ function BoardColumn({
         isClosable: true,
       });
       setLocalName(value);
-    } else {
-      setLocalName(newVal);
-      actions.renameColumn(value, newVal);
     }
   };
 
