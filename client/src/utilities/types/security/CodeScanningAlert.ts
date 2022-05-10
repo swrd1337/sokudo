@@ -1,20 +1,14 @@
+import Location from './Location';
+import Rule from './Rule';
+
 interface CodeScanningAlert {
   number: number;
   createdAt: string;
   state: string;
-  rule: {
-    severity: string;
-    description: string;
-    name: string;
-    securitySeverityLevel: string;
-  };
+  rule: Rule;
   mostRecentInstance: {
     commitSha: string;
-    location: {
-      path: string;
-      startLine: number;
-      endLine: number;
-    }
+    location: Location
   };
 }
 
