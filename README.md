@@ -1,8 +1,6 @@
 # Sokudo
 
-*Sokudo* is and application that implements the principles of Agile software development, particularly project management.
-
-*Sokudo* is based on **Github API** using features offered by **Github Apps**.
+*Sokudo* is and application that implements the principles of Agile software development, particularly project management and based on **Github API** using features offered by **Github Apps**.
 
 
 ### To Do:
