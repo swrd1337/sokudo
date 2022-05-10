@@ -6,5 +6,6 @@
 ### To Do:
 * Add caching for external API calls.
 * Pre-authorize API methods using a list of current user repositories.
+* GH Token expired handler.
 * Add code docs for API.
 * Dark/white theme switch.
