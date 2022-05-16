@@ -23,7 +23,7 @@ function useCreateTask(boardId: number, boardColumns: Set<string>, user: User) {
       navigate(`/tasks/${newTask.id}`);
       toast({
         title: 'Task created!',
-        description: `The given column: ${columnName}`,
+        description: `Column name: '${columnName}'`,
         status: 'info',
         duration: 5000,
         isClosable: true,

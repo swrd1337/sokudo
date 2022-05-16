@@ -56,7 +56,7 @@ function CommentsContainer({ user, taskId }: Props) {
 
   return (
     <Stack spacing={3} overflow="auto" w="100%">
-      <HStack pr={3} pl={3}>
+      <HStack p={3}>
         <Input
           placeholder="Add new comment..."
           value={commentValue}

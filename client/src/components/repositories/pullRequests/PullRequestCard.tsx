@@ -97,7 +97,7 @@ function PullRequestCard({ pullRequest, onCreate }: Props) {
           <Accordion allowMultiple>
             <AccordionItem>
               <AccordionButton>
-                <Text color="red.200" fontWeight="semibold" mr="2">
+                <Text color="blue.200" fontWeight="semibold" mr="2">
                   Description body
                 </Text>
                 <AccordionIcon />
