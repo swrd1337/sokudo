@@ -1,3 +1,4 @@
+import PullRequest from '../utilities/types/PullRequest';
 import Repositories from '../utilities/types/Repositories';
 import RepositoryData from '../utilities/types/RepositoryData';
 import CodeScanningAlert from '../utilities/types/security/CodeScanningAlert';
@@ -92,10 +93,28 @@ async function fetchDependabotAlerts(
   return response.json();
 }
 
+async function fetchPullRequests(
+  owner: string,
+  repo: string,
+  accessToken: string,
+): Promise<PullRequest[]> {
+  const response: Response = await fetch(
+    `${apiBaseUrl}/repositories/${owner}/${repo}/pulls`,
+    {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    },
+  );
+
+  return response.json();
+}
+
 export {
   fetchRepositoriesData,
   fetchRepositoryData,
   fetchCreateRepositoryData,
   fetchCodeScanningAlerts,
   fetchDependabotAlerts,
+  fetchPullRequests,
 };

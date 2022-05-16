@@ -5,7 +5,7 @@ import { fetchCodeScanningAlerts } from '../../../../api/repositoriesApi';
 import CodeScanningAlert from '../../../../utilities/types/security/CodeScanningAlert';
 import User from '../../../../utilities/types/User';
 import CenteredSpinner from '../../../common/CenteredSpinner';
-import NoAlertsMessage from '../NoAlertsMessage';
+import NoItemsMessage from '../../../common/NoItemsMessage';
 import AlertCard from './AlertCard';
 
 type Props = {
@@ -34,7 +34,7 @@ function ScanningAlertsPanel({ user, createTaskHandler }: Props) {
   }, []);
 
   if (errorMessage) {
-    return <NoAlertsMessage message={errorMessage} />;
+    return <NoItemsMessage message={errorMessage} />;
   }
 
   let component;

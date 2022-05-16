@@ -1,7 +1,7 @@
-interface Owner {
+interface SimpleUser {
   login: string;
   avatarUrl: string;
   htmlUrl: string;
 }
 
-export default Owner;
+export default SimpleUser;

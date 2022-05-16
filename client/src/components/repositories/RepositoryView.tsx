@@ -25,6 +25,7 @@ import ViewContainer from '../../ViewContainer';
 import RepositoryBoard from './board/RepositoryBoard';
 import CodeScanningView from './codeScanning/CodeScanningView';
 import MarkdownsNotes from './notes/MarkdownsNotes';
+import PullRequestsView from './pullRequests/PullRequestsView';
 
 function RepositoryView() {
   const navigate = useNavigate();
@@ -198,11 +199,8 @@ function RepositoryView() {
                 <TabPanel w="100%" display="flex" p="0">
                   <CodeScanningView board={repositoryData.boards[boardIndex]} user={user!} />
                 </TabPanel>
-                <TabPanel>
-                  <p>
-                    Commits View:
-                    https://docs.github.com/en/rest/commits/commits
-                  </p>
+                <TabPanel w="100%" display="flex" p="0">
+                  <PullRequestsView board={repositoryData.boards[boardIndex]} user={user!} />
                 </TabPanel>
               </TabPanels>
             )}

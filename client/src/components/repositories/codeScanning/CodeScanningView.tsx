@@ -5,13 +5,10 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  useToast,
 } from '@chakra-ui/react';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchSaveTask } from '../../../api/tasksApi';
+import useCreateTask from '../../../hooks/useCreateTask';
 import Board from '../../../utilities/types/Board';
-import Task from '../../../utilities/types/Task';
 import User from '../../../utilities/types/User';
 import DependabotPanel from './dependabot/DependabotPanel';
 import ScanningAlertsPanel from './scanningAllerts/ScanningAlertsPanel';
@@ -23,32 +20,8 @@ type Props = {
 
 function CodeScanningView({ board, user }: Props) {
   const { id, boardColumns } = board;
-  const navigate = useNavigate();
 
-  const toast = useToast();
-
-  const createTaskHandler = async (title: string, description: string) => {
-    if (user) {
-      const boardColumnName = [...boardColumns][0];
-      let newTask: Task = {
-        id: -1,
-        boardId: id,
-        columnName: boardColumnName,
-        title,
-        description,
-        author: user.username,
-      };
-      newTask = await fetchSaveTask(newTask, user.accessToken);
-      navigate(`/tasks/${newTask.id}`);
-      toast({
-        title: 'Task created!',
-        description: `The given column: ${boardColumnName}`,
-        status: 'info',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
+  const createTaskHandler = useCreateTask(id, boardColumns, user);
 
   return (
     <Box w="100%" flexGrow={1} display="flex" justifyContent="center" p={3}>

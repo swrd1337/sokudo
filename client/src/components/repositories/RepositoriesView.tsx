@@ -4,6 +4,7 @@ import { fetchRepositoriesData } from '../../api/repositoriesApi';
 import UserContext from '../../context/UserContext';
 import Repository from '../../utilities/types/Repository';
 import ViewContainer from '../../ViewContainer';
+import CenteredSpinner from '../common/CenteredSpinner';
 import MainSkeleton from './MainSkeleton';
 import RepositoryCard from './RepositoryCard';
 
@@ -14,6 +15,7 @@ function RepositoriesView() {
   const [repositories, setRepositories] = useState<Repository[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -22,6 +24,7 @@ function RepositoriesView() {
         const tmpRepos = data.repositories;
         if (repositories.length === 0 || (tmpRepos[0].id !== repositories[0].id)) {
           setRepositories([...repositories, ...tmpRepos]);
+          setLoading(false);
         }
       };
       fetchRepos();
@@ -30,7 +33,7 @@ function RepositoriesView() {
 
   return (
     <ViewContainer>
-      {repositories ? (
+      {repositories.length ? (
         <>
           <SimpleGrid
             columns={{
@@ -47,7 +50,10 @@ function RepositoriesView() {
           {repositories && ((currentPage * PER_PAGE_DEFAULT) <= repositories.length) && (
             <Button
               mb={5}
-              onClick={() => setCurrentPage(currentPage + 1)}
+              onClick={() => {
+                setLoading(true);
+                setCurrentPage(currentPage + 1);
+              }}
               variant="ghost"
               color="gray.500"
               borderRadius="full"
@@ -55,6 +61,7 @@ function RepositoriesView() {
               More
             </Button>
           )}
+          {loading && <CenteredSpinner />}
         </>
       ) : (
         <MainSkeleton />

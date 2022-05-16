@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString
-public class PullRequestUserDTO {
+public class CommonUserDTO {
   
   private String login;
 

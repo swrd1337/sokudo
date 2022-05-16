@@ -6,7 +6,7 @@ import DependabotNode from '../../../../utilities/types/security/DependabotNode'
 import DependabotResult from '../../../../utilities/types/security/DependabotResult';
 import User from '../../../../utilities/types/User';
 import CenteredSpinner from '../../../common/CenteredSpinner';
-import NoAlertsMessage from '../NoAlertsMessage';
+import NoItemsMessage from '../../../common/NoItemsMessage';
 import AlertCard from './AlertCard';
 
 const INITIAL_COUNT = 9;
@@ -53,7 +53,7 @@ function DependabotPanel({ user, createTaskHandler }: Props) {
   };
 
   if (noItems) {
-    return <NoAlertsMessage message="Empty... 😓" />;
+    return <NoItemsMessage message="Empty... 😓" />;
   }
 
   return (

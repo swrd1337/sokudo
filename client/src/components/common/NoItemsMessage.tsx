@@ -5,7 +5,7 @@ type Props = {
   message: string,
 }
 
-function NoAlertsMessage({ message }: Props) {
+function NoItemsMessage({ message }: Props) {
   return (
     <Box display="flex" justifyContent="center">
       <Heading as="h4" size="md" color="gray.400">
@@ -15,4 +15,4 @@ function NoAlertsMessage({ message }: Props) {
   );
 }
 
-export default NoAlertsMessage;
+export default NoItemsMessage;

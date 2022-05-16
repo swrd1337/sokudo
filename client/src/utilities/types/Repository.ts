@@ -1,4 +1,4 @@
-import Owner from './Owner';
+import SimpleUser from './SimpleUser';
 
 interface Repository {
   id: number;
@@ -9,7 +9,7 @@ interface Repository {
   fork: boolean;
   language: string;
   defaultBranch: string;
-  owner: Owner;
+  owner: SimpleUser;
 }
 
 export default Repository;

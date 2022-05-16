@@ -31,6 +31,6 @@ public class RepositoryDTO {
 
   private String defaultBranch;
 
-  private RepositoryOwnerDTO owner;
+  private CommonUserDTO owner;
 
 }

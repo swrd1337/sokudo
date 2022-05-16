@@ -17,10 +17,12 @@ public class PullRequestDTO {
 
   private String htmlUrl;
 
-  private PullRequestUserDTO user;
+  private CommonUserDTO user;
 
   private String createdAt;
 
   private String mergeCommitSha;
+
+  private String body;
 
 }
