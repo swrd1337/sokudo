@@ -1,4 +1,4 @@
-import { Box, Heading, VStack } from '@chakra-ui/react';
+import { Box, Divider, Heading, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPullRequests } from '../../../api/repositoriesApi';
@@ -42,7 +42,7 @@ function PullRequestsView({ board, user }: Props) {
 
   if (pullRequests.length) {
     component = (
-      <VStack spacing={5}>
+      <VStack spacing={5} p={4}>
         {pullRequests.map((pr) => (
           <PullRequestCard
             key={pr.mergeCommitSha}
@@ -56,7 +56,8 @@ function PullRequestsView({ board, user }: Props) {
 
   return (
     <Box
-      p={4}
+      px={4}
+      py={2}
       m={3}
       bgColor="gray.700"
       border="2px solid"
@@ -65,9 +66,10 @@ function PullRequestsView({ board, user }: Props) {
       w="100%"
       overflow="auto"
     >
-      <Box display="flex" justifyContent="center" pb={6}>
+      <Box display="flex" justifyContent="center" pb={4}>
         <Heading as="h4" size="md" color="purple.200">Latest pull requests</Heading>
       </Box>
+      <Divider />
       {component}
     </Box>
   );
