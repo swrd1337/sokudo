@@ -76,7 +76,7 @@ function TaskDetails({ task, user, updateTask }: Props) {
       toast({
         title: 'Task title cannot be empty!',
         status: 'warning',
-        position: 'bottom-left',
+        position: 'bottom-right',
         duration: 5000,
         isClosable: true,
       });

@@ -64,7 +64,7 @@ function EditorView({
         status: 'warning',
         isClosable: true,
         duration: 5000,
-        position: 'bottom-left',
+        position: 'bottom-right',
       });
       setNewTitle(markdownTitle);
     }

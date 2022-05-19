@@ -53,6 +53,7 @@ function BoardColumn({
         status: 'warning',
         duration: 5000,
         isClosable: true,
+        position: 'bottom-right',
       });
       setLocalName(value);
     }

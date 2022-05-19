@@ -27,6 +27,7 @@ function useCreateTask(boardId: number, boardColumns: Set<string>, user: User) {
         status: 'info',
         duration: 5000,
         isClosable: true,
+        position: 'bottom-right',
       });
     }
   };

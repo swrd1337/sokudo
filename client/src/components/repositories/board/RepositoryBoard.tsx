@@ -151,7 +151,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
           status: 'success',
           duration: 5000,
           isClosable: true,
-          position: 'bottom-left',
+          position: 'bottom-right',
         });
       }
     } else {
@@ -161,7 +161,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
         status: 'warning',
         duration: 5000,
         isClosable: true,
-        position: 'bottom-left',
+        position: 'bottom-right',
       });
     }
   };

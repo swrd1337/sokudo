@@ -32,6 +32,7 @@ function Root() {
             title: `Welcome, ${userValue.name}! 🎉🎉🎉`,
             status: 'success',
             duration: 9000,
+            position: 'bottom-right',
             isClosable: true,
           });
         } catch (error) {

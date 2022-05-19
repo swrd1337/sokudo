@@ -25,6 +25,7 @@ function UserComponent({ user, setUser }: Props) {
         status: 'success',
         duration: 9000,
         isClosable: true,
+        position: 'bottom-right',
       });
     }
     localStorage.removeItem('user');
