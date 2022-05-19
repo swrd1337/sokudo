@@ -40,8 +40,8 @@ function EditorView({
 }: Props) {
   const { markdownTitle, setMarkdownTitle } = titleState;
   const { markdownContent, setMarkdownContent } = contentState;
-  const [title, setTitle] = useState<string>('');
 
+  const [title, setTitle] = useState<string>('');
   const [contentEditMode, setContentEditMode] = useState<boolean>(false);
 
   const toast = useToast();
