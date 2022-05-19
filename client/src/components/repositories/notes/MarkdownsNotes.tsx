@@ -197,7 +197,10 @@ function MarkdownsNotes({ repoId }: Props) {
           selectedIndex={selectedIndex}
           openDeleteModal={deleteModal.onOpen}
           setMdContentUpdateTrigger={setMdContentUpdateTrigger}
-          markdownTitle={markdownTitle}
+          titleState={{
+            markdownTitle,
+            setMarkdownTitle,
+          }}
           contentState={{
             markdownContent,
             setMarkdownContent,

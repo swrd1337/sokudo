@@ -18,7 +18,10 @@ type Props = {
   selectedIndex: number,
   openDeleteModal(): void,
   setMdContentUpdateTrigger(_value: boolean): void,
-  markdownTitle: string,
+  titleState: {
+    markdownTitle: string,
+    setMarkdownTitle(_value: string): void
+  },
   contentState: {
     markdownContent: string,
     setMarkdownContent(_value: string): void
@@ -32,18 +35,20 @@ function EditorView({
   selectedIndex,
   openDeleteModal,
   setMdContentUpdateTrigger,
-  markdownTitle,
+  titleState,
   contentState,
 }: Props) {
+  const { markdownTitle, setMarkdownTitle } = titleState;
   const { markdownContent, setMarkdownContent } = contentState;
+  const [title, setTitle] = useState<string>('');
 
-  const [newTitle, setNewTitle] = useState<string>(markdownTitle);
   const [contentEditMode, setContentEditMode] = useState<boolean>(false);
 
   const toast = useToast();
 
   useEffect(() => {
     setContentEditMode(false);
+    setTitle(markdownTitle);
   }, [mds, markdownTitle]);
 
   const toggleContentEditMode = () => {
@@ -57,22 +62,23 @@ function EditorView({
       const newMds = [...mds];
       newMds[selectedIndex] = md;
       setMds([...newMds]);
+      setMarkdownTitle(title);
       await fetchUpdateMarkdown(md.id, md, user!.accessToken);
     } else {
       toast({
-        title: 'Title cannot be empty',
+        title: 'Invalid note title!',
         status: 'warning',
         isClosable: true,
         duration: 5000,
         position: 'bottom-right',
       });
-      setNewTitle(markdownTitle);
+      setTitle(markdownTitle);
     }
   };
 
   const onTitleUpdateChange = (value: string) => {
     if (value.length <= Validaton.DEFAULT_TITLE_LENGTH) {
-      setNewTitle(value);
+      setTitle(value);
     }
   };
 
@@ -97,7 +103,7 @@ function EditorView({
         <HStack spacing={3} p="10px" justifyContent="space-between">
           <Editable
             onEdit={() => setContentEditMode(false)}
-            value={newTitle}
+            value={title}
             onChange={onTitleUpdateChange}
             onSubmit={onTitleUpdateConfirm}
             onCancel={onTitleUpdateConfirm}

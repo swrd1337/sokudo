@@ -49,7 +49,7 @@ function BoardColumn({
       actions.renameColumn(value, newVal);
     } else {
       toast({
-        title: 'Column title cannot be empty!',
+        title: 'Invalid column title!',
         status: 'warning',
         duration: 5000,
         isClosable: true,

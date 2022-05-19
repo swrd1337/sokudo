@@ -35,6 +35,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
   const [doneColumnName, setDoneColumnName] = useState<string>('');
   const [addColumnMode, setAddColumnMode] = useState<boolean>(false);
   const [columnName, setColumnName] = useState<string>('');
+  const [invalidColumnName, setInvalidColumnName] = useState<boolean>(false);
 
   const [dataUpdate, setDataUpdate] = useState<boolean>(false);
   const { user } = useContext(UserContext);
@@ -106,6 +107,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
   const onAddModeClick = () => {
     setAddColumnMode(!addColumnMode);
     setColumnName('');
+    setInvalidColumnName(false);
   };
 
   const onInputNameChange = (e: FormEvent<HTMLInputElement>) => {
@@ -113,11 +115,14 @@ function RepositoryBoard({ board, updateBoard }: Props) {
   };
 
   const onSaveClick = () => {
-    if (!columns.has(columnName)) {
+    if (columnName && !columns.has(columnName)) {
       setColumns(columns.add(columnName));
       setAddColumnMode(!addColumnMode);
       setColumnName('');
       setDataUpdate(true);
+      setInvalidColumnName(false);
+    } else {
+      setInvalidColumnName(true);
     }
   };
 
@@ -212,7 +217,7 @@ function RepositoryBoard({ board, updateBoard }: Props) {
                 onInputChange={onInputNameChange}
                 onSubmit={onSaveClick}
                 onCancel={onAddModeClick}
-                isInvalid={columns.has(columnName)}
+                isInvalid={invalidColumnName}
                 value={columnName}
                 inline
               />
