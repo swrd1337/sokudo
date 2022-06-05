@@ -7,17 +7,17 @@ type Props = {
   onConfirmClick(): void,
 }
 
-function DeleteConfirmation({ isOpen, onClose, onConfirmClick }: Props) {
+function CreateTaskConfirmation({ isOpen, onClose, onConfirmClick }: Props) {
   return (
     <ModalBase
       isOpen={isOpen}
       onClose={onClose}
       onConfirmClick={onConfirmClick}
-      title="Delete"
-      body="Are you sure you want to delete?"
-      baseColor="red"
+      title="Create"
+      body="Are you sure you want to create a new task?"
+      baseColor="green"
     />
   );
 }
 
-export default DeleteConfirmation;
+export default CreateTaskConfirmation;

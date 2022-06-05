@@ -6,6 +6,7 @@ import {
   Legend, Pie, PieChart, ResponsiveContainer, Tooltip,
 } from 'recharts';
 import MdStatistics from '../../../../utilities/types/statistics/MdStatistics';
+import NoItemsMessage from '../../../common/NoItemsMessage';
 import TooltipContainer from '../tooltip/TooltipContainer';
 
 type Props = {
@@ -44,21 +45,27 @@ function MarkdownsDataCard({ mdsStats }: Props) {
         Markdown notes:
       </Heading>
       <ResponsiveContainer width="100%" height={400}>
-        <PieChart>
-          <Tooltip content={<RechartTooltip />} />
-          <Legend />
-          <Pie
-            data={mdsStats}
-            dataKey="mdsCount"
-            cx="50%"
-            cy="50%"
-            fill="#D6BCFA"
-            innerRadius={30}
-            outerRadius={100}
-            label
-            name="Notes per author"
-          />
-        </PieChart>
+        {mdsStats.length ? (
+          <PieChart>
+            <Tooltip content={<RechartTooltip />} />
+            <Legend />
+            <Pie
+              data={mdsStats}
+              dataKey="mdsCount"
+              cx="50%"
+              cy="50%"
+              fill="#D6BCFA"
+              innerRadius={30}
+              outerRadius={100}
+              label
+              name="Notes per author"
+            />
+          </PieChart>
+        ) : (
+          <Box p={6}>
+            <NoItemsMessage message="No markdown notes found on this project... 😓" />
+          </Box>
+        )}
       </ResponsiveContainer>
     </Box>
   );

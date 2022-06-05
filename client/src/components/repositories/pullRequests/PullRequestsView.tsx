@@ -1,5 +1,5 @@
 import {
-  Box, Divider, Heading, VStack,
+  Box, Divider, Heading, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import PullRequest from '../../../utilities/types/PullRequest';
 import User from '../../../utilities/types/User';
 import CenteredSpinner from '../../common/CenteredSpinner';
 import NoItemsMessage from '../../common/NoItemsMessage';
+import CreateTaskConfirmation from '../../modals/CreateTaskConfirmation';
 import PullRequestCard from './PullRequestCard';
 
 type Props = {
@@ -19,11 +20,16 @@ type Props = {
 
 function PullRequestsView({ board, user }: Props) {
   const { id, boardColumns } = board;
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { owner, repo } = useParams();
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const createTaskHandler = useCreateTask(id, boardColumns, user);
+
+  const [newTask, setNewTask] = useState<{
+    title: string,
+    desc: string,
+  }>();
 
   useEffect(() => {
     if (user && owner && repo) {
@@ -49,7 +55,10 @@ function PullRequestsView({ board, user }: Props) {
           <PullRequestCard
             key={pr.mergeCommitSha}
             pullRequest={pr}
-            onCreate={createTaskHandler}
+            onCreate={(title, desc) => {
+              onOpen();
+              setNewTask({ title, desc });
+            }}
           />
         ))}
       </VStack>
@@ -73,6 +82,20 @@ function PullRequestsView({ board, user }: Props) {
       </Box>
       <Divider />
       {component}
+      <CreateTaskConfirmation
+        isOpen={isOpen}
+        onClose={() => {
+          setNewTask(undefined);
+          onClose();
+        }}
+        onConfirmClick={() => {
+          onClose();
+          if (newTask) {
+            const { title, desc } = newTask;
+            createTaskHandler(title, desc);
+          }
+        }}
+      />
     </Box>
   );
 }
