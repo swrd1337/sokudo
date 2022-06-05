@@ -16,8 +16,8 @@ function RechartTooltip({ active, payload } : any) {
   if (active && payload && payload.length) {
     return (
       <TooltipContainer>
-        <p>{`${payload[0].value} tasks`}</p>
-        <p>{`${payload[1].value} comments`}</p>
+        <p>{`${payload[0].value} task(s)`}</p>
+        <p>{`${payload[1].value} comment(s)`}</p>
       </TooltipContainer>
     );
   }
