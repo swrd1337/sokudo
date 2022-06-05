@@ -32,6 +32,7 @@ function BoardsDataCard({ boardStats }: Props) {
       borderColor="gray.600"
       borderRadius="lg"
       w="100%"
+      pb={3}
     >
       <Heading
         variant="h4"
@@ -53,7 +54,7 @@ function BoardsDataCard({ boardStats }: Props) {
             left: 20,
           }}
         >
-          <CartesianGrid stroke="#f5f5f5" />
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="boardName" stroke="#fff" />
           <YAxis stroke="#fff" />
           <Tooltip content={<RechartTooltip />} />

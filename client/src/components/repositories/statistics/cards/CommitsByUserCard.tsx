@@ -22,7 +22,7 @@ function CommitsByUserCard({ commitsByUser }: Props) {
       borderColor="gray.600"
       borderRadius="lg"
       w="100%"
-      minH="12em"
+      pb={3}
     >
       <Heading
         variant="h4"

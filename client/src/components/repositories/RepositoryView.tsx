@@ -32,13 +32,9 @@ function RepositoryView() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { owner, repo } = useParams();
-
   const { user } = useContext(UserContext);
-
   const [repositoryData, setRepositoryData] = useState<RepositoryData>();
-
   const [boardIndex, setBoardIndex] = useState<number>(0);
-
   const toast = useToast();
 
   useDebouncedEffect(() => {
@@ -54,9 +50,17 @@ function RepositoryView() {
     }
   }, [user], 300);
 
+  const updateBoardIndex = (i: number) => {
+    setBoardIndex(i);
+    searchParams.set('board', i.toString());
+    setSearchParams(searchParams);
+  };
+
   useEffect(() => {
-    if (boardIndex === -1) {
-      setBoardIndex(0);
+    const currentIndex = searchParams.get('board');
+    if (currentIndex) {
+      const index = +currentIndex;
+      updateBoardIndex(index === -1 ? 0 : index);
     }
   }, [boardIndex]);
 
@@ -72,7 +76,7 @@ function RepositoryView() {
   const addBoard = (newBoard: Board) => {
     if (repositoryData) {
       repositoryData.boards.splice(0, 0, newBoard);
-      setBoardIndex(-1);
+      updateBoardIndex(-1);
       setRepositoryData(repositoryData);
     }
   };
@@ -82,7 +86,7 @@ function RepositoryView() {
       const boardToDelete = repositoryData.boards[boardIndex];
       repositoryData.boards.splice(boardIndex, 1);
       setRepositoryData(repositoryData);
-      setBoardIndex(boardIndex === 0 ? -1 : boardIndex - 1);
+      updateBoardIndex(boardIndex === 0 ? -1 : boardIndex - 1);
       await fetchDeleteBoard(boardToDelete.id, user!.accessToken);
     } else {
       toast({
@@ -182,7 +186,7 @@ function RepositoryView() {
                     boardIndex,
                     boards: repositoryData.boards,
                     repoId: repositoryData.id,
-                    setBoardIndex,
+                    setBoardIndex: updateBoardIndex,
                     addBoard,
                     deleteBoard,
                   }}

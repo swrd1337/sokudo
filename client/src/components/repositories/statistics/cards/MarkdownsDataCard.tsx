@@ -32,7 +32,8 @@ function MarkdownsDataCard({ mdsStats }: Props) {
       border="2px solid"
       borderColor="gray.600"
       borderRadius="lg"
-      w="100%"
+      w="50%"
+      pb={3}
     >
       <Heading
         variant="h4"
@@ -40,7 +41,7 @@ function MarkdownsDataCard({ mdsStats }: Props) {
         p={5}
         borderBottom="1px solid"
         borderColor="gray.600"
-        color="purple.200"
+        color="blue.200"
       >
         Markdown notes:
       </Heading>

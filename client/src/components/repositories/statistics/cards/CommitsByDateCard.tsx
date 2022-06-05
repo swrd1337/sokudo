@@ -3,7 +3,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import {
-  Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import CommitsBy from '../../../../utilities/types/statistics/CommitsBy';
 import CommitsRechartTooltip from '../tooltip/CommitsRechartTooltip';
@@ -20,7 +20,7 @@ function CommitsByDateCard({ commitsByDate }: Props) {
       borderColor="gray.600"
       borderRadius="lg"
       w="100%"
-      minH="12em"
+      pb={3}
     >
       <Heading
         variant="h4"
@@ -42,10 +42,11 @@ function CommitsByDateCard({ commitsByDate }: Props) {
             bottom: 10,
           }}
         >
+          <CartesianGrid stroke="#fff" />
           <XAxis dataKey="name" stroke="#fff" />
           <YAxis stroke="#fff" />
           <Tooltip content={<CommitsRechartTooltip />} />
-          <Area type="monotone" dataKey="count" stroke="#8884d8" fill="#8884d8" />
+          <Area type="monotone" dataKey="count" stroke="#805AD5" fill="#D6BCFA" />
         </AreaChart>
       </ResponsiveContainer>
     </Box>
