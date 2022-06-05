@@ -62,4 +62,8 @@ public class CommentsService {
     });
   }
 
+  public int getCount(Long taskId) {
+    return commentsRepository.countByTaskId(taskId);
+  }
+
 }

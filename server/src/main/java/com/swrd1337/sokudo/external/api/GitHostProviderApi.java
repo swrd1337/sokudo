@@ -20,4 +20,6 @@ public interface GitHostProviderApi {
 
   ResponseEntity<String> fetchPullRequests(String owner, String repo, String accessToken);
 
+  ResponseEntity<String> fetchCommits(String owner, String repo, String accessToken);
+
 }

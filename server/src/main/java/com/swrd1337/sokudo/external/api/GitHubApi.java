@@ -85,6 +85,12 @@ public class GitHubApi implements GitHostProviderApi {
     return executeRequest(url, owner, repo, accessToken);
   }
 
+  @Override
+  public ResponseEntity<String> fetchCommits(String owner, String repo, String accessToken) {
+    String url = properties.getGitProviderBaseUrl() + "/repos/" + owner + "/" + repo + "/commits";
+    return executeRequest(url, owner, repo, accessToken);
+  }
+
   private ResponseEntity<String> executeRequest(String url, String owner, String repo, String accessToken) {
     HttpHeaders headers = getheaders(accessToken);
     HttpEntity<Void> request = new HttpEntity<>(headers);

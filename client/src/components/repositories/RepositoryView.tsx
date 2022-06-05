@@ -26,6 +26,7 @@ import RepositoryBoard from './board/RepositoryBoard';
 import CodeScanningView from './codeScanning/CodeScanningView';
 import MarkdownsNotes from './notes/MarkdownsNotes';
 import PullRequestsView from './pullRequests/PullRequestsView';
+import StatisticsView from './statistics/StatisticsView';
 
 function RepositoryView() {
   const navigate = useNavigate();
@@ -202,6 +203,9 @@ function RepositoryView() {
                 </TabPanel>
                 <TabPanel w="100%" display="flex" p="0">
                   <PullRequestsView board={repositoryData.boards[boardIndex]} user={user!} />
+                </TabPanel>
+                <TabPanel w="100%" display="flex" p="0">
+                  <StatisticsView user={user!} />
                 </TabPanel>
               </TabPanels>
             )}

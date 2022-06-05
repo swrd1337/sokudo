@@ -10,4 +10,6 @@ public interface CommentsRepository extends MongoRepository<Comment, Long> {
 
   void deleteAllByTaskId(Long taskId);
 
+  int countByTaskId(Long taskId);
+
 }

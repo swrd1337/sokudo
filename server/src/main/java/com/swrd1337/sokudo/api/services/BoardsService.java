@@ -1,6 +1,7 @@
 package com.swrd1337.sokudo.api.services;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.swrd1337.sokudo.api.entities.Board;
@@ -69,5 +70,9 @@ public class BoardsService {
     );
 
     return newBoard;
+  }
+
+  public List<Board> getAllByRepoId(Long repoId) {
+    return boardsRepository.findAllByRepoDataId(repoId);
   }
 }
