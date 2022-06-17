@@ -9,6 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.swrd1337.sokudo.api.configuration.ApiAuthenticationToken;
 import com.swrd1337.sokudo.api.dto.commit.CommitDTO;
 import com.swrd1337.sokudo.api.dto.commit.CommitDataDTO;
@@ -19,7 +27,6 @@ import com.swrd1337.sokudo.api.dto.general.MdsStatisticsDTO;
 import com.swrd1337.sokudo.api.dto.general.ProjectStatisticsDTO;
 import com.swrd1337.sokudo.api.entities.Board;
 import com.swrd1337.sokudo.api.entities.Markdown;
-import com.swrd1337.sokudo.api.entities.RepositoryData;
 import com.swrd1337.sokudo.api.entities.Task;
 import com.swrd1337.sokudo.api.services.ApiRepoService;
 import com.swrd1337.sokudo.api.services.AuthTokenService;
@@ -29,14 +36,6 @@ import com.swrd1337.sokudo.api.services.MarkdownsService;
 import com.swrd1337.sokudo.api.services.TasksService;
 import com.swrd1337.sokudo.external.api.GitHostProviderApi;
 import com.swrd1337.sokudo.utilities.GsonWrapper;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/statistics")
