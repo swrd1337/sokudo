@@ -2,7 +2,23 @@
 
 *Sokudo* (*speed* from japanese) is an application that implements the principles of Agile software development, particularly project management, and is based on **GitHub API** using features offered by **GitHub Apps**.
 
-![Example](doc/example.gif)
+### Short demonstration:
+
+<details open>
+<summary><u>Example #1</u></summary>
+<img src="./doc/example_1.gif" alt="example_1" />
+</details>
+
+<details>
+<summary><u>Example #2</u></summary>
+<img src="./doc/example_2.gif" alt="example_2" />
+</details>
+
+<details>
+<summary><u>Example #3</u></summary>
+<img src="./doc/example_3.gif" alt="example_3" />
+</details>
+<br/>
 
 ## Built With
 
