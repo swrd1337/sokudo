@@ -18,7 +18,6 @@
 <summary><u>Example #3</u></summary>
 <img src="./doc/example_3.gif" alt="example_3" />
 </details>
-<br/>
 
 ## Built With
 
