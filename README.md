@@ -82,7 +82,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-### To Do:
+## To Do 🛠️
 * Add caching for external API calls.
 * Pre-authorize API methods using a list of current user repositories.
 * GH Token expired handler.
