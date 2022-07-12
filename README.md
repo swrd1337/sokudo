@@ -88,6 +88,7 @@ Please make sure to update tests as appropriate.
 * GH Token expired handler.
 * Add code docs for API.
 * Dark/white theme switch.
+* Add project and task filtering.
 
 ## License
 [GPL3](LICENSE)
