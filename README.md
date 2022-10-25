@@ -83,6 +83,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## To Do 🛠️
+* Re-write backend in Kotlin (include securing end-points by repo/user names)
 * Add caching for external API calls.
 * Pre-authorize API methods using a list of current user repositories.
 * GH Token expired handler.
